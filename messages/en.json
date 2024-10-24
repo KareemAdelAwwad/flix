@@ -1,6 +1,12 @@
 {
   "Header": {
-    "title": "Movie App"
+    "title": "Movie App",
+    "homeBTN": "Home",
+    "Movies&ShowsBTN": "Movies & Shows",
+    "SupportBTN": "Support",
+    "SubscriptionsBTN": "Subscriptions",
+
+    "sideBar":"${isSidebarVisible ? 'right-0' : '-right-72'}"
   },
   "ThemeToggle": {
     "title": "Toggle theme",
@@ -10,5 +16,32 @@
   },
   "HomePage": {
     "title": "Hello world!"
+  }, 
+  "Footer":{
+    "Home":"Home",
+    "Categories":"Categories",
+    "Devices":"Devices",
+    "Pricing":"Pricing",
+    "FAQ":"FAQ",
+
+    "Movies":"Movies", 
+    "Trending":"Trending",
+    "NewRelease":"New Release ",
+    "Popular":"Popular", 
+
+    
+    "Shows":"Shows",
+
+
+    "Support":"Support",
+    "ContactUs":"Contact Us ",
+
+
+    "Subscription":"Subscription",
+    "Plans":"Plans",
+    "Features":"Features", 
+
+    "ContactWithUs":"Contact With Us"
   }
+  
 }

@@ -1,6 +1,14 @@
 {
   "Header": {
-    "title": "تطبيق الأفلام"
+    "title": "تطبيق الأفلام",
+    "homeBTN": "تطبيق الفيلم",
+    "Movies&ShowsBTN": "الأفلام والعروض",
+    "SupportBTN": "الدعم",
+    "SubscriptionsBTN": "الاشتراكات",
+
+
+
+  "sideBar":" ${isSidebarVisible ? 'left-0' : '-left-72'}"
   },
   "ThemeToggle": {
     "title": "تبديل المظهر",
@@ -10,5 +18,33 @@
   },
   "HomePage": {
     "title": "أهلاً بالعالم!"
+  },
+
+  "Footer":{
+    "Home":"المنزل",
+    "Categories":"فئات",
+    "Devices":"الاجهزه",
+    "Pricing":"الاسعار",
+      "FAQ":"الأسئلة الشائعة",
+
+    "Movies":"الافلام",
+    "Trending":"متداول",
+    "NewRelease":"إصدار جديد",
+    "Popular":"شعبي", 
+
+    
+    "Shows":"عروض",
+
+
+    "Support":"دعم",
+    "ContactUs":"تواصل معنا",
+
+
+    "Subscription":"الاشتراكات",
+    "Plans":"الخطط",
+    "Features":"المميزات",
+
+
+    "ContactWithUs":"تواصل معنا"
   }
 }

@@ -1,18 +1,16 @@
-import {useTranslations} from 'next-intl';
-import { ModeToggle } from '@/components/ModeToggle';
-import { LangToggle } from '@/components/LangToggle';
+//  
 import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 export default function Home() {
-  const t = useTranslations('HomePage');
+ 
   return (
-    <main>
-      <div className="text-2xl text-center">{t('title')}</div>
+    <>
+    
       <Header />
-      <section className='flex w-full justify-between bg-red-90 px-[20%]'>
-        <LangToggle />
-        <ModeToggle />
-      </section>
-    </main>
+
+      <Footer/>
+ 
+    </>
   );
 }
