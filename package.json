@@ -20,7 +20,8 @@
     "react": "18.3.1",
     "react-dom": "react",
     "tailwind-merge": "^2.5.4",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "xior": "^0.6.1"
   },
   "devDependencies": {
     "@types/node": "^20",
