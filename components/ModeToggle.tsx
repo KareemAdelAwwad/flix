@@ -18,6 +18,7 @@ export function ModeToggle() {
   const t = useTranslations('ThemeToggle');
   const { setTheme } = useTheme()
   const locale = useLocale();
+  const { theme } = useTheme()
 
   return (
     <DropdownMenu dir={locale === "ar" ? "rtl" : "ltr"}>
@@ -37,6 +38,7 @@ export function ModeToggle() {
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("system")}>
           {t('system')}
+          
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
