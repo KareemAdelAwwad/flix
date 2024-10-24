@@ -1,0 +1,14 @@
+{
+  "Header": {
+    "title": "Movie App"
+  },
+  "ThemeToggle": {
+    "title": "Toggle theme",
+    "dark": "Dark",
+    "light": "Light",
+    "system": "System"
+  },
+  "HomePage": {
+    "title": "Hello world!"
+  }
+}
