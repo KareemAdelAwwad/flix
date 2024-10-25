@@ -42,6 +42,39 @@
     "Features":"Features", 
 
     "ContactWithUs":"Contact With Us"
+  },
+  "TitlePage":{
+      "title":"Player",
+      "play": "Play Movie",
+      "pause": "Pause Movie",
+      "mute": "Mute",
+      "unmute": "Unmute",
+      "fullscreen": "Fullscreen",
+      "exitfullscreen": "Exit Fullscreen",
+      "volume": "Volume",
+      "quality": "Quality",
+      "speed": "Speed",
+      "subtitles": "Subtitles",
+      "settings": "Settings",
+      "watchlist": "Add to Watchlist",
+      "watched": "Mark as Watched",
+      "unwatched": "Mark as Unwatched",
+      "trailer": "Watch Trailer",
+      "themeSong": "Theme Song",
+      
+
+
+      "description": "Description",
+      "cast": "Cast",
+      "voiceActors": "Voice Actors",
+      "reviews": "Reviews",
+      "addreview": "Add Review",
+      "removereview": "Remove Review",
+      "genre": "Genre",
+      "director": "Director",
+      "releaseDate": "Release Date",
+      "duration": "Duration",
+      "rating": "Rating",
+      "music": "Music"
   }
-  
 }

@@ -36,17 +36,17 @@ const Header = () => {
 
   //for icon theme
   const theme = useTheme().resolvedTheme;
+  const themeTriger: any = () => { return theme === "light" ? "text-black-10" : "text-white"; };
 
   const navItemsClassName = 'p-2 px-4 rounded-3xl hover:bg-neutral-700 hover:text-white text-black-6 dark:text-white bg-transparent transition-all duration-300';
   return (
-    <header className='relative flex items-center justify-between container py-4 text-black dark:text-white '>
+    <header className='relative flex items-center justify-between container py-4 text-black dark:text-white' >
 
       {/* title */}
       <Link className=' cursor-pointer text-3xl font-semibold  ' href='/'>{t('title')}  </Link>
 
 
       {/* buttons and section */}
-      {/* hover:scale-100 */}
       <div className=' scale-90  hidden text-black-6  dark:text-white  lg:flex gap-2 items-center p-1 border-2 border-black-20 box-content rounded-full duration-500 '>
 
 
@@ -64,7 +64,6 @@ const Header = () => {
 
 
       {/* sign in and language side */}
-
       <div className='hidden lg:flex items-center gap-2'>
         <ModeToggle />
         <LangToggle />
@@ -74,27 +73,24 @@ const Header = () => {
 
 
       {/* sidebar button */}
-      <RiMenuFill onClick={toggleSidebar} className={` cursor-pointer w-10 h-10 ${theme === "dark" ? "text-white" : "text-black-10"}  lg:absolute lg:-left-96 duration-500`} />
+      <RiMenuFill onClick={toggleSidebar} className={` cursor-pointer w-10 h-10 aspect-square ${themeTriger}  lg:absolute duration-500 lg:hidden `} />
 
 
       {/* sideBar for mobile and tablet  its disappear at lg*/}
-      <div className={` pt-10 flex flex-col   fixed top-0  h-full w-72   bg-gray-100 dark:bg-black-12 transform ${isSidebarVisible ? 'right-0' : '-right-72'}  ${t('sideBar')}    text-xl transition-all duration-300`}>
-        <Button onClick={toggleSidebar} className='p-2 absolute left-0 top-0'> <CgClose className={` ${theme === "dark" ? "text-black-10" : "text-white "}`} /> </Button>
+      <div className={`z-20 pt-10 flex flex-col fixed top-0 h-full w-72 bg-gray-100 dark:bg-black-12 transform ${isSidebarVisible ? 'right-0' : '-right-72'} text-xl transition-all duration-300`}>
+        <Button onClick={toggleSidebar} className='p-2 absolute left-0 top-0 w-10 h-10 aspect-square'> <CgClose className={themeTriger} /> </Button>
         <ul>
-          
           {
             links.nav.map((link, index) => (
-              <li key={index} onClick={toggleSidebar} className=" text-xl p-2 hover:bg-gray-500 hover:text-white cursor-pointer">{t(link.key)} </li>
+              <Link key={index} href={link.path}>
+                <li key={index} onClick={toggleSidebar} className="text-xl p-2 hover:bg-gray-500 hover:text-white cursor-pointer">
+                  {t(link.key)}
+                </li>
+              </Link>
             ))
           }
-
-
           <LangToggle />
-
           <ThemeSwitcher />
-
-
-
         </ul>
       </div>
 

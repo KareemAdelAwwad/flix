@@ -17,32 +17,59 @@
   "HomePage": {
     "title": "أهلاً بالعالم!"
   },
+  "Footer": {
+    "Home": "المنزل",
+    "Categories": "فئات",
+    "Devices": "الاجهزه",
+    "Pricing": "الاسعار",
+    "FAQ": "الأسئلة الشائعة",
 
-  "Footer":{
-    "Home":"المنزل",
-    "Categories":"فئات",
-    "Devices":"الاجهزه",
-    "Pricing":"الاسعار",
-      "FAQ":"الأسئلة الشائعة",
+    "Movies": "الافلام",
+    "Trending": "متداول",
+    "NewRelease": "إصدار جديد",
+    "Popular": "شعبي",
 
-    "Movies":"الافلام",
-    "Trending":"متداول",
-    "NewRelease":"إصدار جديد",
-    "Popular":"شعبي", 
+    "Shows": "عروض",
 
-    
-    "Shows":"عروض",
+    "Support": "دعم",
+    "ContactUs": "تواصل معنا",
 
+    "Subscription": "الاشتراكات",
+    "Plans": "الخطط",
+    "Features": "المميزات",
 
-    "Support":"دعم",
-    "ContactUs":"تواصل معنا",
+    "ContactWithUs": "تواصل معنا"
+  },
+  "TitlePage": {
+    "title": "المشغل",
+    "play": "تشغيل الفيلم",
+    "pause": "إيقاف الفيلم",
+    "mute": "كتم الصوت",
+    "unmute": "إلغاء الكتم",
+    "fullscreen": "شاشة كاملة",
+    "exitfullscreen": "الخروج من الشاشة الكاملة",
+    "volume": "الصوت",
+    "quality": "الجودة",
+    "speed": "السرعة",
+    "subtitles": "الترجمة",
+    "settings": "الإعدادات",
+    "watchlist": "إضافة إلى قائمة المشاهدة",
+    "watched": "تمييز كمشاهد",
+    "unwatched": "إلغاء التمييز كمشاهد",
+    "trailer": "مشاهدة المقطع الترويجي",
+    "themeSong": "أغنية الخلفية",
 
-
-    "Subscription":"الاشتراكات",
-    "Plans":"الخطط",
-    "Features":"المميزات",
-
-
-    "ContactWithUs":"تواصل معنا"
+    "description": "الوصف",
+    "cast": "طاقم التمثيل",
+    "voiceActors": "مؤدي الأصوات",
+    "reviews": "المراجعات",
+    "addreview": "إضافة مراجعة",
+    "removereview": "إزالة المراجعة",
+    "genre": "التصنيف",
+    "director": "المخرج",
+    "releaseDate": "تاريخ الإصدار",
+    "duration": "المدة",
+    "rating": "التقييم",
+    "music": "الموسيقى"
   }
 }
