@@ -51,7 +51,7 @@ interface Movie {
 }
 interface MovieImages {
   "id": number,
-  "backdrops"?: {
+  "backdrops": {
     "file_path": string,
     "iso_639_1": string,
     "height": number,
@@ -123,12 +123,12 @@ export default function page({ params }: { params: { id: number } }) {
   return (
     <main className='flex justify-center items-center'>
 
-      <section className='w-[90%] md:w-[84%] h-[835px] mt-20 rounded-md overflow-hidden bg-black-20 felx justify-center items-center relative'>
+      <section className='w-[90%] md:w-[84%] h-[835px] mt-5 rounded-md overflow-hidden bg-black-20 felx justify-center items-center relative'>
         <div className='
         flex flex-col justify-end items-center text-white text-center pb-16
         inset-0 bg-gradient-to-t from-black-8 z-10 via-transparent to-transparent w-full h-full absolute'>
-        <h1 className='text-4xl font-bold'>{movie.original_title}</h1>
-        <p className='text-lg text-gray-60'>{movie.overview}</p>
+          <h1 className='text-4xl font-bold'>{movie.original_title}</h1>
+          <p className='text-lg text-gray-60'>{movie.overview}</p>
         </div>
 
         {

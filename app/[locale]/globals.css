@@ -7,9 +7,6 @@
   font-family: "Tajawal", sans-serif;
   font-weight: 400;
 }
-body {
-  background-color: #141414;
-}
 
 @layer base {
   :root {
@@ -46,7 +43,7 @@ body {
   }
 
   .dark {
-    --background: 0 0% 6%;
+    --background: 0 0% 7%;
     --foreground: 0 0% 95%;
 
     --muted: 0 0% 25%;

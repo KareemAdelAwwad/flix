@@ -1,12 +1,12 @@
 {
   "Header": {
     "title": "Movie App",
-    "homeBTN": "Home",
-    "Movies&ShowsBTN": "Movies & Shows",
-    "SupportBTN": "Support",
-    "SubscriptionsBTN": "Subscriptions",
-
-    "sideBar":"${isSidebarVisible ? 'right-0' : '-right-72'}"
+    "home": "Home",
+    "movies": "Movies",
+    "shows": "TV Shows",
+    "support": "Support",
+    "subscriptions": "Subscriptions",
+    "signin": "Sign-in"
   },
   "ThemeToggle": {
     "title": "Toggle theme",

@@ -1,14 +1,12 @@
 {
   "Header": {
     "title": "تطبيق الأفلام",
-    "homeBTN": "تطبيق الفيلم",
-    "Movies&ShowsBTN": "الأفلام والعروض",
-    "SupportBTN": "الدعم",
-    "SubscriptionsBTN": "الاشتراكات",
-
-
-
-  "sideBar":" ${isSidebarVisible ? 'left-0' : '-left-72'}"
+    "home": "تطبيق الفيلم",
+    "movies": "الأفلام",
+    "shows": "العروض",
+    "support": "الدعم",
+    "subscriptions": "الاشتراكات",
+    "signin": "تسجيل دخول"
   },
   "ThemeToggle": {
     "title": "تبديل المظهر",

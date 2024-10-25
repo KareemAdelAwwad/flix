@@ -6,6 +6,9 @@ import { routing } from '@/i18n/routing';
 import type { Metadata } from "next";
 import "./globals.css";
 
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+
 export const metadata: Metadata = {
   title: "Flix App",
   description: "Flix is a subscription-based streaming service that allows our members to watch TV shows and movies on an internet-connected device",
@@ -34,8 +37,10 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <NextIntlClientProvider messages={messages}>
-          {children}
-        </NextIntlClientProvider>
+            <Header />
+            {children}
+            <Footer />
+          </NextIntlClientProvider>
         </ThemeProvider>
       </body>
     </html>

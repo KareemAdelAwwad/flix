@@ -3,8 +3,8 @@ import React from 'react'
 
 export default function page() {
   return (
-    <div>
+    <section className='container'>
       Movies
-    </div>
+    </section>
   )
 }

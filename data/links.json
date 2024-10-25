@@ -1,0 +1,29 @@
+{
+  "nav": [
+    {
+      "key": "home",
+      "name": "Home",
+      "path": "/"
+    },
+    {
+      "key": "movies",
+      "name": "Movies",
+      "path": "/browse/movies"
+    },
+    {
+      "key": "shows",
+      "name": "Shows",
+      "path": "/browse/tv"
+    },
+    {
+      "key": "support",
+      "name": "Support",
+      "path": "/support"
+    },
+    {
+      "key": "subscriptions",
+      "name": "Subscriptions",
+      "path": "/subscriptions"
+    }
+  ]
+}
