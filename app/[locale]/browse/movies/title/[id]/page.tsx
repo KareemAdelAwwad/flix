@@ -18,6 +18,7 @@ import { GoCheckCircle, GoCheckCircleFill } from "react-icons/go";
 
 import HorizontalCarousel from '@/components/carousel'
 import ActorCard from '@/components/ActorCard';
+import ReviewCard from '@/components/ReviewCard';
 
 
 interface Movie {
@@ -99,16 +100,30 @@ interface Cast {
   "order": number
 }[]
 
+interface Review {
+  "author_details": {
+    "name": string | "",
+    "username": string,
+    "avatar_path": string | null,
+    "rating": number | null
+  },
+  "content": string,
+  "created_at": string,
+  "id": string,
+}[]
+
 export default function page({ params }: { params: { id: number } }) {
   const [movie, setMovie] = useState({} as Movie);
   const [images, setImages] = useState({} as MovieImages);
   const [cast, setCast] = useState([] as Cast[]);
+  const [reviews, setReviews] = useState([] as Review[]);
   const [loading, setLoading] = useState(true);
   const locale = useLocale();
   const t = useTranslations('TitlePage');
   const url = `https://api.themoviedb.org/3/movie/${params.id}?language=${locale}`;
-  const imagesUrl = `https://api.themoviedb.org/3/movie/${params.id}/images?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=${locale}&include_image_language=ar,en`;
-  const castUrl = `https://api.themoviedb.org/3/movie/${params.id}/credits?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=${locale}`;
+  const imagesUrl = `https://api.themoviedb.org/3/movie/${params.id}/images?language=${locale}&include_image_language=ar,en`;
+  const castUrl = `https://api.themoviedb.org/3/movie/${params.id}/credits?language=${locale}`;
+  const reviewsUrl = `https://api.themoviedb.org/3/movie/${params.id}/reviews?language=${locale}`;
   // API request Headers
   const options = {
     method: 'GET',
@@ -118,14 +133,14 @@ export default function page({ params }: { params: { id: number } }) {
     }
   };
 
-  // Fetch movie details and images and cast
+  // Fetch movie Data
   useEffect(() => {
     fetch(url, options)
       .then(res => res.json())
       .then(json => setMovie(json))
       .catch(err => console.error(err));
 
-    fetch(imagesUrl)
+    fetch(imagesUrl, options)
       .then(res => res.json())
       .then(json => {
         if (locale === 'ar') {
@@ -143,12 +158,18 @@ export default function page({ params }: { params: { id: number } }) {
       })
       .catch(err => console.error(err));
 
-    fetch(castUrl)
+    fetch(reviewsUrl, options)
+      .then(res => res.json())
+      .then(json => setReviews(json.results))
+      .catch(err => console.error(err));
+
+    fetch(castUrl, options)
       .then(res => res.json())
       .then(json => setCast(json.cast))
       .then(() => setLoading(false))
       .catch(err => console.error(err));
   }, [params.id]);
+
   // Image component that fetches the closest image to the given aspect ratio
   const IMG = (
     { src, height, width, className, ratio }:
@@ -168,9 +189,29 @@ export default function page({ params }: { params: { id: number } }) {
     ) : null;
   }
 
+  const castSliderSettings = {
+    breakpoints: {
+      400: 1,  // Less than 400px -> 1 card
+      520: 2,  // Less than 520px -> 2 cards
+      640: 3,  // Less than 640px -> 3 cards
+      1200: 4, // Less than 1200px -> 4 cards
+      1500: 5, // Less than 1500px -> 5 cards
+      1660: 6, // Less than 1660px -> 6 cards
+      1850: 7, // Less than 1850px -> 7 cards
+    },
+    defaultImagesPerPage: 8 // Default when width is larger than all breakpoints
+  };
+  const reviewSliderSettings = {
+    breakpoints: {
+      520: 1,  // Less than 520px -> 1 card
+    },
+    defaultImagesPerPage: 2 // Default when width is larger than all breakpoints
+  };
+
   return (
     <main className='flex flex-col justify-center items-center gap-20'>
-      <section className='w-[90%] md:w-[84%] h-[835px] mt-5 rounded-md overflow-hidden felx justify-center items-center relative '>
+      {/* Movie Background */}
+      <section className='w-[90%] md:w-[84%] h-[835px] mt-5 rounded-lg overflow-hidden felx justify-center items-center relative '>
         <div className='
         flex flex-col justify-end items-center text-white text-center pb-10
         inset-0 bg-gradient-to-t from-black-8 via-transparent to-transparent w-full h-full absolute z-10'>
@@ -189,6 +230,7 @@ export default function page({ params }: { params: { id: number } }) {
             <ReadyTooltip children={<Button size='lgIcon'><GoCheckCircle /></Button>} title={t('watched')} />
           </div>
         </div>
+        {/* Movie Background Image */}
         {
           loading ? null
             : <Image src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
@@ -197,18 +239,73 @@ export default function page({ params }: { params: { id: number } }) {
       </section>
 
       <section className='w-[90%] md:w-[84%] flex flex-col lg:flex-row gap-5'>
+        {/* Leftside Info */}
         <div className='w-full lg:w-[66%] flex flex-col gap-5'>
+
+          {/* Movie Description */}
           <OpenTitleInfoCard title={t('description')}>
             {movie.overview && <p className='text-white'>{movie.overview}</p>}
           </OpenTitleInfoCard>
+
+
+          {/* Cast Carousel */}
           <OpenTitleInfoCard className='mb-8' title={movie.genres && movie.genres.some(genre => genre.id === 16) ? t('voiceActors') : t('cast')}>
-            <div className='overflow-x-clip'>
-              <HorizontalCarousel data={cast} />
+            <div className='overflow-x-clip h-[8rem]'>
+              <HorizontalCarousel
+                navStyle='style1'
+                data={cast}
+                settings={castSliderSettings}
+                ItemComponent={({ item }) => (
+                  <ActorCard
+                    actorName={item.name}
+                    credit_id={item.credit_id}
+                    profile_path={item.profile_path}
+                    character={item.character}
+                    gender={item.gender}
+                  />
+                )}
+              />
+            </div>
+          </OpenTitleInfoCard>
+
+          {/* Reviews */}
+          <OpenTitleInfoCard className='mb-8' title={t('reviews')}>
+            <div>
+              <HorizontalCarousel
+                navStyle='style2'
+                data={reviews}
+                settings={reviewSliderSettings}
+                ItemComponent={({ item }) => (
+                  <ReviewCard
+                    id={item.id}
+                    name={item.author_details.name}
+                    avatar_path={item.author_details.avatar_path}
+                    username={item.author_details.username}
+                    content={item.content}
+                    rating={item.author_details.rating}
+                    created_at={item.created_at}
+                  />
+                )}
+                />
+              {/* {reviews.map((review) => (
+                <ReviewCard
+                  key={review.id}
+                  authorName={review.author_details.name}
+                  avatar_path={review.author_details.avatar_path}
+                  username={review.author_details.username}
+                  content={review.content}
+                  rating={review.author_details.rating}
+                  created_at={review.created_at}
+                  locale={locale}
+                />
+              ))} */}
             </div>
           </OpenTitleInfoCard>
         </div>
+
+        {/* Rightside Info */}
         <div className='w-full lg:w-[34%]'>
-          <div className='bg-black-10 rounded-md p-12 font-semibold text-lg border-[1px] border-black-15 flex flex-col gap-8'>
+          <div className='bg-black-10 rounded-lg p-12 font-semibold text-lg border-[1px] border-black-15 flex flex-col gap-8'>
             <div>
               <p className={`text-gray-60 mb-3`}>{t('releaseDate')}</p>
               <p className='text-white text-lg text-[20px] font-semibold'>{movie.release_date}</p>

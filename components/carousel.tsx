@@ -2,21 +2,29 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useLocale } from 'next-intl';
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa6";
-import ActorCard from './ActorCard'
 
-const HorizontalCarousel = ({
+type CarouselSettings = {
+  breakpoints: {
+    [key: number]: number; // width: imagesPerPage
+  };
+  defaultImagesPerPage?: number;
+}
+
+interface CarouselProps<T> {
+  data: T[];
+  ItemComponent: React.ComponentType<{ item: T }>;
+  settings: CarouselSettings;
+  navStyle: "style1" | "style2" | "style3";
+}
+
+function HorizontalCarousel<T>({
   data,
-}: {
-  data: {
-    "gender": number,
-    "name": string,
-    "character": string,
-    "profile_path": string,
-    "credit_id": string
-  }[]
-}) => {
+  ItemComponent,
+  settings,
+  navStyle
+}: CarouselProps<T>) {
   const [currentPage, setCurrentPage] = useState(0)
-  const [imagesPerPage, setImagesPerPage] = useState(8)
+  const [imagesPerPage, setImagesPerPage] = useState(settings.defaultImagesPerPage || 8)
   const carouselRef = useRef(null)
   const locale = useLocale()
 
@@ -24,35 +32,55 @@ const HorizontalCarousel = ({
   useEffect(() => {
     const updateImagesPerPage = () => {
       const width = window.innerWidth
-      if (width < 400) { // xs
-        setImagesPerPage(1)
-      } else if (width < 520) { // sm
-        setImagesPerPage(2)
-      } else if (width < 640) { // md
-        setImagesPerPage(3)
-      } else if (width < 768) { // lg
-        setImagesPerPage(4)
-      } else if (width < 1024) { // xl
-        setImagesPerPage(5)
-      } else if (width < 1500) { // xl
-        setImagesPerPage(4)
-      } else { // 2xl
-        setImagesPerPage(8)
+
+      // Get all breakpoints and sort them in descending order
+      const breakpoints = Object.keys(settings.breakpoints)
+        .map(Number)
+        .sort((a, b) => b - a)
+
+      // Find the first breakpoint that matches the current width
+      const matchedBreakpoint = breakpoints.find(breakpoint => width < breakpoint)
+
+      if (matchedBreakpoint) {
+        setImagesPerPage(settings.breakpoints[matchedBreakpoint])
+      } else {
+        // If no breakpoint matches, use the default
+        setImagesPerPage(settings.defaultImagesPerPage || 8)
       }
     }
 
     updateImagesPerPage()
     window.addEventListener('resize', updateImagesPerPage)
     return () => window.removeEventListener('resize', updateImagesPerPage)
-  }, [])
+  }, [settings])
 
   const totalPages = Math.ceil(data.length / imagesPerPage)
+  const buttonClass = `${navStyle === "style3" ? "rounded-lg" : "rounded-full"} flex justify-center items-center group
+  border-[1px] border-black-15 bg-black-8 p-3 text-white hover:bg-black-10 ${currentPage === totalPages - 1 ? 'opacity-50' : 'opacity-100'
+    }`
+  const renderPageIndicators = () => {
+    return (
+      <div className="flex items-center gap-1">
+        {Array.from({ length: totalPages }).map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentPage(index)}
+            className={`h-[3px] transition-all duration-300 rounded-full ${index === currentPage
+              ? "w-6 bg-red-600"
+              : "w-2 bg-gray-600 hover:bg-gray-500"
+              }`}
+            aria-label={`Go to page ${index + 1}`}
+          />
+        ))}
+      </div>
+    );
+  };
 
   return (
-    <div className="w-full">
-      {/* Carousel container - removed relative */}
-      <div className="h-40 overflow-x-hidden">
-        {/* Images row container - removed relative */}
+    <div className="w-full relative">
+      {/* Carousel container */}
+      <div className="h-fit overflow-x-hidden">
+        {/* Images row container */}
         <div
           ref={carouselRef}
           style={{
@@ -77,14 +105,7 @@ const HorizontalCarousel = ({
                     key={pageIndex * imagesPerPage + imageIndex}
                     className="h-full z-10"
                   >
-                    <ActorCard
-                      actorName={item.name}
-                      credit_id={item.credit_id}
-                      profile_path={item.profile_path}
-                      character={item.character}
-                      key={item.credit_id}
-                      gender={item.gender}
-                    />
+                    <ItemComponent item={item} />
                   </div>
                 ))}
             </div>
@@ -92,26 +113,30 @@ const HorizontalCarousel = ({
         </div>
       </div>
 
-      {/* Navigation buttons in a separate container */}
-      <div className="relative h-0">
-      <button
+      {/* Navigation buttons and page indicators */}
+      <div className={`h-fit flex items-center gap-3 mr-4 top-0
+        ${navStyle === "style1" ? "-translate-y-[13rem]"
+          : navStyle === "style3" ? "absolute top-0 -translate-y-[calc(100%+40px)] right-0 bg-black-6 border-[1px] border-black-12 p-2 rounded-xl"
+            : navStyle === "style2" ? "translate-y-6 justify-center" : ""}
+
+        ${locale === "ar" ? "flex-row-reverse justify-start" : "flex-row justify-end"}`}>
+        <button
           disabled={currentPage === 0}
           onClick={() => setCurrentPage((prev) => prev - 1)}
-          className={`absolute right-20 top-0 -translate-y-[14rem] rounded-full flex justify-center items-center
-            border-[1px] border-black-15 bg-black-8 p-3 text-white hover:bg-black-10 ${currentPage === 0 ? 'opacity-50' : 'opacity-100'
-            }`}
+          className={buttonClass}
         >
-          <FaArrowLeft className='text-gray-60' />
+          <FaArrowLeft className='text-gray-60 group-hover:text-white' />
         </button>
+
+        {/* Page Indicators */}
+        {navStyle !== "style1" && renderPageIndicators()}
 
         <button
           disabled={currentPage === totalPages - 1}
           onClick={() => setCurrentPage((prev) => prev + 1)}
-          className={`absolute right-6 top-0 -translate-y-[14rem] rounded-full flex justify-center items-center
-            border-[1px] border-black-15 bg-black-8 p-3 text-white hover:bg-black-10 ${currentPage === totalPages - 1 ? 'opacity-50' : 'opacity-100'
-            }`}
+          className={buttonClass}
         >
-          <FaArrowRight className='text-gray-60' />
+          <FaArrowRight className='text-gray-60 group-hover:text-white' />
         </button>
       </div>
     </div>

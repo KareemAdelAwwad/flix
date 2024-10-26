@@ -57,9 +57,9 @@ const MoviesShows = () => {
   const featuredMovie = popularMovies[0];
 
   return (
-    <main className="bg-black min-h-screen text-white">
+    <main className="bg-black text-white">
       {/* قسم الفيلم المميز */}
-      <section className="container mx-auto py-5">
+      <section className=" mx-auto py-5">
         <h2 className="text-3xl font-bold mb-4 text-red-500">{t('featuredMovie')}</h2>
         <div className="relative bg-gray-800 rounded-lg overflow-hidden">
           <Image
@@ -80,7 +80,7 @@ const MoviesShows = () => {
       </section>
 
       {/* قسم الأفلام الأعلى تقييماً */}
-      <section className="container mx-auto py-8">
+      <section className=" mx-auto py-8">
         <h2 className="text-3xl font-bold mb-4 text-red-500">{t('top10Movies')}</h2>
         <div className="flex overflow-x-auto gap-4 pb-4 bg-gray-900 rounded-lg p-2">
           {top10Movies.slice(0, 10).map((movie) => (
@@ -107,7 +107,7 @@ const MoviesShows = () => {
 
 
       {/* قسم الأفلام الشعبية */}
-      <section className="container mx-auto py-8">
+      <section className=" mx-auto py-8">
         <h2 className="text-3xl font-bold mb-4 text-red-500">{t('popularMovies')}</h2>
         <div className="flex overflow-x-auto gap-4 pb-4 bg-gray-900 rounded-lg p-2">
           {popularMovies.slice(1).map((movie) => (
@@ -133,7 +133,7 @@ const MoviesShows = () => {
       </section>
 
       {/* قسم الأفلام المتداولة */}
-      <section className="container mx-auto py-8">
+      <section className=" mx-auto py-8">
         <h2 className="text-3xl font-bold mb-4 text-red-500">{t('trendingMovies')}</h2>
         <div className="flex overflow-x-auto gap-4 pb-4 bg-gray-900 rounded-lg p-2">
           {trendingMovies.slice(0, 10).map((movie) => (

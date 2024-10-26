@@ -26,4 +26,7 @@ const ActorCard = ({actorName, credit_id, profile_path, character, gender}: Acto
   )
 }
 
+
+
+
 export default ActorCard

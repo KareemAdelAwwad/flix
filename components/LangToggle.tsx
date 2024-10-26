@@ -3,7 +3,7 @@
 import * as React from "react"
 import { ChangeEvent, useTransition } from 'react';
 import { useLocale } from 'next-intl';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 
 import { Button } from "@/components/ui/button"
 import {
@@ -17,12 +17,23 @@ import {
 export function LangToggle() {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const pathname = usePathname();
   const localActive = useLocale();
 
   const onSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const nextLocale = e.target.value;
+    
+    // Get the current path segments
+    const segments = pathname.split('/');
+    
+    // Replace the locale segment (index 1) with the new locale
+    segments[1] = nextLocale;
+    
+    // Reconstruct the full path
+    const newPath = segments.join('/');
+    
     startTransition(() => {
-      router.replace(`/${nextLocale}`);
+      router.replace(newPath);
     });
   };
 
