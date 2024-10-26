@@ -6,11 +6,11 @@ import {
 } from "@/components/ui/tooltip"
 import React from "react"
 
-export default function readyTooltip({ children, title }: { children: React.ReactNode, title: string }) {
+export default function readyTooltip({ children, title, className }: { children: React.ReactNode, title: string, className?: string }) {
   return (
     <TooltipProvider>
       <Tooltip>
-        <TooltipTrigger>{children}</TooltipTrigger>
+        <TooltipTrigger className={className}>{children}</TooltipTrigger>
         <TooltipContent>
           <p>{title}</p>
         </TooltipContent>

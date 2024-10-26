@@ -16,6 +16,9 @@ import { IoBookmarkOutline, IoShareSocialOutline } from "react-icons/io5";
 import { PiFilmSlateDuotone } from "react-icons/pi";
 import { GoCheckCircle, GoCheckCircleFill } from "react-icons/go";
 
+import HorizontalCarousel from '@/components/carousel'
+import ActorCard from '@/components/ActorCard';
+
 
 interface Movie {
   "id": number,
@@ -193,36 +196,37 @@ export default function page({ params }: { params: { id: number } }) {
         }
       </section>
 
-      <section className='w-[90%] md:w-[84%] flex gap-5'>
-        <div className='w-full md:w-[66%] flex flex-col gap-5'>
+      <section className='w-[90%] md:w-[84%] flex flex-col lg:flex-row gap-5'>
+        <div className='w-full lg:w-[66%] flex flex-col gap-5'>
           <OpenTitleInfoCard title={t('description')}>
             {movie.overview && <p className='text-white'>{movie.overview}</p>}
           </OpenTitleInfoCard>
-          <OpenTitleInfoCard title={movie.genres && movie.genres.some(genre => genre.id === 16) ? t('voiceActors') : t('cast')}>
-            <div className='flex gap-4 overflow-clip'>
-              {cast.map((actor) => (
-                <div key={actor.credit_id}>
-                  <ReadyTooltip title={actor.name}>
-                    <div className='w-[100px] h-[105px] flex'>
-                      <Image src={`https://image.tmdb.org/t/p/original${actor.profile_path}`}
-                        alt={actor.name} className='object-cover rounded-md pointer-events-none' width={100} height={105} />
-                    </div>
-                    <p className='text-gray-50 text-center text-sm'>{actor.character}</p>
-                  </ReadyTooltip>
-                </div>
-              ))}
+          <OpenTitleInfoCard className='mb-8' title={movie.genres && movie.genres.some(genre => genre.id === 16) ? t('voiceActors') : t('cast')}>
+            <div className='overflow-x-clip'>
+              <HorizontalCarousel data={cast} />
+              {/* {cast.map((actor, index) => (
+                <ActorCard actorName={actor.name} credit_id={actor.credit_id} profile_path={actor.profile_path} character={actor.character} key={actor.credit_id} />
+              ))} */}
             </div>
           </OpenTitleInfoCard>
         </div>
-        <div className='w-full md:w-[34%]'>
-          <OpenTitleInfoCard title={t('reviews')}>
-            {movie.overview && <p className='text-white'>{movie.overview}</p>}
-          </OpenTitleInfoCard>
+        <div className='w-full lg:w-[34%]'>
+          <div className='bg-black-10 rounded-md p-12 font-semibold text-lg border-[1px] border-black-15 flex flex-col gap-8'>
+            <div>
+              <p className={`text-gray-60 mb-3`}>{t('releaseDate')}</p>
+              <p className='text-white text-lg text-[20px] font-semibold'>{movie.release_date}</p>
+            </div>
+
+            <div>
+              <p className={`text-gray-60 mb-3`}>{t('releaseDate')}</p>
+              <p className='text-white text-lg text-[20px] font-semibold'>{movie.release_date}</p>
+            </div>
+          </div>
         </div>
 
       </section>
 
 
-    </main>
+    </main >
   )
 }
