@@ -76,5 +76,14 @@
       "duration": "Duration",
       "rating": "Rating",
       "music": "Music"
+  } , 
+  "MoviesShows" : {
+    "featuredMovie": "Featured Movie",
+    "popularMovies": "Popular Movies",
+    "top10Movies": "Top 10 Movies",
+    "trendingMovies": "Trending Movies",
+    "watchFilm": "Watch the Film",
+    "loading": "Loading..."
   }
+  
 }

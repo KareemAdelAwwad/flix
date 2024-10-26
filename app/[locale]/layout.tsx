@@ -5,7 +5,9 @@ import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import type { Metadata } from "next";
 import "./globals.css";
-
+import {
+  ClerkProvider,
+} from '@clerk/nextjs'
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
@@ -28,21 +30,23 @@ export default function RootLayout({
   const messages = useMessages();
 
   return (
-    <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
-      <body>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <NextIntlClientProvider messages={messages}>
-            <Header />
-            {children}
-            <Footer />
-          </NextIntlClientProvider>
-        </ThemeProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
+        <body>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <NextIntlClientProvider messages={messages}>
+              <Header />
+              {children}
+              <Footer />
+            </NextIntlClientProvider>
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

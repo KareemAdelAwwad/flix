@@ -1,7 +1,7 @@
 {
   "Header": {
     "title": "تطبيق الأفلام",
-    "home": "تطبيق الفيلم",
+    "home": "الرئيسية",
     "movies": "الأفلام",
     "shows": "العروض",
     "support": "الدعم",
@@ -18,26 +18,21 @@
     "title": "أهلاً بالعالم!"
   },
   "Footer": {
-    "Home": "المنزل",
-    "Categories": "فئات",
-    "Devices": "الاجهزه",
-    "Pricing": "الاسعار",
+    "Home": "الرئيسية",
+    "Categories": "الفئات",
+    "Devices": "الأجهزة",
+    "Pricing": "الأسعار",
     "FAQ": "الأسئلة الشائعة",
-
-    "Movies": "الافلام",
-    "Trending": "متداول",
+    "Movies": "الأفلام",
+    "Trending": "المتداولة",
     "NewRelease": "إصدار جديد",
-    "Popular": "شعبي",
-
+    "Popular": "شائع",
     "Shows": "عروض",
-
-    "Support": "دعم",
+    "Support": "الدعم",
     "ContactUs": "تواصل معنا",
-
     "Subscription": "الاشتراكات",
     "Plans": "الخطط",
-    "Features": "المميزات",
-
+    "Features": "الميزات",
     "ContactWithUs": "تواصل معنا"
   },
   "TitlePage": {
@@ -54,14 +49,13 @@
     "subtitles": "الترجمة",
     "settings": "الإعدادات",
     "watchlist": "إضافة إلى قائمة المشاهدة",
-    "watched": "تمييز كمشاهد",
-    "unwatched": "إلغاء التمييز كمشاهد",
-    "trailer": "مشاهدة المقطع الترويجي",
+    "watched": "مُشاهد",
+    "unwatched": "غير مُشاهد",
+    "trailer": "مشاهدة العرض",
     "themeSong": "أغنية الخلفية",
-
     "description": "الوصف",
-    "cast": "طاقم التمثيل",
-    "voiceActors": "مؤدي الأصوات",
+    "cast": "طاقم العمل",
+    "voiceActors": "مؤدو الأصوات",
     "reviews": "المراجعات",
     "addreview": "إضافة مراجعة",
     "removereview": "إزالة المراجعة",
@@ -71,5 +65,16 @@
     "duration": "المدة",
     "rating": "التقييم",
     "music": "الموسيقى"
+  },
+  "MoviesShows": {
+
+      "featuredMovie": "الفيلم المميز",
+      "popularMovies": "الأفلام الشعبية",
+      "top10Movies": "أفضل 10 أفلام",
+      "trendingMovies": "الأفلام المتداولة",
+      "watchFilm": "شاهد الفيلم",
+      "loading": "جاري التحميل..."
+    
+    
   }
 }

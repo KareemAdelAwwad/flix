@@ -204,9 +204,6 @@ export default function page({ params }: { params: { id: number } }) {
           <OpenTitleInfoCard className='mb-8' title={movie.genres && movie.genres.some(genre => genre.id === 16) ? t('voiceActors') : t('cast')}>
             <div className='overflow-x-clip'>
               <HorizontalCarousel data={cast} />
-              {/* {cast.map((actor, index) => (
-                <ActorCard actorName={actor.name} credit_id={actor.credit_id} profile_path={actor.profile_path} character={actor.character} key={actor.credit_id} />
-              ))} */}
             </div>
           </OpenTitleInfoCard>
         </div>

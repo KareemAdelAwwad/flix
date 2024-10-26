@@ -5,7 +5,7 @@ import links from '@/data/links.json';
 import React, { useState } from 'react';
 // import { useTheme } from 'next-themes';
 import { Link } from '@/i18n/routing';
-
+import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 //img src
 import { RiMenuFill } from "react-icons/ri";
 import { BsSearch } from "react-icons/bs";
@@ -57,20 +57,22 @@ const Header = () => {
           <BsSearch className={`text-white`} size={16} />
         </Link>
       </div>
-
-
-
-
-
-
       {/* sign in and language side */}
       <div className='hidden lg:flex items-center gap-2'>
         <ModeToggle />
         <LangToggle />
-        <Button className='bg-red-45 px-4 py-3 font-medium text-white rounded-lg hover:bg-red-60'>{t('signin')}</Button>
+        <SignedOut>
+          <Button className='bg-red-45 px-3 py-2 font-medium text-white rounded-lg hover:bg-red-60'>
+            <SignInButton>
+              {t('signin')}
+            </SignInButton>
+          </Button>
+        </SignedOut>
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
+
       </div>
-
-
 
       {/* sidebar button */}
       <RiMenuFill onClick={toggleSidebar} className={` cursor-pointer w-10 h-10 aspect-square ${themeTriger}  lg:absolute duration-500 lg:hidden `} />

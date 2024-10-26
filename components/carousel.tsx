@@ -1,5 +1,6 @@
 'use client'
 import React, { useEffect, useRef, useState } from 'react'
+import { useLocale } from 'next-intl';
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa6";
 import ActorCard from './ActorCard'
 
@@ -17,6 +18,7 @@ const HorizontalCarousel = ({
   const [currentPage, setCurrentPage] = useState(0)
   const [imagesPerPage, setImagesPerPage] = useState(8)
   const carouselRef = useRef(null)
+  const locale = useLocale()
 
   // Update images per page based on screen size
   useEffect(() => {
