@@ -6,7 +6,8 @@
     "shows": "TV Shows",
     "support": "Support",
     "subscriptions": "Subscriptions",
-    "signin": "Sign-in"
+    "signin": "Sign-in",
+     "search":"Search"
   },
   "ThemeToggle": {
     "title": "Toggle theme",
