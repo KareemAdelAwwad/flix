@@ -5,7 +5,7 @@ import links from '@/data/links.json';
 import React, { useState } from 'react';
 // import { useTheme } from 'next-themes';
 import { Link } from '@/i18n/routing';
-
+import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 //img src
 import { RiMenuFill } from "react-icons/ri";
 import { BsSearch } from "react-icons/bs";
@@ -36,17 +36,17 @@ const Header = () => {
 
   //for icon theme
   const theme = useTheme().resolvedTheme;
+  const themeTriger: any = () => { return theme === "light" ? "text-black-10" : "text-white"; };
 
   const navItemsClassName = 'p-2 px-4 rounded-3xl hover:bg-neutral-700 hover:text-white text-black-6 dark:text-white bg-transparent transition-all duration-300';
   return (
-    <header className='relative overflow-hidden flex items-center justify-between container py-4 text-black dark:text-white '>
+    <header className='relative flex items-center justify-between container py-4 text-black dark:text-white' >
 
       {/* title */}
       <Link className=' cursor-pointer text-3xl font-semibold  ' href='/'>{t('title')}  </Link>
 
 
       {/* buttons and section */}
-      
       <div className=' scale-90  hidden text-black-6  dark:text-white  lg:flex gap-2 items-center p-1 border-2 border-black-20 box-content rounded-full duration-500 '>
        
        
@@ -58,24 +58,25 @@ const Header = () => {
           <BsSearch className={`text-white`} size={16} />
         </Link>
       </div>
-
-
-
-
-
-
-      {/* signIn and language side */}
-
+      {/* sign in and language side */}
       <div className='hidden lg:flex items-center gap-2'>
         <ModeToggle />
         <LangToggle />
-        <Button className='bg-red-45 px-4 py-3 font-medium text-white rounded-lg hover:bg-red-60'>{t('signin')}</Button>
+        <SignedOut>
+          <Button className='bg-red-45 px-3 py-2 font-medium text-white rounded-lg hover:bg-red-60'>
+            <SignInButton>
+              {t('signin')}
+            </SignInButton>
+          </Button>
+        </SignedOut>
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
+
       </div>
 
-
-
       {/* sidebar button */}
-      <RiMenuFill onClick={toggleSidebar} className={` cursor-pointer w-10 h-10 ${theme === "dark" ? "text-white" : "text-black-10"}  lg:absolute lg:-left-96 duration-500`} />
+      <RiMenuFill onClick={toggleSidebar} className={` cursor-pointer w-10 h-10 aspect-square ${themeTriger}  lg:absolute duration-500 lg:hidden `} />
 
 
       {/* sideBar for mobile and tablet  its disappear at lg*/}
@@ -95,10 +96,13 @@ const Header = () => {
        
           {
             links.nav.map((link, index) => (
-              <li key={index} onClick={toggleSidebar} className=" text-xl p-2 hover:bg-gray-500 hover:text-white cursor-pointer">{t(link.key)} </li>
+              <Link key={index} href={link.path}>
+                <li key={index} onClick={toggleSidebar} className="text-xl p-2 hover:bg-gray-500 hover:text-white cursor-pointer">
+                  {t(link.key)}
+                </li>
+              </Link>
             ))
           }
-
           <LangToggle />
           <ThemeSwitcher />
         </ul>

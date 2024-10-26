@@ -20,7 +20,7 @@ const Footer = () => {
   const theme = useTheme().resolvedTheme;
 
   const socialMediaIcon = 'p-2 rounded-md bg-gray-75 dark:bg-black-10 hover:scale-95 trainsition-all duration-900 border-[1px] border-black-15';
-  const sochiaMediaIconTheme: any = () => { return theme === "light" ? "text-black-10" : "text-white"; };
+  const themeTriger: any = () => { return theme === "light" ? "text-black-10" : "text-white"; };
   return (
     <footer className='container flex justify-center flex-col items-center'>
       <div className='flex flex-wrap items-start justify-between w-full gap-8 py-10'>
@@ -70,9 +70,9 @@ const Footer = () => {
         <div className='flex flex-col text-lg'>
           <h2 className='dark:text-white text-black-6'>{t('ContactWithUs')} </h2>
           <div className='flex justify-evenly gap-2'>
-            <Link className={socialMediaIcon} href=""> <FaFacebook className={sochiaMediaIconTheme} size={22} /> </Link>
-            <Link className={socialMediaIcon} href=""> <FaLinkedin className={sochiaMediaIconTheme} size={22} /> </Link>
-            <Link className={socialMediaIcon} href=""> <FaXTwitter className={sochiaMediaIconTheme} size={22} /> </Link>
+            <Link className={socialMediaIcon} href=""> <FaFacebook className={themeTriger} size={22} /> </Link>
+            <Link className={socialMediaIcon} href=""> <FaLinkedin className={themeTriger} size={22} /> </Link>
+            <Link className={socialMediaIcon} href=""> <FaXTwitter className={themeTriger} size={22} /> </Link>
           </div>
         </div>
 

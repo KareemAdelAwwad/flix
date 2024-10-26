@@ -19,13 +19,13 @@ export function ThemeSwitcher() {
   if (!mounted) return null
 
   return (
-    <div className=" m-auto w-fit bg-red-60 flex justify-evenly  rounded-lg ">
+    <div className=" mx-4 w-ful bg-red-60 flex justify-evenly  rounded-lg delay-1000 ">
 
 
 
-      <Button className=" text-black-10 bg-white    dark:text-white dark:bg-transparent hover:bg-white transition-all duration-700" onClick={() => setTheme('light')}> <Sun /> {t('light')}</Button>
+      <Button className="w-full text-black-10 bg-white    dark:text-white dark:bg-transparent hover:bg-white" onClick={() => setTheme('light')}> <Sun /> {t('light')}</Button>
 
-      <Button className="text-white   bg-transparent  dark:bg-black-10 hover:bg-transparent transition-all duration-700" onClick={() => setTheme('dark')}>  <Moon /> {t('dark')} </Button>
+      <Button className="w-full text-white   bg-transparent  dark:bg-black-10 hover:bg-transparent" onClick={() => setTheme('dark')}>  <Moon /> {t('dark')} </Button>
     </div>
   )
 };
