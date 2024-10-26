@@ -1,0 +1,80 @@
+{
+  "Header": {
+    "title": "تطبيق الأفلام",
+    "home": "الرئيسية",
+    "movies": "الأفلام",
+    "shows": "العروض",
+    "support": "الدعم",
+    "subscriptions": "الاشتراكات",
+    "signin": "تسجيل دخول"
+  },
+  "ThemeToggle": {
+    "title": "تبديل المظهر",
+    "dark": "داكن",
+    "light": "فاتح",
+    "system": "النظام"
+  },
+  "HomePage": {
+    "title": "أهلاً بالعالم!"
+  },
+  "Footer": {
+    "Home": "الرئيسية",
+    "Categories": "الفئات",
+    "Devices": "الأجهزة",
+    "Pricing": "الأسعار",
+    "FAQ": "الأسئلة الشائعة",
+    "Movies": "الأفلام",
+    "Trending": "المتداولة",
+    "NewRelease": "إصدار جديد",
+    "Popular": "شائع",
+    "Shows": "عروض",
+    "Support": "الدعم",
+    "ContactUs": "تواصل معنا",
+    "Subscription": "الاشتراكات",
+    "Plans": "الخطط",
+    "Features": "الميزات",
+    "ContactWithUs": "تواصل معنا"
+  },
+  "TitlePage": {
+    "title": "المشغل",
+    "play": "تشغيل الفيلم",
+    "pause": "إيقاف الفيلم",
+    "mute": "كتم الصوت",
+    "unmute": "إلغاء الكتم",
+    "fullscreen": "ملء الشاشة",
+    "exitfullscreen": "الخروج من ملء الشاشة",
+    "volume": "الصوت",
+    "quality": "الجودة",
+    "speed": "السرعة",
+    "subtitles": "الترجمة",
+    "settings": "الإعدادات",
+    "watchlist": "إضافة إلى قائمة المشاهدة",
+    "watched": "مُشاهد",
+    "unwatched": "غير مُشاهد",
+    "trailer": "مشاهدة العرض",
+    "themeSong": "أغنية الخلفية",
+    "description": "الوصف",
+    "cast": "طاقم العمل",
+    "voiceActors": "مؤدو الأصوات",
+    "reviews": "المراجعات",
+    "addreview": "إضافة مراجعة",
+    "removereview": "إزالة المراجعة",
+    "genre": "التصنيف",
+    "director": "المخرج",
+    "releaseDate": "تاريخ الإصدار",
+    "duration": "المدة",
+    "rating": "التقييم",
+    "music": "الموسيقى"
+  },
+  "MoviesShows": {
+
+      "featuredMovie": "الفيلم المميز",
+      "popularMovies": "الأفلام الشعبية",
+      "top10Movies": "أفضل 10 أفلام",
+      "trendingMovies": "الأفلام المتداولة",
+      "watchFilm": "شاهد الفيلم",
+      "loading": "جاري التحميل..."
+    
+    
+  }
+}

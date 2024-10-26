@@ -1,0 +1,89 @@
+{
+  "Header": {
+    "title": "Movie App",
+    "home": "Home",
+    "movies": "Movies",
+    "shows": "TV Shows",
+    "support": "Support",
+    "subscriptions": "Subscriptions",
+    "signin": "Sign-in"
+  },
+  "ThemeToggle": {
+    "title": "Toggle theme",
+    "dark": "Dark",
+    "light": "Light",
+    "system": "System"
+  },
+  "HomePage": {
+    "title": "Hello world!"
+  }, 
+  "Footer":{
+    "Home":"Home",
+    "Categories":"Categories",
+    "Devices":"Devices",
+    "Pricing":"Pricing",
+    "FAQ":"FAQ",
+
+    "Movies":"Movies", 
+    "Trending":"Trending",
+    "NewRelease":"New Release ",
+    "Popular":"Popular", 
+
+    
+    "Shows":"Shows",
+
+
+    "Support":"Support",
+    "ContactUs":"Contact Us ",
+
+
+    "Subscription":"Subscription",
+    "Plans":"Plans",
+    "Features":"Features", 
+
+    "ContactWithUs":"Contact With Us"
+  },
+  "TitlePage":{
+      "title":"Player",
+      "play": "Play Movie",
+      "pause": "Pause Movie",
+      "mute": "Mute",
+      "unmute": "Unmute",
+      "fullscreen": "Fullscreen",
+      "exitfullscreen": "Exit Fullscreen",
+      "volume": "Volume",
+      "quality": "Quality",
+      "speed": "Speed",
+      "subtitles": "Subtitles",
+      "settings": "Settings",
+      "watchlist": "Add to Watchlist",
+      "watched": "Mark as Watched",
+      "unwatched": "Mark as Unwatched",
+      "trailer": "Watch Trailer",
+      "themeSong": "Theme Song",
+      
+
+
+      "description": "Description",
+      "cast": "Cast",
+      "voiceActors": "Voice Actors",
+      "reviews": "Reviews",
+      "addreview": "Add Review",
+      "removereview": "Remove Review",
+      "genre": "Genre",
+      "director": "Director",
+      "releaseDate": "Release Date",
+      "duration": "Duration",
+      "rating": "Rating",
+      "music": "Music"
+  } , 
+  "MoviesShows" : {
+    "featuredMovie": "Featured Movie",
+    "popularMovies": "Popular Movies",
+    "top10Movies": "Top 10 Movies",
+    "trendingMovies": "Trending Movies",
+    "watchFilm": "Watch the Film",
+    "loading": "Loading..."
+  }
+  
+}
