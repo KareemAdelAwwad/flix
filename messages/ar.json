@@ -68,14 +68,18 @@
     "music": "الموسيقى"
   },
   "MoviesShows": {
-    "loading": "جارٍ التحميل",
-    "featuredMovie": "الفيلم المميز",
-    "enjoyFeatured": "استمتع بالفيلم المميز",
+    "popular": "الأفلام الشائعة",
+    "top10": "أفضل 10 أفلام",
+    "trending": "الأفلام الرائجة",
+    "action": "أفلام الأكشن",
+    "featuredMovie": "فيلم مميز",
     "watchFilm": "شاهد الفيلم",
-    "popularMovies": "أفلام شعبية",
-    "top10Movies": "أفضل 14 أفلام",
-    "trendingMovies": "أفلام متصدرة",
-    "romanticMovies": "أفلام رومانسية",
-    "actionMovies": "أفلام أكشن"
+    "noRuntime": "لا توجد مدة",
+    "noDescription": "لا توجد وصف",
+    "allMovies": "كل الأفلام",
+    "popularMovies": "الأفلام الشائعة",
+    "top10Movies": "أفضل 10 أفلام",
+    "trendingMovies": "الأفلام الرائجة",
+    "actionMovies": "أفلام الأكشن"
   }
 }
