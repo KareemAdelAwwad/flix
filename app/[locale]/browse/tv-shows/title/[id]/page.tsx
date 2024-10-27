@@ -275,10 +275,10 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
       <section className='w-full h-[835px] mt-5 rounded-lg overflow-hidden felx justify-center items-center relative'>
         <div className='
         flex flex-col justify-end items-center text-white text-center pb-10
-        inset-0 bg-gradient-to-t from-black-8 via-transparent to-transparent w-full h-full absolute z-10'>
+        inset-0 bg-gradient-to-t dark:from-black-8 from-white via-transparent to-transparent w-full h-full absolute z-10'>
           <div>
-            <h1 className='text-4xl font-bold'>{series.name}</h1>
-            <p className='text-lg text-gray-60'>{series.tagline ? series.tagline : series.overview}</p>
+            <h1 className='text-4xl font-bold dark:text-white text-black-6'>{series.name}</h1>
+            <p className='text-lg dark:text-gray-60 text-black-12'>{series.tagline ? series.tagline : series.overview}</p>
           </div>
           {/* Series controles */}
           <div className='flex justify-center items-center gap-2 w-full h-16 bg-transparent flex-wrap'>
