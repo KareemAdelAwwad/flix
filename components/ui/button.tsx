@@ -23,7 +23,7 @@ const buttonVariants = cva(
         default: "h-10 px-4 py-2",
         sm: "h-9 rounded-md px-3",
         lg: "h-11 rounded-md px-8",
-        icon: "h-10 w-10 text-white bg-black-6 hover:bg-black-10 transition-colors duration-400",
+        icon: "h-10 w-10",
         lgIcon: "h-11 w-11 text-white bg-black-6 hover:bg-black-10 transition-colors duration-400",
       },
     },

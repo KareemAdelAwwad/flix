@@ -48,8 +48,6 @@ const Header = () => {
 
       {/* buttons and section */}
       <div className=' scale-90  hidden text-black-6  dark:text-white  lg:flex gap-2 items-center p-1 border-2 border-black-20 box-content rounded-full duration-500 '>
-       
-       
 
         {links.nav.map((link, index) => (
           <Link key={index} href={link.path} className={navItemsClassName}>{t(link.key)}</Link>
@@ -63,8 +61,8 @@ const Header = () => {
         <ModeToggle />
         <LangToggle />
         <SignedOut>
-          <Button className='bg-red-45 px-3 py-2 font-medium text-white rounded-lg hover:bg-red-60'>
-            <SignInButton>
+          <Button className='bg-red-45 text-white rounded-lg hover:bg-red-60'>
+            <SignInButton mode='modal'>
               {t('signin')}
             </SignInButton>
           </Button>
@@ -82,18 +80,18 @@ const Header = () => {
       {/* sideBar for mobile and tablet  its disappear at lg*/}
       <div className={` pt-10 flex flex-col   fixed top-0  h-full w-72   bg-gray-100 dark:bg-black-12 transform ${isSidebarVisible ? 'right-0' : '-right-72'}  ${t('sideBar')}    text-xl transition-all duration-300`}>
         <Button onClick={toggleSidebar} className='p-2 absolute left-0 top-0'> <CgClose className={` ${theme === "dark" ? "text-black-10" : "text-white "}`} /> </Button>
-        
-        <div className='flex items-center  bg-gray-60  p-1 m-1 rounded-lg '>
-       <Button className=' p-0 mx-2 bg-transparent hover:bg-transparent'>
-         <BsSearch className={`text-white`} size={20} />
-      </Button>
 
-          <input type="text" name="search" id="" placeholder={t('search')} className='placeholder:text-white   bg-transparent p-0 m-0 w-full focus:outline-none focus:'  />
+        <div className='flex items-center  bg-gray-60  p-1 m-1 rounded-lg '>
+          <Button className=' p-0 mx-2 bg-transparent hover:bg-transparent'>
+            <BsSearch className={`text-white`} size={20} />
+          </Button>
+
+          <input type="text" name="search" id="" placeholder={t('search')} className='placeholder:text-white   bg-transparent p-0 m-0 w-full focus:outline-none focus:' />
         </div>
-   
+
         {/* setting */}
         <ul>
-       
+
           {
             links.nav.map((link, index) => (
               <Link key={index} href={link.path}>

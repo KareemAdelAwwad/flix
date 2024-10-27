@@ -7,7 +7,7 @@
     "support": "الدعم",
     "subscriptions": "الاشتراكات",
     "signin": "تسجيل دخول",
-    "search":"بحث"
+    "search": "بحث"
   },
   "ThemeToggle": {
     "title": "تبديل المظهر",
@@ -68,14 +68,14 @@
     "music": "الموسيقى"
   },
   "MoviesShows": {
-     "loading": "جارٍ التحميل",
-  "featuredMovie": "الفيلم المميز",
-  "enjoyFeatured": "استمتع بالفيلم المميز",
-  "watchFilm": "شاهد الفيلم",
-  "popularMovies": "أفلام شعبية",
-  "top10Movies": "أفضل 10 أفلام",
-  "trendingMovies": "أفلام متصدرة",
-  "romanticMovies": "أفلام رومانسية",
-  "actionMovies": "أفلام أكشن"
+    "loading": "جارٍ التحميل",
+    "featuredMovie": "الفيلم المميز",
+    "enjoyFeatured": "استمتع بالفيلم المميز",
+    "watchFilm": "شاهد الفيلم",
+    "popularMovies": "أفلام شعبية",
+    "top10Movies": "أفضل 10 أفلام",
+    "trendingMovies": "أفلام متصدرة",
+    "romanticMovies": "أفلام رومانسية",
+    "actionMovies": "أفلام أكشن"
   }
 }

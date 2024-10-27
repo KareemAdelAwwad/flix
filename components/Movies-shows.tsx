@@ -51,7 +51,7 @@ const MoviesShows = () => {
   }, []);
 
   // Function to fetch runtime for each movie
-  const addRuntimes = async (movies) => {
+  const addRuntimes = async (movies: any[]) => {
     return await Promise.all(
       movies.map(async (movie) => {
         const runtimeRes = await fetch(`https://api.themoviedb.org/3/movie/${movie.id}?api_key=d1e58d52f11cdeb332c4d907dd3ab70b`);
@@ -61,7 +61,7 @@ const MoviesShows = () => {
     );
   };
 
-  const formatRuntime = (runtime) => {
+  const formatRuntime = (runtime: number) => {
     const hours = Math.floor(runtime / 60);
     const minutes = runtime % 60;
     return hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;

@@ -1,5 +1,5 @@
 import { ThemeProvider } from "@/app/[locale]/theme-provider";
-import { NextIntlClientProvider, useMessages } from 'next-intl';
+import { NextIntlClientProvider, useLocale, useMessages } from 'next-intl';
 // import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
@@ -8,6 +8,7 @@ import "./globals.css";
 import {
   ClerkProvider,
 } from '@clerk/nextjs'
+import { arSA, enUS } from '@clerk/localizations'
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
@@ -28,9 +29,8 @@ export default function RootLayout({
   }
 
   const messages = useMessages();
-
   return (
-    <ClerkProvider>
+    <ClerkProvider localization={locale === "ar" ? arSA : enUS}>
       <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
         <body>
           <ThemeProvider

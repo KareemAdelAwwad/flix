@@ -19,7 +19,7 @@ const Footer = () => {
   //for icon theme
   const theme = useTheme().resolvedTheme;
 
-  const socialMediaIcon = 'p-2 rounded-md bg-gray-75 dark:bg-black-10 hover:scale-95 trainsition-all duration-900 border-[1px] border-black-15';
+  const socialMediaIcon = 'p-2 rounded-md bg-gray-75 dark:bg-black-10 bg-transparent hover:scale-95 trainsition-all duration-900 border-[1px] dark:border-black-15';
   const themeTriger: any = () => { return theme === "light" ? "text-black-10" : "text-white"; };
   return (
     <footer className='container flex justify-center flex-col items-center'>

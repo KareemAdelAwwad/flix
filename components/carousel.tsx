@@ -33,18 +33,23 @@ function HorizontalCarousel<T>({
     const updateImagesPerPage = () => {
       const width = window.innerWidth
 
-      // Get all breakpoints and sort them in descending order
+      // Get all breakpoints and sort them in ascending order
       const breakpoints = Object.keys(settings.breakpoints)
         .map(Number)
-        .sort((a, b) => b - a)
+        .sort((a, b) => a - b)
 
-      // Find the first breakpoint that matches the current width
-      const matchedBreakpoint = breakpoints.find(breakpoint => width < breakpoint)
+      // Find the appropriate breakpoint for current width
+      let selectedBreakpoint = null
+      for (const breakpoint of breakpoints) {
+        if (width <= breakpoint) {
+          selectedBreakpoint = breakpoint
+          break
+        }
+      }
 
-      if (matchedBreakpoint) {
-        setImagesPerPage(settings.breakpoints[matchedBreakpoint])
+      if (selectedBreakpoint !== null) {
+        setImagesPerPage(settings.breakpoints[selectedBreakpoint])
       } else {
-        // If no breakpoint matches, use the default
         setImagesPerPage(settings.defaultImagesPerPage || 8)
       }
     }
@@ -56,8 +61,8 @@ function HorizontalCarousel<T>({
 
   const totalPages = Math.ceil(data.length / imagesPerPage)
   const buttonClass = `${navStyle === "style3" ? "rounded-lg" : "rounded-full"} flex justify-center items-center group
-  border-[1px] border-black-15 bg-black-8 p-3 text-white hover:bg-black-10 ${currentPage === totalPages - 1 ? 'opacity-50' : 'opacity-100'
-    }`
+  border-[1px] border-black-15 bg-black-8 p-3 text-white hover:bg-black-10`
+
   const renderPageIndicators = () => {
     return (
       <div className="flex items-center gap-1">
@@ -65,10 +70,11 @@ function HorizontalCarousel<T>({
           <button
             key={index}
             onClick={() => setCurrentPage(index)}
-            className={`h-[3px] transition-all duration-300 rounded-full ${index === currentPage
-              ? "w-6 bg-red-600"
-              : "w-2 bg-gray-600 hover:bg-gray-500"
-              }`}
+            className={`h-[3px] transition-all duration-300 rounded-full ${
+              index === currentPage
+                ? "w-6 bg-red-600"
+                : "w-2 bg-gray-600 hover:bg-gray-500"
+            }`}
             aria-label={`Go to page ${index + 1}`}
           />
         ))}
@@ -103,7 +109,7 @@ function HorizontalCarousel<T>({
                 .map((item, imageIndex) => (
                   <div
                     key={pageIndex * imagesPerPage + imageIndex}
-                    className="h-full z-10"
+                    className="h-full z-10 flex-1"
                   >
                     <ItemComponent item={item} />
                   </div>
@@ -123,7 +129,7 @@ function HorizontalCarousel<T>({
         <button
           disabled={currentPage === 0}
           onClick={() => setCurrentPage((prev) => prev - 1)}
-          className={buttonClass}
+          className={`${buttonClass} ${currentPage === 0 ? 'opacity-50 cursor-not-allowed' : 'opacity-100'}`}
         >
           <FaArrowLeft className='text-gray-60 group-hover:text-white' />
         </button>
@@ -134,7 +140,7 @@ function HorizontalCarousel<T>({
         <button
           disabled={currentPage === totalPages - 1}
           onClick={() => setCurrentPage((prev) => prev + 1)}
-          className={buttonClass}
+          className={`${buttonClass} ${currentPage === totalPages - 1 ? 'opacity-50 cursor-not-allowed' : 'opacity-100'}`}
         >
           <FaArrowRight className='text-gray-60 group-hover:text-white' />
         </button>

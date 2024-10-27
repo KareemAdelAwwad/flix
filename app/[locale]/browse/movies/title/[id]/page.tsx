@@ -13,12 +13,21 @@ import { FaPlay, FaPlus } from "react-icons/fa6";
 import { SlVolume2 } from "react-icons/sl";
 import { AiOutlineLike } from "react-icons/ai";
 import { IoBookmarkOutline, IoShareSocialOutline } from "react-icons/io5";
-import { PiFilmSlateDuotone } from "react-icons/pi";
 import { GoCheckCircle, GoCheckCircleFill } from "react-icons/go";
+import { CiCalendar } from "react-icons/ci";
+import { CiStar } from "react-icons/ci";
+import { PiTranslate, PiFilmReel, PiFilmSlateDuotone } from "react-icons/pi";
+import { BiCategoryAlt } from "react-icons/bi";
+import { CgMusicNote } from "react-icons/cg";
+
+
+
 
 import HorizontalCarousel from '@/components/carousel'
 import ActorCard from '@/components/ActorCard';
 import ReviewCard from '@/components/ReviewCard';
+import Info from '@/components/ui/Info';
+import RatingStars from '@/components/ui/RatingStars';
 
 
 interface Movie {
@@ -117,6 +126,8 @@ export default function page({ params }: { params: { id: number } }) {
   const [images, setImages] = useState({} as MovieImages);
   const [cast, setCast] = useState([] as Cast[]);
   const [reviews, setReviews] = useState([] as Review[]);
+  const [director, setDirector] = useState({} as Cast);
+  const [imageLoaing, setImageLoading] = useState(true);
   const [loading, setLoading] = useState(true);
   const locale = useLocale();
   const t = useTranslations('TitlePage');
@@ -142,6 +153,7 @@ export default function page({ params }: { params: { id: number } }) {
 
     fetch(imagesUrl, options)
       .then(res => res.json())
+
       .then(json => {
         if (locale === 'ar') {
           if (json.backdrops) {
@@ -156,6 +168,7 @@ export default function page({ params }: { params: { id: number } }) {
         }
         setImages(json);
       })
+      .then(() => setImageLoading(false))
       .catch(err => console.error(err));
 
     fetch(reviewsUrl, options)
@@ -165,8 +178,11 @@ export default function page({ params }: { params: { id: number } }) {
 
     fetch(castUrl, options)
       .then(res => res.json())
-      .then(json => setCast(json.cast))
-      .then(() => setLoading(false))
+      .then(json => {
+        setCast(json.cast);
+        setDirector(json.crew.find((member: { job: string; }) => member.job === 'Director'));
+        setLoading(false);
+      })
       .catch(err => console.error(err));
   }, [params.id]);
 
@@ -197,21 +213,20 @@ export default function page({ params }: { params: { id: number } }) {
       1200: 4, // Less than 1200px -> 4 cards
       1500: 5, // Less than 1500px -> 5 cards
       1660: 6, // Less than 1660px -> 6 cards
-      1850: 7, // Less than 1850px -> 7 cards
     },
-    defaultImagesPerPage: 8 // Default when width is larger than all breakpoints
+    defaultImagesPerPage: 7 // Default when width is larger than all breakpoints
   };
   const reviewSliderSettings = {
     breakpoints: {
-      520: 1,  // Less than 520px -> 1 card
+      1520: 1,  // Less than 520px -> 1 card
     },
     defaultImagesPerPage: 2 // Default when width is larger than all breakpoints
   };
 
   return (
-    <main className='flex flex-col justify-center items-center gap-20'>
+    <main className='flex flex-col justify-center items-center gap-20 container'>
       {/* Movie Background */}
-      <section className='w-[90%] md:w-[84%] h-[835px] mt-5 rounded-lg overflow-hidden felx justify-center items-center relative '>
+      <section className='w-full h-[835px] mt-5 rounded-lg overflow-hidden felx justify-center items-center relative'>
         <div className='
         flex flex-col justify-end items-center text-white text-center pb-10
         inset-0 bg-gradient-to-t from-black-8 via-transparent to-transparent w-full h-full absolute z-10'>
@@ -220,7 +235,7 @@ export default function page({ params }: { params: { id: number } }) {
             <p className='text-lg text-gray-60'>{movie.tagline ? movie.tagline : movie.overview}</p>
           </div>
           {/* Movie controles */}
-          <div className='flex justify-center items-center gap-2 w-full h-16 bg-transparent'>
+          <div className='flex justify-center items-center gap-2 w-full h-16 bg-transparent flex-wrap'>
             <ReadyTooltip children={<Button className='text-white text-2xl font-bold bg-red-45 hover:bg-red-50 transition-colors duration-400' size="lg">
               <FaPlay /> {t('title')}
             </Button>} title={t('play')} />
@@ -232,13 +247,13 @@ export default function page({ params }: { params: { id: number } }) {
         </div>
         {/* Movie Background Image */}
         {
-          loading ? null
+          imageLoaing ? null
             : <Image src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
               alt={movie.original_title} className='w-full h-full object-cover' height={835} width={1800} />
         }
       </section>
 
-      <section className='w-[90%] md:w-[84%] flex flex-col lg:flex-row gap-5'>
+      <section className='w-full flex flex-col lg:flex-row gap-5'>
         {/* Leftside Info */}
         <div className='w-full lg:w-[66%] flex flex-col gap-5'>
 
@@ -277,6 +292,7 @@ export default function page({ params }: { params: { id: number } }) {
                 settings={reviewSliderSettings}
                 ItemComponent={({ item }) => (
                   <ReviewCard
+                    locale={locale}
                     id={item.id}
                     name={item.author_details.name}
                     avatar_path={item.author_details.avatar_path}
@@ -286,35 +302,77 @@ export default function page({ params }: { params: { id: number } }) {
                     created_at={item.created_at}
                   />
                 )}
-                />
-              {/* {reviews.map((review) => (
-                <ReviewCard
-                  key={review.id}
-                  authorName={review.author_details.name}
-                  avatar_path={review.author_details.avatar_path}
-                  username={review.author_details.username}
-                  content={review.content}
-                  rating={review.author_details.rating}
-                  created_at={review.created_at}
-                  locale={locale}
-                />
-              ))} */}
+              />
             </div>
           </OpenTitleInfoCard>
         </div>
 
         {/* Rightside Info */}
         <div className='w-full lg:w-[34%]'>
-          <div className='bg-black-10 rounded-lg p-12 font-semibold text-lg border-[1px] border-black-15 flex flex-col gap-8'>
-            <div>
-              <p className={`text-gray-60 mb-3`}>{t('releaseDate')}</p>
-              <p className='text-white text-lg text-[20px] font-semibold'>{movie.release_date}</p>
-            </div>
+          <div className='dark:bg-black-10 bg-gray-90 rounded-lg p-12 font-semibold text-lg border-[1px] dark:border-black-15 border-gray-75 flex flex-col gap-8'>
+            <Info title='Released Year'
+              content={<p className='dark:text-white text-[16px] font-semibold'>{movie.release_date}</p>}
+              icon={<CiCalendar size={24} />} />
+            <Info title='Available Languages'
+              content={
+                <div className='flex gap-2.5 flex-wrap'>
+                  {
+                    movie.spoken_languages && movie.spoken_languages.map((lang, i) => (
+                      <span key={i} className='pointer-events-none dark:text-white text-sm font-medium py-[6px] px-3 dark:bg-black-8 bg-gray-50 border-[1px] dark:border-black-15 rounded-md'>
+                        {lang.name}
+                      </span>
+                    ))
+                  }
+                </div>
+              }
+              icon={<PiTranslate size={24} />} />
+            <Info title='Ratings'
+              content={
+                <div className='flex gap-4 flex-col md:flex-row lg:flex-col xl:flex-row overflow-hidden'>
+                  <div className='w-full dark:text-white text-sm font-semibold p-3
+              dark:bg-black-8 bg-gray-50 border-[1px] dark:border-black-15 rounded-lg'>
+                    <h6>IMDb</h6>
+                    <RatingStars rating={movie.vote_average / 2} type='no-outline' />
+                  </div>
 
-            <div>
-              <p className={`text-gray-60 mb-3`}>{t('releaseDate')}</p>
-              <p className='text-white text-lg text-[20px] font-semibold'>{movie.release_date}</p>
-            </div>
+                  <div className='w-full dark:text-white text-sm font-semibold p-3
+              dark:bg-black-8 bg-gray-50 border-[1px] dark:border-black-15 rounded-lg'>
+                    <h6>Flix APP</h6>
+                    <RatingStars rating={movie.vote_average / 2} type='no-outline' />
+                  </div>
+                </div>
+              }
+              icon={<CiStar size={24} />} />
+            <Info title='Gernes'
+              content={
+                <div className='flex gap-2.5 flex-wrap'>
+                  {
+                    movie.spoken_languages && movie.genres.map((genre, i) => (
+                      <span key={i} className='dark:text-white text-sm font-medium py-[6px] px-3
+                      dark:bg-black-8 bg-gray-50 border-[1px] dark:border-black-15 rounded-md cursor-pointer'>
+                        {genre.name}
+                      </span>
+                    ))
+                  }
+                </div>
+              }
+              icon={<BiCategoryAlt size={24} />} />
+            <Info title='Director'
+              content={
+
+                <div className='dark:text-white font-medium p-2.5 dark:bg-black-8 bg-gray-50 border-[1px] dark:border-black-15 rounded-lg flex gap-2 items-center'>
+                  <div className='w-[48px] h-[50px] overflow-hidden rounded-lg flex justify-center items-center'>
+                    <Image src={`https://image.tmdb.org/t/p/original${director.profile_path}`}
+                      alt={director.name} className='object-center' width={48} height={48} />
+                  </div>
+                  <div>
+                    <h4 className='text-[16px]'>{director.name}</h4>
+                    <p className='text-sm text-gray-60'>{director.name}</p>
+                  </div>
+                </div>
+              }
+              icon={<PiFilmReel size={24} />} />
+            <Info title='Music' content={movie.release_date} icon={<CgMusicNote size={24} />} />
           </div>
         </div>
 
