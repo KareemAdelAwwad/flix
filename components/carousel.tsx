@@ -70,11 +70,10 @@ function HorizontalCarousel<T>({
           <button
             key={index}
             onClick={() => setCurrentPage(index)}
-            className={`h-[3px] transition-all duration-300 rounded-full ${
-              index === currentPage
+            className={`h-[3px] transition-all duration-300 rounded-full ${index === currentPage
                 ? "w-6 bg-red-600"
                 : "w-2 bg-gray-600 hover:bg-gray-500"
-            }`}
+              }`}
             aria-label={`Go to page ${index + 1}`}
           />
         ))}
@@ -99,7 +98,7 @@ function HorizontalCarousel<T>({
           {Array.from({ length: totalPages }).map((_, pageIndex) => (
             <div
               key={pageIndex}
-              className="flex justify-center items-center 2xl:justify-normal 2xl:items-start h-full w-full shrink-0 gap-2 sm:gap-4 px-2 sm:px-4"
+              className="flex h-full w-full shrink-0 gap-2 sm:gap-4 px-2 sm:px-4"
             >
               {data
                 .slice(
@@ -109,7 +108,7 @@ function HorizontalCarousel<T>({
                 .map((item, imageIndex) => (
                   <div
                     key={pageIndex * imagesPerPage + imageIndex}
-                    className="h-full z-10 flex-1"
+                    className="h-full z-10 flex-1 flex justify-center items-center"
                   >
                     <ItemComponent item={item} />
                   </div>
