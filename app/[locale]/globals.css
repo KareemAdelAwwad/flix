@@ -87,8 +87,9 @@
 }
 /* ملف CSS */
 .section-title {
-  color: black; /* اللون الافتراضي في الوضع العادي */
+  color: red; /* اللون الأحمر بشكل دائم */
 }
+
 .section-container {
   background-color: rgba(0, 0, 0, 0.5); /* خلفية سوداء بنسبة شفافية 50% */
   padding: 1rem; /* مساحة داخلية لتعطي مظهر مرتب */
@@ -100,10 +101,9 @@
   background-color: rgba(0, 0, 0, 0.6); /* تغيير الشفافية عند التمرير */
 }
 
-
 @media (prefers-color-scheme: dark) {
   .section-title {
-    color: white; /* اللون في الوضع الداكن */
+    color: red; /* اللون الأحمر في الوضع الداكن أيضًا */
   }
 }
 
@@ -180,41 +180,22 @@
 .button-container button:hover {
   background-color: #6b6b6b; /* Slightly lighter on hover */
 }
-.movie-runtime {
-  /* إخفاء المدة افتراضيًا */
-  display: none;
-  position: absolute;
-  bottom: 10px; /* ضبط الموضع حسب التصميم */
-  left: 10px; /* ضبط الموضع حسب التصميم */
-  color: white; /* أو أي لون تريده */
-  background-color: rgba(0, 0, 0, 0.7); /* لون الخلفية */
-  padding: 5px 10px; /* حواف */
-  border-radius: 5px; /* زوايا مستديرة */
-}
-
-.movie-card:hover .movie-runtime {
-  /* إظهار المدة عند hover */
-  display: block;
-}
-.movie-card:hover .movie-card-overlay {
-  opacity: 1;
-}
 
 .movie-runtime {
-  display: none;
-  position: absolute;
-  bottom: 10px; /* ضبط الموضع حسب التصميم */
-  left: 10px; /* ضبط الموضع حسب التصميم */
-  color: white; /* أو أي لون تريده */
-  background-color: rgba(0, 0, 0, 0.7); /* لون الخلفية */
-  padding: 5px 10px; /* حواف */
-  border-radius: 5px; /* زوايا مستديرة */
-}
-
-.movie-runtime.hidden {
   display: none; /* إخفاء المدة افتراضيًا */
+  position: absolute;
+  bottom: 10px; /* ضبط الموضع حسب التصميم */
+  left: 10px; /* ضبط الموضع حسب التصميم */
+  color: white; /* أو أي لون تريده */
+  background-color: rgba(0, 0, 0, 0.7); /* لون الخلفية */
+  padding: 5px 10px; /* حواف */
+  border-radius: 5px; /* زوايا مستديرة */
 }
 
 .movie-card:hover .movie-runtime {
   display: block; /* إظهار المدة عند hover */
+}
+
+.movie-runtime.hidden {
+  display: none; /* إخفاء المدة افتراضيًا */
 }
