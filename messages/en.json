@@ -16,7 +16,21 @@
     "system": "System"
   },
   "HomePage": {
-    "title": "Hello world!"
+    "smartPhone": "Smart Phone",
+    "Tablet":"Tablet",
+    "SmartTV":"Smart TV",
+    "Laptop":"Laptop",
+    "GamingConsole":"Gaming Console",
+    "VRHeadsets":"VR Headsets",
+
+
+    "h1Section1":"The Best Streaming Experience",
+    "descriptionSection1":"streamVibe is the best streaming experience for watching your favorite movies and shows on demand, anytime, anywhere. With StreamVibe, you can enjoy a wide variety of content, including the latest blockbusters, classic movies, popular TV shows, and more. You can also create your own watchlists, so you can easily find the content you want to watch.",
+    
+    "h1Section2":" We Provide you streaming experience across various devices.",
+    "descriptionSection2":"With StreamVibe, you can enjoy your favorite movies and TV shows anytime, anywhere. Our platform is designed to be compatible with a wide range of devices, ensuring that you never miss a moment of entertainment.",
+    
+    "descriptionSection3" :"StreamVibe is optimized for both Android and iOS smartphones. Download our app from the Google Play Store or the Apple App Store"
   },
   "Footer": {
     "Home": "Home",
