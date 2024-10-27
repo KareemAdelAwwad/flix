@@ -44,6 +44,7 @@
   "TitlePage": {
     "title": "Player",
     "play": "Play Movie",
+    "playEpisode": "Play Episode",
     "pause": "Pause Movie",
     "mute": "Mute",
     "unmute": "Unmute",
@@ -66,12 +67,23 @@
     "reviews": "Reviews",
     "addreview": "Add Review",
     "removereview": "Remove Review",
-    "genre": "Genre",
+    "language": "Avilable Languages",
+    "genres": "Genres",
     "director": "Director",
     "releaseDate": "Release Date",
+    "first_air_date": "First Air Date",
+    "network": "Network",
+    "from": "From",
+    "seasons": "Seasons",
+    "season": "Season",
+    "episodes": "Episodes",
+    "episode": "Episode",
     "duration": "Duration",
     "rating": "Rating",
-    "music": "Music"
+    "music": "Music",
+    "loading": "Loading...",
+    "minute": "m",
+    "hour": "h"
   },
   "MoviesShows": {
     "featuredMovie": "Featured Movie",

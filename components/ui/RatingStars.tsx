@@ -11,7 +11,7 @@ const RatingStars = ({ rating, maxRating = 5, type }: RatingStarsProps) => {
   const roundedRating = Math.round(rating * 2) / 2; // Round to nearest 0.5
 
   return (
-    <div className={`${type !== "no-outline" ? 'hidden sm:flex' : 'flex'} items-center gap-0.5
+    <div  className={`${type !== "no-outline" ? 'hidden sm:flex' : 'flex'} items-center gap-0.5
     ${type !== 'no-outline' ? `bg-black-8 rounded-full px-[12px] py-[6px] border-[1px] border-black-15` : ""}`}>
       {[...Array(maxRating)].map((_, index) => {
         const isFilled = index < Math.floor(roundedRating);
@@ -29,7 +29,7 @@ const RatingStars = ({ rating, maxRating = 5, type }: RatingStarsProps) => {
 
             {/* Foreground star (filled or half-filled) */}
             <div
-              className="absolute top-0 left-0 overflow-hidden"
+              className="absolute top-0  overflow-hidden"
               style={{ width: isHalf ? '50%' : '100%' }}
             >
               {(isFilled || isHalf) && (

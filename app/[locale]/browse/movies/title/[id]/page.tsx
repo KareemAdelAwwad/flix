@@ -33,6 +33,7 @@ import RatingStars from '@/components/ui/RatingStars';
 interface Movie {
   "id": number,
   "imdb_id": string | null,
+  "title": string,
   "original_title": string,
   "overview": string,
   "origin_country": string[],
@@ -134,7 +135,7 @@ export default function page({ params }: { params: { id: number } }) {
   const url = `https://api.themoviedb.org/3/movie/${params.id}?language=${locale}`;
   const imagesUrl = `https://api.themoviedb.org/3/movie/${params.id}/images?language=${locale}&include_image_language=ar,en`;
   const castUrl = `https://api.themoviedb.org/3/movie/${params.id}/credits?language=${locale}`;
-  const reviewsUrl = `https://api.themoviedb.org/3/movie/${params.id}/reviews?language=${locale}`;
+  const reviewsUrl = `https://api.themoviedb.org/3/movie/${params.id}/reviews?language=en-US`;
   // API request Headers
   const options = {
     method: 'GET',
@@ -225,13 +226,14 @@ export default function page({ params }: { params: { id: number } }) {
 
   return (
     <main className='flex flex-col justify-center items-center gap-20 container'>
+      <title>{movie.title}</title>
       {/* Movie Background */}
       <section className='w-full h-[835px] mt-5 rounded-lg overflow-hidden felx justify-center items-center relative'>
         <div className='
         flex flex-col justify-end items-center text-white text-center pb-10
         inset-0 bg-gradient-to-t from-black-8 via-transparent to-transparent w-full h-full absolute z-10'>
           <div>
-            <h1 className='text-4xl font-bold'>{movie.original_title}</h1>
+            <h1 className='text-4xl font-bold'>{movie.title}</h1>
             <p className='text-lg text-gray-60'>{movie.tagline ? movie.tagline : movie.overview}</p>
           </div>
           {/* Movie controles */}
@@ -286,36 +288,45 @@ export default function page({ params }: { params: { id: number } }) {
           </OpenTitleInfoCard>
 
           {/* Reviews */}
-          <OpenTitleInfoCard className='mb-8' title={t('reviews')}>
-            <div>
-              <HorizontalCarousel
-                navStyle='style2'
-                data={reviews}
-                settings={reviewSliderSettings}
-                ItemComponent={({ item }) => (
-                  <ReviewCard
-                    locale={locale}
-                    id={item.id}
-                    name={item.author_details.name}
-                    avatar_path={item.author_details.avatar_path}
-                    username={item.author_details.username}
-                    content={item.content}
-                    rating={item.author_details.rating}
-                    created_at={item.created_at}
-                  />
-                )}
-              />
-            </div>
-          </OpenTitleInfoCard>
+          {
+            reviews.length > 0 &&
+            <OpenTitleInfoCard className='mb-8' title={t('reviews')}>
+              <Button className='text-lg dark:bg-black-8 border-[1px] dark:border-black-15  dark:text-white font-medium flex justify-center items-center absolute right-[4rem] top-[40px]'>
+                <FaPlus /> Add Review
+              </Button>
+              <div>
+                <HorizontalCarousel
+                  navStyle='style2'
+                  data={reviews}
+                  settings={reviewSliderSettings}
+                  ItemComponent={({ item }) => (
+                    <ReviewCard
+                      locale={locale}
+                      id={item.id}
+                      name={item.author_details.name}
+                      avatar_path={item.author_details.avatar_path}
+                      username={item.author_details.username}
+                      content={item.content}
+                      rating={item.author_details.rating}
+                      created_at={item.created_at}
+                    />
+                  )}
+                />
+              </div>
+            </OpenTitleInfoCard>
+          }
         </div>
 
         {/* Rightside Info */}
         <div className='w-full lg:w-[34%]'>
           <div className='dark:bg-black-10 bg-gray-90 rounded-lg p-12 font-semibold text-lg border-[1px] dark:border-black-15 border-gray-75 flex flex-col gap-8'>
-            <Info title='Released Year'
+            <div className='flex justify-center items-center'>
+              <Image loading='lazy' src={`https://image.tmdb.org/t/p/original${images.logos && images.logos[0].file_path}`} alt="Movie Logo" width={240} height={160} />
+            </div>
+            <Info title={t('releaseDate')}
               content={<p className='dark:text-white text-[16px] font-semibold'>{movie.release_date}</p>}
               icon={<CiCalendar size={24} />} />
-            <Info title='Available Languages'
+            <Info title={t('language')}
               content={
                 <div className='flex gap-2.5 flex-wrap'>
                   {
@@ -328,7 +339,7 @@ export default function page({ params }: { params: { id: number } }) {
                 </div>
               }
               icon={<PiTranslate size={24} />} />
-            <Info title='Ratings'
+            <Info title={t('rating')}
               content={
                 <div className='flex gap-4 flex-col md:flex-row lg:flex-col xl:flex-row overflow-hidden'>
                   <div className='w-full dark:text-white text-sm font-semibold p-3
@@ -345,7 +356,7 @@ export default function page({ params }: { params: { id: number } }) {
                 </div>
               }
               icon={<CiStar size={24} />} />
-            <Info title='Gernes'
+            <Info title={t('genres')}
               content={
                 <div className='flex gap-2.5 flex-wrap'>
                   {
@@ -359,7 +370,7 @@ export default function page({ params }: { params: { id: number } }) {
                 </div>
               }
               icon={<BiCategoryAlt size={24} />} />
-            <Info title='Director'
+            <Info title={t('director')}
               content={
 
                 <div className='dark:text-white font-medium p-2.5 dark:bg-black-8 bg-gray-50 border-[1px] dark:border-black-15 rounded-lg flex gap-2 items-center'>
@@ -374,7 +385,7 @@ export default function page({ params }: { params: { id: number } }) {
                 </div>
               }
               icon={<PiFilmReel size={24} />} />
-            <Info title='Music' content={movie.release_date} icon={<CgMusicNote size={24} />} />
+            <Info title={t('music')} content={movie.release_date} icon={<CgMusicNote size={24} />} />
           </div>
         </div>
 

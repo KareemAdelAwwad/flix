@@ -85,6 +85,12 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
+
+@layer components {
+  .borders {
+    @apply border-[1px] dark:border-black-15 border-gray-75;
+  }
+}
 /* ملف CSS */
 .section-title {
   color: red; /* اللون الأحمر بشكل دائم */

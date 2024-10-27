@@ -39,6 +39,7 @@
   "TitlePage": {
     "title": "المشغل",
     "play": "تشغيل الفيلم",
+    "playEpisode": "تشغيل الحلقة",
     "pause": "إيقاف الفيلم",
     "mute": "كتم الصوت",
     "unmute": "إلغاء الكتم",
@@ -60,12 +61,23 @@
     "reviews": "المراجعات",
     "addreview": "إضافة مراجعة",
     "removereview": "إزالة المراجعة",
-    "genre": "التصنيف",
+    "language": "اللغات المتوفرة",
+    "genres": "التصنيفات",
     "director": "المخرج",
     "releaseDate": "تاريخ الإصدار",
+    "first_air_date": "تاريخ العرض الأول الأول",
+    "network": "الشبكة",
+    "from": "مِن",
+    "seasons": "المواسم",
+    "season": "الموسم",
+    "episodes": "حلقات",
+    "episode": "الحلقة",
     "duration": "المدة",
     "rating": "التقييم",
-    "music": "الموسيقى"
+    "music": "الموسيقى",
+    "loading": "جارٍ التحميل...",
+    "minute": "د",
+    "hour": "س"
   },
   "MoviesShows": {
     "loading": "جارٍ التحميل",

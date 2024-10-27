@@ -27,6 +27,7 @@ function HorizontalCarousel<T>({
   const [imagesPerPage, setImagesPerPage] = useState(settings.defaultImagesPerPage || 8)
   const carouselRef = useRef(null)
   const locale = useLocale()
+  const isRTL = locale === "ar"
 
   // Update images per page based on screen size
   useEffect(() => {
@@ -71,8 +72,8 @@ function HorizontalCarousel<T>({
             key={index}
             onClick={() => setCurrentPage(index)}
             className={`h-[3px] transition-all duration-300 rounded-full ${index === currentPage
-                ? "w-6 bg-red-600"
-                : "w-2 bg-gray-600 hover:bg-gray-500"
+              ? "w-6 bg-red-600"
+              : "w-2 bg-gray-600 hover:bg-gray-500"
               }`}
             aria-label={`Go to page ${index + 1}`}
           />
@@ -89,7 +90,7 @@ function HorizontalCarousel<T>({
         <div
           ref={carouselRef}
           style={{
-            left: `-${currentPage * 100}%`,
+            [isRTL ? 'right' : 'left']: `-${currentPage * 100}%`,
             position: 'relative',
           }}
           className="flex h-full w-full transition-all duration-1000"

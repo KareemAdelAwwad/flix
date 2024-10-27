@@ -24,7 +24,7 @@ const buttonVariants = cva(
         sm: "h-9 rounded-md px-3",
         lg: "h-11 rounded-md px-8",
         icon: "h-10 w-10",
-        lgIcon: "h-11 w-11 text-white bg-black-6 hover:bg-black-10 transition-colors duration-400",
+        lgIcon: "h-11 w-11 dark:text-white text-black-12 dark:bg-black-6 bg-white dark:hover:bg-black-10 hover:bg-gray-90 transition-colors duration-400",
       },
     },
     defaultVariants: {
