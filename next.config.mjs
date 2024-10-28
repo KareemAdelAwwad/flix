@@ -5,7 +5,7 @@ const withNextIntl = createNextIntlPlugin();
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['image.tmdb.org', 'picsum.photos', 'mighty.tools'],
+    domains: ['image.tmdb.org', 'picsum.photos', 'mighty.tools', 'placehold.co'],
   },
   typescript: {
     ignoreBuildErrors: true,

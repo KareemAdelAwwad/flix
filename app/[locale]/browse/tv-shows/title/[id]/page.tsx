@@ -10,12 +10,15 @@ import OpenTitleInfoCard from '@/components/OpenTitleInfoCard';
 import ReadyTooltip from '@/components/ui/ready-tooltip';
 import dynamic from 'next/dynamic';
 
+// Import components
+import { Hero } from '@/components/TitlePage/HeroSection';
+
 // Import types
 import {
   Series,
   CachedSeasonData,
   SeriesImages,
-  Cast,
+  SeriesCast,
   Review,
   ImageProps,
   SliderSettings
@@ -93,8 +96,9 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
   const [series, setSeries] = useState<Series>({} as Series);
   const [cachedSeasonData, setCachedSeasonData] = useState<CachedSeasonData>({});
   const [images, setImages] = useState<SeriesImages>({} as SeriesImages);
-  const [cast, setCast] = useState<Cast>([]);
+  const [cast, setCast] = useState<SeriesCast>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [providers, setProviders] = useState<any>({});
   const [imageLoading, setImageLoading] = useState(true);
   const [loading, setLoading] = useState(true);
   const [episodeLoading, setEpisodeLoading] = useState(true);
@@ -107,8 +111,9 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
   const urls = useMemo(() => ({
     series: `${API_CONFIG.baseUrl}/tv/${params.id}?language=${locale}`,
     images: `${API_CONFIG.baseUrl}/tv/${params.id}/images?language=${locale}&include_image_language=ar,en`,
-    cast: `${API_CONFIG.baseUrl}/tv/${params.id}/credits?language=${locale}`,
-    reviews: `${API_CONFIG.baseUrl}/tv/${params.id}/reviews?language=en-US`
+    cast: `${API_CONFIG.baseUrl}/tv/${params.id}/aggregate_credits?language=${locale}`,
+    reviews: `${API_CONFIG.baseUrl}/tv/${params.id}/reviews?language=en-US`,
+    providers: `${API_CONFIG.baseUrl}/tv/${params.id}/watch/providers`
   }), [params.id, locale]);
 
   // Fetch data using Promise.all for parallel requests
@@ -131,6 +136,10 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
           fetch(urls.cast, API_CONFIG.options).then(res => {
             if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
             return res.json();
+          }),
+          fetch(urls.providers, API_CONFIG.options).then(res => {
+            if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+            return res.json();
           })
         ]);
 
@@ -149,7 +158,8 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
 
         setImages(imagesData);
         setReviews(reviewsData.results);
-        setCast(castData.cast);
+        setCast(castData.cast.slice(0, 28));
+        setProviders(reviewsData.results.EG);
       } catch (err) {
         setError(err instanceof Error ? err : new Error('An error occurred while fetching data'));
         console.error('Error fetching data:', err);
@@ -274,8 +284,8 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
       {/* Series Background */}
       <section className='w-full h-[835px] mt-5 rounded-lg overflow-hidden felx justify-center items-center relative'>
         <div className='
-        flex flex-col justify-end items-center text-white text-center pb-10
-        inset-0 bg-gradient-to-t dark:from-black-8 from-white via-transparent to-transparent w-full h-full absolute z-10'>
+    flex flex-col justify-end items-center text-white text-center pb-10
+    inset-0 bg-gradient-to-t dark:from-black-8 from-white via-transparent to-transparent w-full h-full absolute z-10'>
           <div>
             <h1 className='text-4xl font-bold dark:text-white text-black-6'>{series.name}</h1>
             <p className='text-lg dark:text-gray-60 text-black-12'>{series.tagline ? series.tagline : series.overview}</p>
@@ -300,6 +310,7 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
               alt={series.original_title} className='w-full h-full object-cover' height={835} width={1800} />
         }
       </section>
+      
 
       <section className='w-full flex flex-col lg:flex-row gap-5'>
         {/* Leftside Info */}
@@ -311,7 +322,7 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
               {
                 series.seasons && series.seasons.sort((a, b) => a.season_number - b.season_number).map(season => (
                   <AccordionItem value={`item-${season.season_number}`}
-                    className={`dark:bg-black-6 bg-gray-90 px-[50px] py-2.5 rounded-lg borders ${season.season_number !== 0  && "mt-5"}`}>
+                    className={`dark:bg-black-6 bg-gray-90 px-[50px] py-2.5 rounded-lg borders ${season.season_number !== 0 && "mt-5"}`}>
                     <AccordionTrigger onClick={() => LoadSeasonData(season.season_number)}>
                       <h4 className='text-xl font-semibold'>{`${t('season')} ${season.season_number.toString().padStart(2, '0')}`}</h4>
                       <p className='text-lg font-medium text-gray-60'>
@@ -336,7 +347,7 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
                                 <IoPlayCircleOutline size={30}
                                   className='w-14 h-14 p-2 dark:bg-black-6 bg-gray-90 bg-opacity-60 rounded-full text-white group-hover:animate-pulse transition-all duration-300
                                 absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]' />
-                                <Image src={episode.still_path && `https://image.tmdb.org/t/p/original${episode.still_path}`}
+                                <Image src={episode.still_path ? `https://image.tmdb.org/t/p/original${episode.still_path}` : `https://placehold.co/300x200.png?text=${episode.name}`}
                                   height={300} width={200} alt={episode.name} className='w-full h-full object-cover pointer-events-none' />
                               </div>
                             </Suspense>
@@ -382,8 +393,9 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
                     actorName={item.name}
                     credit_id={item.credit_id}
                     profile_path={item.profile_path}
-                    character={item.character}
+                    roles={item.roles}
                     gender={item.gender}
+                    character={item.roles?.[0]?.character}
                   />
                 )}
               />

@@ -91,7 +91,32 @@ export interface ImageItem {
   width: number;
 }
 
-export interface CastMember {
+export interface ProviderItem {
+  display_priority: number;
+  logo_path: string;
+  provider_id: number;
+  provider_name: string;
+}
+
+export interface Provider {
+  link: string;
+  flatrate: ProviderItem[];
+}
+
+export interface SeriesCastMember {
+  id: number;
+  gender: number;
+  name: string;
+  original_name: string;
+  profile_path: string;
+  credit_id: string;
+  order: number;
+  roles: {
+    character: string;
+    episode_count: number;
+  }[];
+}
+export interface MovieCastMember {
   id: number;
   gender: number;
   name: string;
@@ -102,7 +127,8 @@ export interface CastMember {
   order: number;
 }
 
-export type Cast = CastMember[];
+export type SeriesCast = SeriesCastMember[];
+export type MovieCast = MovieCastMember[];
 
 export interface Review {
   author_details: {
