@@ -22,15 +22,57 @@
     "Laptop":"Laptop",
     "GamingConsole":"Gaming Console",
     "VRHeadsets":"VR Headsets",
+    "APPS-P" :"StreamVibe is optimized for both Android and iOS smartphones. Download our app from the Google Play Store or the Apple App Store",
+ 
+    "SECTION-ONE-BTN":"Start watching Now",
 
 
-    "h1Section1":"The Best Streaming Experience",
-    "descriptionSection1":"streamVibe is the best streaming experience for watching your favorite movies and shows on demand, anytime, anywhere. With StreamVibe, you can enjoy a wide variety of content, including the latest blockbusters, classic movies, popular TV shows, and more. You can also create your own watchlists, so you can easily find the content you want to watch.",
+    "SECTION-ONE-H1":"The Best Streaming Experience",
+    "SECTION-TWO-H1":" We Provide you streaming experience across various devices.",
+     
+
+    "DES-ONE":"streamVibe is the best streaming experience for watching your favorite movies and shows on demand, anytime, anywhere. With StreamVibe, you can enjoy a wide variety of content, including the latest blockbusters, classic movies, popular TV shows, and more. You can also create your own watchlists, so you can easily find the content you want to watch.",
+    "DES-TWO":"With StreamVibe, you can enjoy your favorite movies and TV shows anytime, anywhere. Our platform is designed to be compatible with a wide range of devices, ensuring that you never miss a moment of entertainment.",
+  
+    "Q-BTN":" Ask a Question",
+    "Q-H1": "Frequently Asked Questions",
+    "Q-P":"Got questions? We’ve got answers! Check out our FAQ section to find answers to the most common questions about StreamVibe.",
+    "Q-ONE":"What is StreamVibe?",
+    "Q-TWO":"How much does StreamVibe cost?",
+    "Q-THREE":"What content is available on StreamVibe?",
+    "Q-FOUR":"How can I watch StreamVibe?",
+    "Q-FIVE":"How do I sign up for StreamVibe?",
+    "Q-SIX":"What is the StreamVibe free trial?",
+    "Q-SEVEN":"How do I contact StreamVibe customer support?",
+    "Q-EIGHT":"What are the StreamVibe payment methods?",
+  
+    "A-ONE":"StreamVibe is available at various pricing tiers.",
+    "A-TWO":"StreamVibe offers a variety of movies, series, and documentaries.",
+    "A-THREE":"You can watch StreamVibe via our app or website. ",
+    "A-FOUR":"Sign up for StreamVibe by visiting our website. ",
+    "A-FIVE":"StreamVibe offers a 7-day free trial for new users.",
+    "A-SIX":"Contact StreamVibe customer service via our support page." ,
+    "A-SEVEN":"StreamVibe accepts credit cards, PayPal, and more.",
+    "A-EIGHT":"We accept various payment methods, including credit cards, debit cards, and PayPal.",
+  
+    "PLANS-H1":"",
+    "PLANS-P":"",
     
-    "h1Section2":" We Provide you streaming experience across various devices.",
-    "descriptionSection2":"With StreamVibe, you can enjoy your favorite movies and TV shows anytime, anywhere. Our platform is designed to be compatible with a wide range of devices, ensuring that you never miss a moment of entertainment.",
-    
-    "descriptionSection3" :"StreamVibe is optimized for both Android and iOS smartphones. Download our app from the Google Play Store or the Apple App Store"
+
+    "monthly_price": "Monthly Price",
+    "video_sound_quality": "Video and sound quality:",
+    "supported_devices": "Supported devices:",
+    "devices_list": "TV, computer, mobile phone, tablet",
+    "simultaneous_streams": "Devices your household can watch at the same time:",
+    "download_devices": "Download devices:",
+    "spatial_audio": "Spatial audio (immersive sound):",
+    "resolution": "Resolution:",
+
+
+    "Basic_quality": "Basic",
+    "standard_quality": "standard",
+    "Premium_quality": "Premium"
+
   },
   "Footer": {
     "Home": "Home",
