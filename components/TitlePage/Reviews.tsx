@@ -1,7 +1,7 @@
 import OpenTitleInfoCard from '@/components/OpenTitleInfoCard';
 import { Button } from '@/components/ui/button';
 import { FaPlus } from "react-icons/fa6";
-import { Review, SliderSettings } from '@/types/series';
+import { Review, SliderSettings } from '@/types/title';
 import dynamic from 'next/dynamic';
 
 const HorizontalCarousel = dynamic(() => import('@/components/carousel'), {

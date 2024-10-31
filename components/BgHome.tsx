@@ -51,9 +51,9 @@ const BackgroundCollage = () => {
   return (
     <div className="relative h-screen w-full overflow-hidden pt-2">
       {/* Movie Posters Background */}
-      <div className="absolute grid grid-cols-10 grid-rows-4 gap-6 -skew-x-[20deg] -left-[12%]">
+      <div className="absolute grid 2xl:grid-cols-10 xl:grid-cols-8 grid-cols-6 flex-wrap gap-6 -skew-x-[20deg] md:-left-[12%] -left-[100%]">
         {popularMovies.map((movie) => (
-          <div className='h-[240px] w-[200px]' >
+          <div className='' >
             <Image
               key={movie.id}
               src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}

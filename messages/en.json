@@ -139,7 +139,8 @@
     "music": "Music",
     "loading": "Loading...",
     "minute": "m",
-    "hour": "h"
+    "hour": "h",
+    "recommended": "Recommended"
   },
   "MoviesShows": {
     "popular": "Popular Movies",

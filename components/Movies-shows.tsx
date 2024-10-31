@@ -9,7 +9,7 @@ interface Movie {
   id: number;
   title: string;
   poster_path: string;
-  runtime?: number;
+  runtime?: number | null;
   overview?: string;
   backdrop_path?: string;
   vote_average?: number;
@@ -27,10 +27,10 @@ const MoviesShows = () => {
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const popularRes = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=d1e58d52f11cdeb332c4d907dd3ab70b`);
-        const top10Res = await fetch(`https://api.themoviedb.org/3/movie/top_rated?api_key=d1e58d52f11cdeb332c4d907dd3ab70b`);
-        const trendingRes = await fetch(`https://api.themoviedb.org/3/trending/movie/week?api_key=d1e58d52f11cdeb332c4d907dd3ab70b`);
-        const actionRes = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=d1e58d52f11cdeb332c4d907dd3ab70b&with_genres=28`);
+        const popularRes = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`);
+        const top10Res = await fetch(`https://api.themoviedb.org/3/movie/top_rated?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`);
+        const trendingRes = await fetch(`https://api.themoviedb.org/3/trending/movie/week?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`);
+        const actionRes = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&with_genres=28`);
 
         const popularData = await popularRes.json();
         const top10Data = await top10Res.json();
@@ -54,7 +54,7 @@ const MoviesShows = () => {
   const addRuntimes = async (movies: any[]) => {
     return await Promise.all(
       movies.map(async (movie: { id: any; }) => {
-        const runtimeRes = await fetch(`https://api.themoviedb.org/3/movie/${movie.id}?api_key=d1e58d52f11cdeb332c4d907dd3ab70b`);
+        const runtimeRes = await fetch(`https://api.themoviedb.org/3/movie/${movie.id}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=${local}`);
         const movieDetails = await runtimeRes.json();
         const runtime = movieDetails.runtime;
   
@@ -93,8 +93,8 @@ const MoviesShows = () => {
   
   const renderMoviesSection = (title: string, movies: Movie[]) => { 
     return (
-      <div className='my-12'>
-        <h2 className="section-title text-3xl font-bold dark:text-white text-left mb-8 ">
+      <div className='my-20 pt-0'>
+        <h2 className="section-title text-3xl font-bold dark:text-white mb-12 ">
           {t(title)}
         </h2>
         <HorizontalCarousel
@@ -117,7 +117,7 @@ const MoviesShows = () => {
                   )}
                 </div>
                 <div className="movie-card-overlay text-center">
-                  <h3 className='movie-title dark:text-white text-black mx-2'>{item.title}</h3>
+                  <h3 className='movie-title dark:text-white text-blac</section>k mx-2'>{item.title}</h3>
                   <div className="flex justify-between items-center">
                     <span className="movie-runtime hidden group-hover:block">
                       {item.runtime ? formatRuntime(item.runtime) : t('noRuntime')}
@@ -152,10 +152,10 @@ const MoviesShows = () => {
   const featuredMovie = popularMovies[0];
 
   return (
-    <main className={`min-h-screen text-red-45 text-black`}>
+    <main className={`min-h-s</span>creen text-red-45 text-black`}>
       <section className="my-10">
         <h2 className="section-title text-3xl text-red-500 font-bold mb-4">{t('featuredMovie')}</h2>
-        {featuredMovie && (
+        {featuredMovie ? (
           <div className="relative w-full h-[500px] mb-8">
             <Image
               src={`https://image.tmdb.org/t/p/original${featuredMovie.backdrop_path}`}
@@ -176,24 +176,27 @@ const MoviesShows = () => {
               {featuredMovie.runtime ? formatRuntime(featuredMovie.runtime) : t('noRuntime')}
             </span>
           </div>
-        )}
+        ) : (
+          <div className="h-[500px] bg-black-30 animate-pulse rounded-lg" />
+        )
+      }
 
         <div className="button-container mt-6 flex flex-wrap">
-          <button onClick={() => setSelectedSection(null)} className={`bg-gray-700 text-white ${selectedSection === null ? 'active' : ''}`}>
+          <Button onClick={() => setSelectedSection(null)} className={`bg-gray-700 text-white ${selectedSection === null ? 'active' : ''}`}>
             {t('allMovies')}
-          </button>
-          <button onClick={() => setSelectedSection('popular')} className={`bg-gray-700 text-white ${selectedSection === 'popular' ? 'active' : ''}`}>
-            {t('popularMovies')}
-          </button>
-          <button onClick={() => setSelectedSection('top10')} className={`bg-gray-700 text-white ${selectedSection === 'top10' ? 'active' : ''}`}>
+          </Button>
+          <Button onClick={() => setSelectedSection('popular')} className={`bg-gray-700 text-white ${selectedSection === 'popular' ? 'active' : ''}`}>
+            {t('popular')}
+          </Button>
+          <Button onClick={() => setSelectedSection('top10')} className={`bg-gray-700 text-white ${selectedSection === 'top10' ? 'active' : ''}`}>
             {t('top10Movies')}
-          </button>
-          <button onClick={() => setSelectedSection('trending')} className={`bg-gray-700 text-white ${selectedSection === 'trending' ? 'active' : ''}`}>
+          </Button>
+          <Button onClick={() => setSelectedSection('trending')} className={`bg-gray-700 text-white ${selectedSection === 'trending' ? 'active' : ''}`}>
             {t('trendingMovies')}
-          </button>
-          <button onClick={() => setSelectedSection('action')} className={`bg-gray-700 text-white ${selectedSection === 'action' ? 'active' : ''}`}>
+          </Button>
+          <Button onClick={() => setSelectedSection('action')} className={`bg-gray-700 text-white ${selectedSection === 'action' ? 'active' : ''}`}>
             {t('actionMovies')}
-          </button>
+          </Button>
         </div>
 
         {/* عرض الأقسام بناءً على الاختيار */}

@@ -5,7 +5,7 @@ import { FaPlay, FaPlus } from "react-icons/fa6";
 import { SlVolume2 } from "react-icons/sl";
 import { GoCheckCircle } from "react-icons/go";
 import { PiFilmSlateDuotone } from "react-icons/pi";
-import { Series } from '@/types/series';
+import { Series } from '@/types/title';
 
 interface HeroProps {
   series: Series;

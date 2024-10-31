@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { Series, SeriesImages } from '@/types/series';
+import { Series, SeriesImages } from '@/types/title';
 import Info from '@/components/ui/Info';
 import RatingStars from '@/components/ui/RatingStars';
 import { CiCalendar, CiStar } from "react-icons/ci";

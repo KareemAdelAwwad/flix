@@ -1,5 +1,5 @@
 import OpenTitleInfoCard from '@/components/OpenTitleInfoCard';
-import { Series } from '@/types/series';
+import { Series } from '@/types/title';
 
 interface DescriptionProps {
   series: Series;

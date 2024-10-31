@@ -3,6 +3,7 @@
 import React from 'react'
 import { useLocale, useTranslations } from 'next-intl';
 import { useState, useEffect } from 'react';
+import NextIntlClientProvider from 'next-intl';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import OpenTitleInfoCard from '@/components/OpenTitleInfoCard';
@@ -20,14 +21,14 @@ import { PiTranslate, PiFilmReel, PiFilmSlateDuotone } from "react-icons/pi";
 import { BiCategoryAlt } from "react-icons/bi";
 import { CgMusicNote } from "react-icons/cg";
 
-
-
-
+// Import Components
 import HorizontalCarousel from '@/components/carousel'
 import ActorCard from '@/components/ActorCard';
 import ReviewCard from '@/components/ReviewCard';
 import Info from '@/components/ui/Info';
 import RatingStars from '@/components/ui/RatingStars';
+import Recommendations from '@/components/TitlePage/Recommendations';
+import AudioPlayer from '@/components/AudioPlayer';
 
 
 interface Movie {
@@ -228,10 +229,10 @@ export default function page({ params }: { params: { id: number } }) {
     <main className='flex flex-col justify-center items-center gap-20 container'>
       <title>{movie.title}</title>
       {/* Movie Background */}
-      <section className='w-full h-[835px] mt-5 rounded-lg overflow-hidden felx justify-center items-center relative'>
+      <section className='w-full h-[835px] mt-5 rounded-t-lg overflow-hidden felx justify-center items-center relative'>
         <div className='
         flex flex-col justify-end items-center text-white text-center pb-10
-        inset-0 bg-gradient-to-t from-black-8 via-transparent to-transparent w-full h-full absolute z-10'>
+        inset-0 bg-gradient-to-t from-black-8  to-transparent w-full h-full absolute z-10'>
           <div>
             <h1 className='text-4xl font-bold'>{movie.title}</h1>
             <p className='text-lg text-gray-60'>{movie.tagline ? movie.tagline : movie.overview}</p>
@@ -244,7 +245,7 @@ export default function page({ params }: { params: { id: number } }) {
             <div className='flex justify-center items-center gap-2'>
               <ReadyTooltip children={<Button size='lgIcon'><FaPlus /></Button>} title={t('watchlist')} />
               <ReadyTooltip children={<Button size='lgIcon'><PiFilmSlateDuotone /></Button>} title={t('trailer')} />
-              <ReadyTooltip children={<Button size='lgIcon'><SlVolume2 /></Button>} title={t('themeSong')} />
+              <AudioPlayer songName={`${movie.title} - Movie - Music`} tooltipTitle={t('themeSong')} />
               <ReadyTooltip children={<Button size='lgIcon'><GoCheckCircle /></Button>} title={t('watched')} />
             </div>
           </div>
@@ -291,8 +292,9 @@ export default function page({ params }: { params: { id: number } }) {
           {
             reviews.length > 0 &&
             <OpenTitleInfoCard className='mb-8' title={t('reviews')}>
-              <Button className='text-lg dark:bg-black-8 border-[1px] dark:border-black-15  dark:text-white font-medium flex justify-center items-center absolute right-[4rem] top-[40px]'>
-                <FaPlus /> Add Review
+              <Button className={`text-lg dark:bg-black-8 bg-gray-50 borders dark:text-white text-black-12 font-medium flex justify-center items-center hover:bg-gray-90 transition-colors duration-300
+            absolute top-[40px] ${locale === 'ar' ? 'left-[4rem]' : 'right-[4rem]'}`}>
+                <FaPlus /> {t('addreview')}
               </Button>
               <div>
                 <HorizontalCarousel
@@ -379,7 +381,7 @@ export default function page({ params }: { params: { id: number } }) {
 
                 <div className='dark:text-white font-medium p-2.5 dark:bg-black-8 bg-gray-50 border-[1px] dark:border-black-15 rounded-lg flex gap-2 items-center'>
                   <div className='w-[48px] h-[50px] overflow-hidden rounded-lg flex justify-center items-center'>
-                    <Image src={`https://image.tmdb.org/t/p/original${director.profile_path}`}
+                    <Image src={director.profile_path ? `https://image.tmdb.org/t/p/original${director.profile_path}` : "/images/robot-image.jpg"}
                       alt={director.name} className='object-center' width={48} height={48} />
                   </div>
                   <div>
@@ -393,9 +395,14 @@ export default function page({ params }: { params: { id: number } }) {
           </div>
         </div>
 
+
       </section>
 
+      <section className='w-full flex flex-col'>
+        <Recommendations titleType='movie' titleID={params.id} header={t('recommended')} />
+      </section>
 
+      
     </main >
   )
 }

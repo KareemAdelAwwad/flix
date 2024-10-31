@@ -22,7 +22,7 @@ import {
   Review,
   ImageProps,
   SliderSettings
-} from '@/types/series';
+} from '@/types/title';
 
 // Import Icons
 import { FaPlay, FaPlus } from "react-icons/fa6";
@@ -58,6 +58,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import Recommendations from '@/components/TitlePage/Recommendations';
+import AudioPlayer from '@/components/AudioPlayer';
 
 // Font configuration
 const manropes = Manrope({
@@ -298,7 +300,7 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
             <div className='flex justify-center items-center gap-2'>
               <ReadyTooltip children={<Button size='lgIcon'><FaPlus /></Button>} title={t('watchlist')} />
               <ReadyTooltip children={<Button size='lgIcon'><PiFilmSlateDuotone /></Button>} title={t('trailer')} />
-              <ReadyTooltip children={<Button size='lgIcon'><SlVolume2 /></Button>} title={t('themeSong')} />
+              <AudioPlayer songName={`${series.name} - opening`} tooltipTitle={t('themeSong')} />
               <ReadyTooltip children={<Button size='lgIcon'><GoCheckCircle /></Button>} title={t('watched')} />
             </div>
           </div>
@@ -310,7 +312,7 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
               alt={series.original_title} className='w-full h-full object-cover' height={835} width={1800} />
         }
       </section>
-      
+
 
       <section className='w-full flex flex-col lg:flex-row gap-5'>
         {/* Leftside Info */}
@@ -489,22 +491,26 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
 
             <Info title={t('network')}
               content={
-                series.networks && series.networks.map((network) => (
-                  <div key={network.id} className='dark:text-white font-medium p-2.5 dark:bg-black-8 bg-gray-50 borders rounded-lg flex gap-4 items-center'>
-                    <div className='rounded-lg flex justify-center items-center'>
-                      <Image src={`https://image.tmdb.org/t/p/original${network.logo_path}`}
-                        alt={network.name} className='object-center' width={100} height={100} />
-                    </div>
-                    <div>
-                      <h4 className='text-[16px]'>{network.name}</h4>
-                      {network.origin_country &&
-                        <p className='text-sm text-gray-60'>
-                          {t('from')} {' '}
-                          {new Intl.DisplayNames([locale], { type: 'region' }).of(network.origin_country === 'IS' ? 'PS' : network.origin_country)} {/* فلسطين حرة ❤️ */}
-                        </p>}
-                    </div>
-                  </div>
-                ))
+                <div className='flex flex-col gap-2'>
+                  {
+                    series.networks && series.networks.slice(0,10).map((network) => (
+                      <div key={network.id} className='dark:text-white font-medium p-2.5 dark:bg-black-8 bg-gray-50 borders rounded-lg flex gap-4 items-center'>
+                        <div className='rounded-lg flex justify-center items-center'>
+                          <Image src={`https://image.tmdb.org/t/p/original${network.logo_path}`}
+                            alt={network.name} className='object-center' width={100} height={100} />
+                        </div>
+                        <div>
+                          <h4 className='text-[16px]'>{network.name}</h4>
+                          {network.origin_country &&
+                            <p className='text-sm text-gray-60'>
+                              {t('from')} {' '}
+                              {new Intl.DisplayNames([locale], { type: 'region' }).of(network.origin_country === 'IS' ? 'PS' : network.origin_country)} {/* فلسطين حرة ❤️ */}
+                            </p>}
+                        </div>
+                      </div>
+                    ))
+                  }
+                </div>
               }
               icon={<BiNetworkChart size={24} />} />
 
@@ -514,6 +520,10 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
 
       </section>
 
+      <section className='w-full flex flex-col'>
+
+        <Recommendations titleType='tv' titleID={params.id} header={t('recommended')} />
+      </section>
 
     </main >
   )

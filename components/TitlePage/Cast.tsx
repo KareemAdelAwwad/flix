@@ -1,5 +1,5 @@
 import OpenTitleInfoCard from '@/components/OpenTitleInfoCard';
-import { Series, Cast as CastType, SliderSettings } from '@/types/series';
+import { Series, Cast as CastType, SliderSettings } from '@/types/title';
 import dynamic from 'next/dynamic';
 
 const HorizontalCarousel = dynamic(() => import('@/components/carousel'), {
