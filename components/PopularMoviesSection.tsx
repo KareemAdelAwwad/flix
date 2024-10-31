@@ -73,7 +73,7 @@ const MoviesShows = () => {
   const renderMoviesSection = (title: string, movies: Movie[]) => {
     return (
       <div className='my-12'>
-        <h2 className="section-title text-3xl font-bold dark:text-white text-left mb-8">
+        <h2 className="text-3xl font-bold dark:text-white mb-8">
           {t(title)}
         </h2>
         <HorizontalCarousel

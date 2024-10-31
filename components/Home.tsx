@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Button } from './ui/button';
 import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/routing';
 import { FaPlay, FaMobile, FaTablet } from "react-icons/fa";
 import { MdOutlineLaptopChromebook } from "react-icons/md";
 import { BsHeadsetVr } from "react-icons/bs";
@@ -22,25 +23,33 @@ interface PlanCardProps {
   devices: number;
   downloads: number;
   spatialAudio?: boolean;
+  mostPopular?: boolean;
 }
 
-function PlanCard({ style, name, price, resolution, devices, downloads, spatialAudio }: PlanCardProps) {
+function PlanCard({ style, name, price, resolution, devices, downloads, spatialAudio, mostPopular }: PlanCardProps) {
   const t = useTranslations('HomePage');
-  const listStyle = `border-t border-black-6 pt-6 dark:border-black-30`
+  const listStyle = `border-t border-black-6 pt-4 dark:border-black-30`
   const h1Style = `text-lg font-medium text-black-20 dark:text-gray-70`
-  const pStyle = `text-xl font-medium  text-black-10 dark:text-white`
+  const pStyle = `text-xl font-medium text-black-10 dark:text-white`
   return (
-    <div className="bg-transparent border-black-6 borders hover:border-red-60 hover:shadow-2xl transition-all p-4 pb-10 dark:bg-black-10 rounded-2xl shadow-md">
-
+    <div className={`relative bg-transparent border-black-6 borders hover:border-red-60 hover:shadow-2xl transition-all 
+    p-4 pb-10 ${mostPopular && "rounded-t-none"} dark:bg-black-10 rounded-2xl shadow-md flex flex-col justify-between gap-10`}>
+      {
+        mostPopular && (
+          <div className='bg-red-45 rounded-t-2xl absolute top-0 -translate-y-[100%] right-0 w-full text-center text-base font-medium capitalize'>
+            {t('most_popular')}
+          </div>
+        )
+      }
       <div className={`${style} bg-red-50 rounded-xl p-4 pb-8`}>
         <h3 className="text-2xl font-bold text-white">{name}</h3>
         <p className='text-white text-base font-bold'>{resolution}</p>
       </div>
 
-      <ul className="list-none flex flex-col gap-6 justify-start px-4 ">
+      <ul className="list-none flex flex-col gap-4 justify-start px-4 ">
         <li className={`${listStyle} border-none`}>
           <h1 className={h1Style}>{t("monthly_price")}</h1>
-          <p className={pStyle}>EGP {price}</p>
+          <p className={pStyle}>{price} {t('EGP')}</p>
         </li>
 
         <li className={listStyle}>
@@ -69,6 +78,9 @@ function PlanCard({ style, name, price, resolution, devices, downloads, spatialA
           </li>
         )}
       </ul>
+
+        <Button size={'lg'} className="bg-red-50 text-white hover:bg-red-60">{t("choose_plan")} </Button>
+
     </div>)
 };
 
@@ -128,6 +140,7 @@ const Home = () => {
       devices: 4,
       downloads: 6,
       spatialAudio: true,
+      mostPopular: true,
     },
   ];
 
@@ -198,7 +211,7 @@ const Home = () => {
                   onClick={() => toggleFAQ(index)}
                 >
                   <div className='mt-2 flex items-center'>
-                    <span className='dark:bg-black-12 bg-gray-60 text-white p-3 px-4 rounded-lg mr-4 flex justify-center items-center font-semibold text-xl borders'>
+                    <span className='dark:bg-black-12 bg-gray-60 text-white p-3 px-4 rounded-lg mx-4 flex justify-center items-center font-semibold text-xl borders'>
                       <p>
                         {`${index + 1}`.toString().padStart(2, '0')}
                       </p>
@@ -219,8 +232,8 @@ const Home = () => {
 
 
         {/* plans  */}
-        <div className="py-8">
-          <h2 className=" text-2xl font-bold mb-6">Choose Your Plan</h2>
+        <div className="py-8" id='subscriptions'>
+          <h2 className=" text-3xl font-bold mb-6">{t('PLANS-TITLE')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-2xl">
             {plans.map((plan, index) => (
               <PlanCard {...plan} />

@@ -23,7 +23,7 @@
     {
       "key": "subscriptions",
       "name": "Subscriptions",
-      "path": "/subscriptions"
+      "path": "/#subscriptions"
     }
   ]
 }

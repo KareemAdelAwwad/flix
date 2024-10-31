@@ -23,6 +23,7 @@
     "GamingConsole":"Gaming Console",
     "VRHeadsets":"VR Headsets",
     "APPS-P" :"StreamVibe is optimized for both Android and iOS smartphones. Download our app from the Google Play Store or the Apple App Store",
+    
  
     "SECTION-ONE-BTN":"Start watching Now",
 
@@ -55,6 +56,10 @@
     "A-SEVEN":"StreamVibe accepts credit cards, PayPal, and more.",
     "A-EIGHT":"We accept various payment methods, including credit cards, debit cards, and PayPal.",
   
+    "PLANS-TITLE":"Choose the plan that’s right for you",
+    "choose_plan": "Choose Plan",
+    "most_popular":"Most Popular",
+    "EGP":"EGP",
     "PLANS-H1":"",
     "PLANS-P":"",
     
