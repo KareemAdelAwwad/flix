@@ -27,40 +27,41 @@ interface PlanCardProps {
 function PlanCard({ style, name, price, resolution, devices, downloads, spatialAudio }: PlanCardProps) {
   const t = useTranslations('HomePage');
   return (
-    <div className="bg-transparent border-black-6   border  dark:bg-black-10 rounded-lg p-6 shadow-md">
+    <div className="bg-transparent border-black-6   border  dark:bg-black-10 rounded-lg   shadow-md  ">
 
       <div className={` ${style} bg-red-50 rounded-lg p-3 `}> <h3 className="text-xl font-bold mb-2 text-white">{name}</h3>
-        <span className="font-bold text-xl text-white">{t("resolution")}</span> <span className=' text-white font-bold'>{resolution}</span>
+        <span className="text-white text-xl  ">{t("resolution")}</span> <span className='text-white'>{resolution}</span>
       </div>
-      <ul className="list-none">
-        <li className="mt-5 mb-2">
-          <h1 className='text-lg'>{t("monthly_price")}</h1>
-          <p className="text-xl text-gray-50 mb-4 font-bold">EGP {price}</p>
+
+      <ul className="list-none flex flex-col justify-evenly px-2  ">
+        <li className=" py-5 mb-2">
+          <h1 className='text-lg text-black-20 dark:text-gray-70'>{t("monthly_price")}</h1>
+          <p className="text-xl  mb-4 text-black-10 dark:text-white">EGP {price}</p>
         </li>
 
-        <li className="mt-5 mb-2 border-t border-black-6 dark:border-white">
-          <div className="text-lg ">{t("video_sound_quality")} </div>{' '}
-          <span className='text-xl font-bold'>{name === 'Premium' ? 'Best' : name === 'Standard' ? 'Great' : 'Good'}</span>
+        <li className=" py-5 mb-2 border-t border-black-6 dark:border-white">
+          <div className="text-lg text-black-20 dark:text-gray-70 ">{t("video_sound_quality")} </div>{' '}
+          <span className='text-xl text-black-10 dark:text-white'>{name === 'Premium' ? 'Best' : name === 'Standard' ? 'Great' : 'Good'}</span>
         </li>
 
-        <li className="mt-5 mb-2 border-t border-black-6 dark:border-white">
-          <div className="text-lg">{t("supported_devices")}</div>
-          <span className='font-bold'> {t("devices_list")}</span>
+        <li className=" py-5 mb-2 border-t border-black-6 dark:border-white">
+          <div className="text-lg text-black-20 dark:text-gray-70">{t("supported_devices")}</div>
+          <span className='text-black-10 dark:text-white'> {t("devices_list")}</span>
         </li>
 
-        <li className="mt-5 mb-2 border-t border-black-6 dark:border-white">
-          <div className="text-lg">{t("simultaneous_streams")}</div>
+        <li className=" py-5 mb-2 border-t border-black-6 dark:border-white">
+          <div className="text-lg text-black-20 dark:text-gray-70">{t("simultaneous_streams")}</div>
           <div>{devices}</div>
         </li>
 
-        <li className='mt-5 border-t border-white'>
-          <div className=" "> {t("download_devices")}</div>
-          <span className='font-bold'>{downloads}</span>
+        <li className=' py-5  border-t border-black-6 dark:border-white'>
+          <div className=" text-black-20 dark:text-gray-70 "> {t("download_devices")}</div>
+          <span className='text-black-10 dark:text-white'>{downloads}</span>
         </li>
         {spatialAudio && (
-          <li className='mt-5 border-t border-white'>
-            <div className=" ">{t("spatial_audio")}</div>
-            <span className='font-bold'>6</span>
+          <li className=' py-5  border-t border-black-6 dark:border-white'>
+            <div className="  text-black-20 dark:text-gray-70 ">{t("spatial_audio")}</div>
+            <span className='text-black-10 dark:text-white'>6</span>
           </li>
         )}
       </ul>
@@ -160,7 +161,7 @@ const Home = () => {
           {/* apps  */}
           <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-5 text-white">
             {deviceData.map((device, index) => (
-              <div key={index} className='w-full p-9 rounded-lg h-50 bg-gradient-to-tr from-red-50 to-gray-60 dark:to-black-6 flex flex-col justify-evenly'>
+              <div key={index} className='w-full p-9 rounded-lg h-50 bg-gradient-to-tr from-60%  from-black-6 via-black-6 to-red-900 flex flex-col justify-evenly'>
                 <div className='flex items-center gap-2'>
                   <div className='text-red-45 p-2 bg-gray-900 rounded-lg' style={{ fontSize: '35px' }}>
                     {device.icon}
@@ -174,12 +175,11 @@ const Home = () => {
         </div>
 
         {/* questions */}
-        <div className="p-8  mt-10">
+        <div className="py-8  mt-10">
           <h2 className="text-3xl font-semibold mb-4"> {t("Q-H1")}</h2>
           <p className="text-gray-400  mb-6">{t("Q-P")}</p>
-          <div className="space-y-4 flex flex-wrap w-full">
+          <div className=" flex flex-wrap w-full ">
             {faqs.map((faq, index) => (
-
               <div key={index} className=" text-lg rounded-lg p-4 w-full  md:w-2/4 ">
                 <button
                   className=" border-t border-red-45 pt-2 w-full flex justify-between items-center text-left   font-medium"
@@ -206,7 +206,7 @@ const Home = () => {
 
 
         {/* plans  */}
-        <div className="  p-8">
+        <div className="  py-8">
           <h2 className=" text-2xl font-bold mb-6">Choose Your Plan</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-2xl">
             {plans.map((plan) => (
