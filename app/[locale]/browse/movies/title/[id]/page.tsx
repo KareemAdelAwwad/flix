@@ -320,9 +320,13 @@ export default function page({ params }: { params: { id: number } }) {
         {/* Rightside Info */}
         <div className='w-full lg:w-[34%]'>
           <div className='dark:bg-black-10 bg-gray-90 rounded-lg p-12 font-semibold text-lg border-[1px] dark:border-black-15 border-gray-75 flex flex-col gap-8'>
-            <div className='flex justify-center items-center'>
-              <Image loading='lazy' src={`https://image.tmdb.org/t/p/original${images.logos && images.logos[0].file_path}`} alt="Movie Logo" width={240} height={160} />
-            </div>
+            {
+              images.logos && images.logos.length > 0
+              &&
+              <div className='flex justify-center items-center'>
+                <Image loading='lazy' src={`https://image.tmdb.org/t/p/original${images.logos && images.logos[0].file_path}`} alt="Movie Logo" width={240} height={160} />
+              </div>
+            }
             <Info title={t('releaseDate')}
               content={<p className='dark:text-white text-[16px] font-semibold'>{movie.release_date}</p>}
               icon={<CiCalendar size={24} />} />

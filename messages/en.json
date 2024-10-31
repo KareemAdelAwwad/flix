@@ -142,11 +142,18 @@
     "hour": "h"
   },
   "MoviesShows": {
+    "popular": "Popular Movies",
+    "top10": "Top 10 Movies",
+    "trending": "Trending Movies",
+    "action": "Action Movies",
     "featuredMovie": "Featured Movie",
-    "popularMovies": "Popular Movies",
-    "top10Movies": "Top 14 Movies",
+    "watchFilm": "Watch Film",
+    "noRuntime": "No Runtime",
+    "noDescription": "No Description",
+    "allMovies": "All Movies",
+    "top10Movies": "Top 10 Movies",
     "trendingMovies": "Trending Movies",
-    "watchFilm": "Watch the Film",
+    "actionMovies": "Action Movies",
     "loading": "Loading..."
   }
 }

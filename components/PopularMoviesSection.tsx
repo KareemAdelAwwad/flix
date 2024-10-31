@@ -9,7 +9,7 @@ interface Movie {
   id: number;
   title: string;
   poster_path: string;
-  runtime?: number;
+  runtime?: number | null;
   overview?: string;
   backdrop_path?: string;
   vote_average?: number;
@@ -24,7 +24,7 @@ const MoviesShows = () => {
     const fetchPopularMovies = async () => {
       try {
         const popularRes = await fetch(
-          `https://api.themoviedb.org/3/movie/popular?api_key=d1e58d52f11cdeb332c4d907dd3ab70b`
+          `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`
         );
 
         const popularData = await popularRes.json();
@@ -43,7 +43,7 @@ const MoviesShows = () => {
     return await Promise.all(
       movies.map(async (movie: { id: any }) => {
         const runtimeRes = await fetch(
-          `https://api.themoviedb.org/3/movie/${movie.id}?api_key=d1e58d52f11cdeb332c4d907dd3ab70b`
+          `https://api.themoviedb.org/3/movie/${movie.id}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`
         );
         const movieDetails = await runtimeRes.json();
         const runtime = movieDetails.runtime;
@@ -81,7 +81,7 @@ const MoviesShows = () => {
           navStyle="style3"
           ItemComponent={({ item }: { item: Movie }) => {
             return (
-              <div className="relative movie-card group max-w-8 mb-100">
+              <div className="relative movie-card group mb-100">
                 <div className="aspect-w-2 aspect-h-3">
                   {loading ? (
                     <div className="bg-gray-300 animate-pulse h-full w-full rounded-lg" />
