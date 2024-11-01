@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import HorizontalCarousel from "@/components/carousel";
 import { Link } from "@/i18n/routing";
+import WatchlistButton from "../AddToWatchlistButton";
 
 interface RecommendationsProps {
   header: string;
@@ -35,7 +36,7 @@ const settings = {
 };
 
 
-const  Recommendations: React.FC<RecommendationsProps> = ({ titleType, titleID, header }) => {
+const Recommendations: React.FC<RecommendationsProps> = ({ titleType, titleID, header }) => {
   const [recommendations, setRecommendations] = useState([] as Title[]);
   const url = `https://api.themoviedb.org/3/${titleType === 'movie' ? "movie" : "tv"}/${titleID}/recommendations?language=en-US&page=1`
   useEffect(() => {
@@ -54,12 +55,14 @@ const  Recommendations: React.FC<RecommendationsProps> = ({ titleType, titleID, 
         settings={settings}
         ItemComponent={({ item }) => (
           <div key={item.id} className="overflow-hidden rounded-lg p-5 bg-black-12 flex flex-col group">
-            <div className="w-full h-[300px] overflow-hidden rounded-lg group-hover:scale-105 transition-all">
+            <div className="relative w-full h-[300px] overflow-hidden rounded-lg group-hover:scale-105 transition-all">
               <Link href={`/browse/${titleType === "movie" ? 'movies' : 'tv-shows'}/title/${item.id}`}>
                 <Image src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
                   alt={item.name ? item.name : item.title || 'No title available'} width={250} height={300}
                   className="w-full h-full object-cover pointer-events-none " />
               </Link>
+              {item.id && <WatchlistButton titleId={item.id.toString()} titleType={titleType} style='badge'
+              className="opacity-0 group-hover:opacity-100 transition-all"/>}
             </div>
           </div>
         )}

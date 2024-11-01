@@ -9,6 +9,7 @@ import {
   ClerkProvider,
 } from '@clerk/nextjs'
 import { arSA, enUS } from '@clerk/localizations'
+import { dark, neobrutalism } from '@clerk/themes'
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
@@ -30,7 +31,7 @@ export default function RootLayout({
 
   const messages = useMessages();
   return (
-    <ClerkProvider localization={locale === "ar" ? arSA : enUS}>
+    <ClerkProvider localization={locale === "ar" ? arSA : enUS} appearance={{ baseTheme: dark }}>
       <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
         <body>
           <ThemeProvider

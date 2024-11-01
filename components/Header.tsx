@@ -5,11 +5,13 @@ import links from '@/data/links.json';
 import React, { useState } from 'react';
 // import { useTheme } from 'next-themes';
 import { Link } from '@/i18n/routing';
+import {useLocale} from 'next-intl';
 import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
-//img src
+//icons
 import { RiMenuFill } from "react-icons/ri";
 import { BsSearch } from "react-icons/bs";
 import { CgClose } from "react-icons/cg";
+import { IoBookmark } from 'react-icons/io5';
 
 // components import
 import { ModeToggle } from '@/components/ModeToggle';
@@ -22,6 +24,7 @@ import { ThemeSwitcher } from '@/components/ThemeSwitcher';
 //translate import
 import { useTranslations } from 'next-intl';
 import { useTheme } from 'next-themes';
+
 
 const Header = () => {
 
@@ -36,8 +39,9 @@ const Header = () => {
 
   //for icon theme
   const theme = useTheme().resolvedTheme;
+  const locale = useLocale();
   const themeTriger: any = () => { return theme === "light" ? "text-black-10" : "text-white"; };
-
+  
   const navItemsClassName = 'p-2 px-4 rounded-3xl hover:bg-neutral-700 hover:text-white text-black-6 dark:text-white bg-transparent transition-all duration-300';
   return (
     <header className='flex items-center justify-between container py-4 text-black dark:text-white' >
@@ -68,7 +72,16 @@ const Header = () => {
           </Button>
         </SignedOut>
         <SignedIn>
-          <UserButton />
+          <UserButton>
+            <UserButton.MenuItems>
+              <UserButton.Link
+                label="Watchlist"
+                labelIcon={<IoBookmark size={18} />}
+                href={`${locale}/watchlist`}
+              />
+              <UserButton.Action label="manageAccount" />
+            </UserButton.MenuItems>
+          </UserButton>
         </SignedIn>
 
       </div>

@@ -29,6 +29,7 @@ import Info from '@/components/ui/Info';
 import RatingStars from '@/components/ui/RatingStars';
 import Recommendations from '@/components/TitlePage/Recommendations';
 import AudioPlayer from '@/components/AudioPlayer';
+import WatchlistButton from '@/components/AddToWatchlistButton';
 
 
 interface Movie {
@@ -243,9 +244,11 @@ export default function page({ params }: { params: { id: number } }) {
               <FaPlay /> {t('title')}
             </Button>} title={t('play')} />
             <div className='flex justify-center items-center gap-2'>
-              <ReadyTooltip children={<Button size='lgIcon'><FaPlus /></Button>} title={t('watchlist')} />
+              {movie.id && <WatchlistButton titleId={movie.id.toString()} titleType='movie' style='icon' />}
               <ReadyTooltip children={<Button size='lgIcon'><PiFilmSlateDuotone /></Button>} title={t('trailer')} />
-              <AudioPlayer songName={`${movie.title} - Movie - Music`} tooltipTitle={t('themeSong')} />
+              {
+                locale === 'en' && <AudioPlayer songName={`${movie.title} - Movie - Music`} tooltipTitle={t('themeSong')} />
+              }
               <ReadyTooltip children={<Button size='lgIcon'><GoCheckCircle /></Button>} title={t('watched')} />
             </div>
           </div>
@@ -402,7 +405,7 @@ export default function page({ params }: { params: { id: number } }) {
         <Recommendations titleType='movie' titleID={params.id} header={t('recommended')} />
       </section>
 
-      
+
     </main >
   )
 }

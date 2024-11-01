@@ -22,6 +22,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "next.config.mjs", "hooks/useScrollCarousel.ts", "app/[locale]/page.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "next.config.mjs", "hooks/useScrollCarousel.ts", "app/[locale]/page.tsx", "lib/firebase.js"],
   "exclude": ["node_modules"]
 }

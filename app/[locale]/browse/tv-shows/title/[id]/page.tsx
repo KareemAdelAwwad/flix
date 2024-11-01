@@ -60,6 +60,7 @@ import {
 } from "@/components/ui/accordion";
 import Recommendations from '@/components/TitlePage/Recommendations';
 import AudioPlayer from '@/components/AudioPlayer';
+import WatchlistButton from '@/components/AddToWatchlistButton';
 
 // Font configuration
 const manropes = Manrope({
@@ -298,9 +299,11 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
               <FaPlay /> {t('title')}
             </Button>} title={t('play')} />
             <div className='flex justify-center items-center gap-2'>
-              <ReadyTooltip children={<Button size='lgIcon'><FaPlus /></Button>} title={t('watchlist')} />
+              {series.id && <WatchlistButton titleId={series.id.toString()} titleType='tv' style='icon' />}
               <ReadyTooltip children={<Button size='lgIcon'><PiFilmSlateDuotone /></Button>} title={t('trailer')} />
-              <AudioPlayer songName={`${series.name} - opening`} tooltipTitle={t('themeSong')} />
+              {
+                locale === 'en' && <AudioPlayer songName={`${series.name} - opening`} tooltipTitle={t('themeSong')} />
+              }
               <ReadyTooltip children={<Button size='lgIcon'><GoCheckCircle /></Button>} title={t('watched')} />
             </div>
           </div>
@@ -493,7 +496,7 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
               content={
                 <div className='flex flex-col gap-2'>
                   {
-                    series.networks && series.networks.slice(0,10).map((network) => (
+                    series.networks && series.networks.slice(0, 10).map((network) => (
                       <div key={network.id} className='dark:text-white font-medium p-2.5 dark:bg-black-8 bg-gray-50 borders rounded-lg flex gap-4 items-center'>
                         <div className='rounded-lg flex justify-center items-center'>
                           <Image src={`https://image.tmdb.org/t/p/original${network.logo_path}`}

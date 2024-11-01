@@ -17,8 +17,8 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ songName, tooltipTitle }) => 
     setIsPlaying(savedIsPlaying);
 
     if (audioRef.current) {
-      // Set volume to 0.25
-      audioRef.current.volume = 0.25;
+      // Set volume to 0.15
+      audioRef.current.volume = 0.15;
 
       // If the song was playing before, start it again
       if (savedIsPlaying) {

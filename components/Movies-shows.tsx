@@ -4,6 +4,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import HorizontalCarousel from '@/components/carousel';
 import { Button } from './ui/button';
+import WatchlistButton from './AddToWatchlistButton';
 
 interface Movie {
   id: number;
@@ -57,17 +58,17 @@ const MoviesShows = () => {
         const runtimeRes = await fetch(`https://api.themoviedb.org/3/movie/${movie.id}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=${local}`);
         const movieDetails = await runtimeRes.json();
         const runtime = movieDetails.runtime;
-  
+
         // تحقق من أن قيمة runtime صحيحة
         if (typeof runtime !== 'number' || runtime < 0) {
           console.warn(`Invalid runtime for movie ID ${movie.id}:`, runtime);
         }
-  
+
         // تحقق إذا كانت القيمة NaN
         if (isNaN(runtime)) {
           console.warn(`Runtime is NaN for movie ID ${movie.id}`);
         }
-  
+
         return {
           ...movie,
           title: movieDetails.title,
@@ -79,22 +80,22 @@ const MoviesShows = () => {
       })
     );
   };
-  
+
   const formatRuntime = (runtime: number | null) => {
     if (runtime === null || isNaN(runtime)) return t('noRuntime'); // تحقق من NaN أيضًا
     const hours = Math.floor(runtime / 60);
     const minutes = runtime % 60;
     return hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
   };
-  
+
 
   const local = useLocale();
   const movieURLFormat = (movie: Movie) => `/${local}/browse/movies/title/${movie.id}`;
-  
-  const renderMoviesSection = (title: string, movies: Movie[]) => { 
+
+  const renderMoviesSection = (title: string, movies: Movie[]) => {
     return (
       <div className='my-20 pt-0'>
-        <h2 className="section-title text-3xl font-bold dark:text-white mb-12 ">
+        <h2 className="text-3xl font-bold  mb-12 ">
           {t(title)}
         </h2>
         <HorizontalCarousel
@@ -103,7 +104,7 @@ const MoviesShows = () => {
           ItemComponent={({ item }: { item: Movie }) => {
             return (
               <div className="relative movie-card group max-w-8 mb-100">
-                <div className="aspect-w-2 aspect-h-3"> 
+                <div className="aspect-w-2 aspect-h-3">
                   {loading ? (
                     <div className="bg-gray-300 animate-pulse h-full w-full rounded-lg" />
                   ) : (
@@ -118,17 +119,17 @@ const MoviesShows = () => {
                 </div>
                 <div className="movie-card-overlay text-center">
                   <h3 className='movie-title dark:text-white text-blac</section>k mx-2'>{item.title}</h3>
-                  <div className="flex justify-between items-center">
-                    <span className="movie-runtime hidden group-hover:block">
-                      {item.runtime ? formatRuntime(item.runtime) : t('noRuntime')}
-                    </span>
-                    {/* تمت إزالة الجزء المتعلق بعرض التصنيف */}
-                  </div>
                   <Link href={movieURLFormat(item)}>
                     <Button className="mt-4 bg-red-50 text-white hover:bg-red-60">
                       {t('watchFilm')}
                     </Button>
                   </Link>
+                  <div className="flex justify-between items-center absolute bottom-2.5 w-full px-4">
+                    <span className="hidden group-hover:block">
+                      {item.runtime ? formatRuntime(item.runtime) : t('noRuntime')}
+                    </span>
+                    <WatchlistButton titleId={item.id.toString()} titleType='movie' style='icon' />
+                  </div>
                 </div>
               </div>
             );
@@ -152,9 +153,9 @@ const MoviesShows = () => {
   const featuredMovie = popularMovies[0];
 
   return (
-    <main className={`min-h-s</span>creen text-red-45 text-black`}>
+    <main className={`text-black`}>
       <section className="my-10">
-        <h2 className="section-title text-3xl text-red-500 font-bold mb-4">{t('featuredMovie')}</h2>
+        <h2 className="text-3xl  font-bold mb-4">{t('featuredMovie')}</h2>
         {featuredMovie ? (
           <div className="relative w-full h-[500px] mb-8">
             <Image
@@ -172,14 +173,17 @@ const MoviesShows = () => {
                 </Button>
               </Link>
             </div>
-            <span className="absolute bottom-4 left-4 text-white text-lg">
-              {featuredMovie.runtime ? formatRuntime(featuredMovie.runtime) : t('noRuntime')}
-            </span>
+            <div className='absolute bottom-4 w-full flex items-center justify-between px-4'>
+              <span className=" text-white text-lg">
+                {featuredMovie.runtime ? formatRuntime(featuredMovie.runtime) : t('noRuntime')}
+              </span>
+              <WatchlistButton titleId={featuredMovie.id.toString()} titleType='movie' style='text' />
+            </div>
           </div>
         ) : (
           <div className="h-[500px] bg-black-30 animate-pulse rounded-lg" />
         )
-      }
+        }
 
         <div className="button-container mt-6 flex flex-wrap">
           <Button onClick={() => setSelectedSection(null)} className={`bg-gray-700 text-white ${selectedSection === null ? 'active' : ''}`}>

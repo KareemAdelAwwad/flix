@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { Button } from './ui/button';
 import { useTranslations } from 'next-intl';
-import { Link } from '@/i18n/routing';
 import { FaPlay, FaMobile, FaTablet } from "react-icons/fa";
 import { MdOutlineLaptopChromebook } from "react-icons/md";
 import { BsHeadsetVr } from "react-icons/bs";
@@ -36,7 +35,7 @@ function PlanCard({ style, name, price, resolution, devices, downloads, spatialA
     p-4 pb-10 ${mostPopular && "rounded-t-none"} dark:bg-black-10 rounded-2xl shadow-md flex flex-col justify-between gap-10`}>
       {
         mostPopular && (
-          <div className='bg-red-45 rounded-t-2xl absolute top-0 -translate-y-[100%] right-0 w-full text-center text-base font-medium capitalize'>
+          <div className='bg-red-45 rounded-t-2xl absolute top-0 -translate-y-[100%] right-[50%] -translate-x-[-50%] w-[calc(100%+2.5px)] text-center text-base font-medium capitalize'>
             {t('most_popular')}
           </div>
         )
@@ -79,8 +78,9 @@ function PlanCard({ style, name, price, resolution, devices, downloads, spatialA
         )}
       </ul>
 
-        <Button size={'lg'} className="bg-red-50 text-white hover:bg-red-60">{t("choose_plan")} </Button>
-
+      <Button size={'lg'} className="bg-red-50 text-white hover:bg-red-60">
+        {t("choose_plan")}
+      </Button>
     </div>)
 };
 
@@ -179,7 +179,7 @@ const Home = () => {
           <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-5">
             {deviceData.map((device, index) => (
               <div key={index} className='w-full p-10 rounded-lg h-50 hover:scale-105 transition-transform
-              bg-gradient-to-tr dark:from-black-6 to-[#E5000020] from-70% flex flex-col justify-evenly borders'>
+              bg-gradient-to-tr dark:from-black-6 dark:to-[#E5000020] from-70% flex flex-col justify-evenly borders'>
                 <div className='flex items-center gap-2'>
                   <div className='text-red-45 p-2 dark:bg-black-8 bg-gray-90 rounded-lg' style={{ fontSize: '30px' }}>
                     {device.icon}
