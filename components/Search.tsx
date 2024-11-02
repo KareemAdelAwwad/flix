@@ -117,8 +117,8 @@ const Search = ({ isMobile }: { isMobile: boolean }) => {
           <Image src={`https://image.tmdb.org/t/p/w500${poster_path}`}
             width={80} height={120}
             alt={title} className='w-20 h-24 rounded-lg' />
-          <div className='flex flex-col justify-between gap-2 h-full w-full'>
-            <div className='flex justify-between items-center '>
+          <div className='flex flex-col justify-between gap-2 h-full w-full overflow-hidden'>
+            <div className='flex justify-between items-center'>
               <h3 className='text-lg font-semibold truncate w-[70%]'>{title}</h3>
               {
                 !isMobile &&
