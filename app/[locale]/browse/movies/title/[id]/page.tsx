@@ -32,6 +32,7 @@ import AudioPlayer from '@/components/TitlePage/AudioPlayer';
 import WatchlistButton from '@/components/AddToWatchlistButton';
 import Trailer from '@/components/TitlePage/Trailer';
 import { Movie, MovieCastMember as Cast, Review } from '@/types/title';
+import YoutubeVideo from '@/types/youtube';
 
 interface MovieImages {
   "id": number,
@@ -64,6 +65,7 @@ export default function page({ params }: { params: { id: number } }) {
   const [cast, setCast] = useState([] as Cast[]);
   const [reviews, setReviews] = useState([] as Review[]);
   const [director, setDirector] = useState({} as Cast);
+  const [musicList, setMusicList] = useState([] as YoutubeVideo[]);
   const [showTrailer, setShowTrailer] = useState(false);
   const [imageLoaing, setImageLoading] = useState(true);
   const [loading, setLoading] = useState(true);
@@ -73,6 +75,7 @@ export default function page({ params }: { params: { id: number } }) {
   const imagesUrl = `https://api.themoviedb.org/3/movie/${params.id}/images?language=${locale}&include_image_language=ar,en`;
   const castUrl = `https://api.themoviedb.org/3/movie/${params.id}/credits?language=${locale}`;
   const reviewsUrl = `https://api.themoviedb.org/3/movie/${params.id}/reviews?language=en-US`;
+  const youtubeUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&key=${process.env.NEXT_PUBLIC_YOUTUBE_API_KEY}&type=video&q=${movie.title}+Song&maxResults=2`;
   // API request Headers
   const options = {
     method: 'GET',
@@ -122,7 +125,22 @@ export default function page({ params }: { params: { id: number } }) {
         setLoading(false);
       })
       .catch(err => console.error(err));
-  }, [params.id]);
+
+    if (movie.title !== undefined) {
+      fetch(youtubeUrl)
+        .then(response => response.json())
+        .then(data => {
+          console.log('YouTube API response:', data); // Log the API response
+          if (data.items && data.items.length > 0) {
+            setMusicList(data.items);
+          } else {
+            console.error('No video found for the given title.');
+          }
+        })
+        .catch(error => console.error('Error fetching YouTube API:', error));
+    }
+  }, [movie.title]);
+
 
   const castSliderSettings = {
     breakpoints: {
@@ -162,7 +180,7 @@ export default function page({ params }: { params: { id: number } }) {
             <div className='flex justify-center items-center gap-2'>
               {movie.id && <WatchlistButton titleId={movie.id.toString()} titleType='movie' style='icon' />}
               <Trailer titleName={movie.title} status={showTrailer} string={t('trailer')} />
-              
+
               {
                 locale === 'en' && <AudioPlayer songName={`${movie.title} - Movie - Music`} tooltipTitle={t('themeSong')} />
               }
@@ -312,7 +330,24 @@ export default function page({ params }: { params: { id: number } }) {
                 </div>
               }
               icon={<PiFilmReel size={24} />} />
-            <Info title={t('music')} content={movie.release_date} icon={<CgMusicNote size={24} />} />
+            <Info title={t('music')} content={
+              <div className='flex flex-col gap-2.5 flex-wrap'>
+                {
+                  musicList && musicList.map((song, i) => (
+                    <div className='dark:text-white font-medium p-2.5 py-2 dark:bg-black-8 bg-gray-50 border-[1px] 
+                    dark:border-black-15 rounded-lg flex gap-2 items-center w-full overflow-hidden'>
+                      <div className='w-[80px] h-fit overflow-hidden rounded-lg flex justify-center items-center'>
+                        <Image src={song.snippet.thumbnails.medium.url}
+                          alt={song.snippet.title} className='object-cover w-full h-full' width={200} height={150} />
+                      </div>
+                      <div className='relative w-full overflow-hidden'>
+                        <h4 className='text-[14px] w-[80%] truncate'>{song.snippet.title}</h4>
+                      </div>
+                    </div>
+                  ))
+                }
+              </div>
+            } icon={<CgMusicNote size={24} />} />
           </div>
         </div>
 

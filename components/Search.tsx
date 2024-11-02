@@ -26,7 +26,7 @@ const Search = ({ isMobile }: { isMobile: boolean }) => {
   const [searchValue, setSearchValue] = useState('');
   const [activateSearch, setActivateSearch] = useState(false);
   const [titleType, setTitleType] = useState('movie');
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState<SearchResults[]>([]);
   const url = `https://api.themoviedb.org/3/search/multi?query=${searchValue}&include_adult=false&language=${locale}&page=1`;
   const options = {
     method: 'GET',
@@ -98,6 +98,24 @@ const Search = ({ isMobile }: { isMobile: boolean }) => {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Enter' && searchResults.length > 0) {
+        const firstResult = searchResults[0];
+        if (firstResult.media_type === 'movie' || firstResult.media_type === 'tv') {
+          window.location.href = `/${locale}/browse/${firstResult.media_type === 'movie' ? 'movies' : 'tv-shows'}/title/${firstResult.id}`;
+        } else if (firstResult.media_type === 'person') {
+          window.location.href = `/${locale}/browse/people/person/${firstResult.id}`;
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [searchResults]);
 
   // Title Card Component
   interface TitleCardProps {
@@ -179,7 +197,7 @@ const Search = ({ isMobile }: { isMobile: boolean }) => {
       ${isMobile ? 'rounded-xl' : 'rounded-full'} bg-black-20 hover:hover:bg-black-30 transition-all duration-300
         ${isMobile && 'w-full flex flex-row-reverse'}`}
         onClick={() => isMobile && setActivateSearch(true)}
-        >
+      >
         {
           (activateSearch === true || searchValue !== "") ?
             <IoClose className={`text-white cursor-pointer `} size={16} onClick={() => clickHandler()} />

@@ -14,7 +14,7 @@ const Trailer = ({ titleName, string, status }: TrailerProps) => {
   const [showsTrailer, setShowsTrailer] = useState(status);
   const [trailer, setTrailer] = useState({} as YoutubeVideo);
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&key=${process.env.NEXT_PUBLIC_YOUTUBE_API_KEY}&type=video&q=${titleName}+trailer`;
+  const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&key=${process.env.NEXT_PUBLIC_YOUTUBE_API_KEY}&type=video&q=${titleName}+trailer&maxResults=1`;
 
   useEffect(() => {
     if (!titleName) {
@@ -25,7 +25,6 @@ const Trailer = ({ titleName, string, status }: TrailerProps) => {
     fetch(url)
       .then(response => response.json())
       .then(data => {
-        console.log('YouTube API response:', data); // Log the API response
         if (data.items && data.items.length > 0) {
           setTrailer(data.items[0]);
         } else {
