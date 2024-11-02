@@ -8,6 +8,9 @@
   font-weight: 400;
   scroll-behavior: smooth;
 }
+/* .cl-userButtonPopoverFooter{
+  display: none;
+} */
 
 @layer base {
   :root {

@@ -59,8 +59,9 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import Recommendations from '@/components/TitlePage/Recommendations';
-import AudioPlayer from '@/components/AudioPlayer';
+import AudioPlayer from '@/components/TitlePage/AudioPlayer';
 import WatchlistButton from '@/components/AddToWatchlistButton';
+import Trailer from '@/components/TitlePage/Trailer';
 
 // Font configuration
 const manropes = Manrope({
@@ -102,6 +103,7 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
   const [cast, setCast] = useState<SeriesCast>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [providers, setProviders] = useState<any>({});
+  const [showTrailer, setShowTrailer] = useState(false);
   const [imageLoading, setImageLoading] = useState(true);
   const [loading, setLoading] = useState(true);
   const [episodeLoading, setEpisodeLoading] = useState(true);
@@ -299,8 +301,8 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
               <FaPlay /> {t('title')}
             </Button>} title={t('play')} />
             <div className='flex justify-center items-center gap-2'>
-              {series.id && <WatchlistButton titleId={series.id.toString()} titleType='tv' style='icon' />}
-              <ReadyTooltip children={<Button size='lgIcon'><PiFilmSlateDuotone /></Button>} title={t('trailer')} />
+                {series.id && <WatchlistButton titleId={series.id.toString()} titleType='tv' style='icon' />}
+                <Trailer titleName={`${series.original_name} (${new Date(series.first_air_date).getFullYear()})`} status={showTrailer} string={t('trailer')} />
               {
                 locale === 'en' && <AudioPlayer songName={`${series.name} - opening`} tooltipTitle={t('themeSong')} />
               }

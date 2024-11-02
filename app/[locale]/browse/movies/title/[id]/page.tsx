@@ -28,55 +28,11 @@ import ReviewCard from '@/components/ReviewCard';
 import Info from '@/components/ui/Info';
 import RatingStars from '@/components/ui/RatingStars';
 import Recommendations from '@/components/TitlePage/Recommendations';
-import AudioPlayer from '@/components/AudioPlayer';
+import AudioPlayer from '@/components/TitlePage/AudioPlayer';
 import WatchlistButton from '@/components/AddToWatchlistButton';
+import Trailer from '@/components/TitlePage/Trailer';
+import { Movie, MovieCastMember as Cast, Review } from '@/types/title';
 
-
-interface Movie {
-  "id": number,
-  "imdb_id": string | null,
-  "title": string,
-  "original_title": string,
-  "overview": string,
-  "origin_country": string[],
-  "original_language": string,
-  "adult": boolean,
-  "popularity": number,
-  "poster_path": string,
-  "backdrop_path": string,
-  "belongs_to_collection": {
-    "id": number,
-    "name": string,
-    "poster_path": string | null,
-    "backdrop_path": string
-  },
-  "genres": {
-    "id": number,
-    "name": string
-  }[],
-  "homepage": string | null,
-  "production_companies": {
-    "id": number,
-    "logo_path": string | null,
-    "name": string,
-    "origin_country": string
-  }[],
-  "production_countries": {
-    "iso_3166_1": string,
-    "name": string
-  }[],
-  "release_date": string,
-  "revenue": number,
-  "runtime": number,
-  "spoken_languages": {
-    "iso_639_1": string,
-    "name": string
-  }[],
-  "status": string,
-  "video": boolean,
-  "tagline": string,
-  "vote_average": number
-}
 interface MovieImages {
   "id": number,
   "backdrops": {
@@ -101,28 +57,6 @@ interface MovieImages {
     "width": number
   }[]
 }
-interface Cast {
-  "id": number,
-  "gender": number,
-  "name": string,
-  "original_name": string,
-  "character": string,
-  "profile_path": string,
-  "credit_id": string,
-  "order": number
-}[]
-
-interface Review {
-  "author_details": {
-    "name": string | "",
-    "username": string,
-    "avatar_path": string | null,
-    "rating": number | null
-  },
-  "content": string,
-  "created_at": string,
-  "id": string,
-}[]
 
 export default function page({ params }: { params: { id: number } }) {
   const [movie, setMovie] = useState({} as Movie);
@@ -130,6 +64,7 @@ export default function page({ params }: { params: { id: number } }) {
   const [cast, setCast] = useState([] as Cast[]);
   const [reviews, setReviews] = useState([] as Review[]);
   const [director, setDirector] = useState({} as Cast);
+  const [showTrailer, setShowTrailer] = useState(false);
   const [imageLoaing, setImageLoading] = useState(true);
   const [loading, setLoading] = useState(true);
   const locale = useLocale();
@@ -189,25 +124,6 @@ export default function page({ params }: { params: { id: number } }) {
       .catch(err => console.error(err));
   }, [params.id]);
 
-  // Image component that fetches the closest image to the given aspect ratio
-  const IMG = (
-    { src, height, width, className, ratio }:
-      { src: 'backdrops' | 'posters' | 'logos', height: number, width: number, className?: string, ratio: number }) => {
-
-    const closestImage = Array.isArray(images[src]) && images[src].reduce((prev, curr) => {
-      return (Math.abs(curr.aspect_ratio - ratio) < Math.abs(prev.aspect_ratio - ratio) ? curr : prev);
-    }, images[src][0]);
-
-    return closestImage ? (
-      <Image src={`https://image.tmdb.org/t/p/original${closestImage.file_path}`}
-        alt={movie.original_title}
-        className={`w-full h-full object-cover ${className}`}
-        width={closestImage.width || width}
-        height={closestImage.height || height}
-      />
-    ) : null;
-  }
-
   const castSliderSettings = {
     breakpoints: {
       400: 1,  // Less than 400px -> 1 card
@@ -234,7 +150,7 @@ export default function page({ params }: { params: { id: number } }) {
         <div className='
         flex flex-col justify-end items-center text-white text-center pb-10
         inset-0 bg-gradient-to-t from-black-8  to-transparent w-full h-full absolute z-10'>
-          <div>
+          <div className='flex flex-col gap-2'>
             <h1 className='text-4xl font-bold'>{movie.title}</h1>
             <p className='text-lg text-gray-60'>{movie.tagline ? movie.tagline : movie.overview}</p>
           </div>
@@ -245,7 +161,8 @@ export default function page({ params }: { params: { id: number } }) {
             </Button>} title={t('play')} />
             <div className='flex justify-center items-center gap-2'>
               {movie.id && <WatchlistButton titleId={movie.id.toString()} titleType='movie' style='icon' />}
-              <ReadyTooltip children={<Button size='lgIcon'><PiFilmSlateDuotone /></Button>} title={t('trailer')} />
+              <Trailer titleName={movie.title} status={showTrailer} string={t('trailer')} />
+              
               {
                 locale === 'en' && <AudioPlayer songName={`${movie.title} - Movie - Music`} tooltipTitle={t('themeSong')} />
               }
@@ -257,6 +174,7 @@ export default function page({ params }: { params: { id: number } }) {
         {
           imageLoaing ? null
             : <Image src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
+
               alt={movie.original_title} className='w-full h-full object-cover' height={835} width={1800} />
         }
       </section>

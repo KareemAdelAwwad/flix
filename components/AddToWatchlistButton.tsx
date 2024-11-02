@@ -5,6 +5,7 @@ import { db } from '@/lib/firebase';
 import { Button } from './ui/button';
 import ReadyTooltip from './ui/ready-tooltip';
 import { IoBookmarkOutline, IoBookmark } from "react-icons/io5";
+import { useLocale } from 'next-intl';
 
 interface WatchlistButtonProps {
   titleId: string;
@@ -15,6 +16,17 @@ interface WatchlistButtonProps {
 
 const WatchlistButton: React.FC<WatchlistButtonProps> = ({ titleId, titleType, style, className }) => {
   const { userId } = useAuth();
+  const locale = useLocale();
+  const strings = {
+    en: {
+      add: 'Add to Watchlist',
+      remove: 'Remove from Watchlist'
+    },
+    ar: {
+      add: 'أضف إلى قائمة المشاهدة',
+      remove: 'إزالة من قائمة المشاهدة'
+    }
+  };
   const [isInWatchlist, setIsInWatchlist] = useState(false);
 
   useEffect(() => {
@@ -54,17 +66,19 @@ const WatchlistButton: React.FC<WatchlistButtonProps> = ({ titleId, titleType, s
             isInWatchlist ? <IoBookmark size={24} /> : <IoBookmarkOutline size={24} />
           }
         </Button>}
-        title={isInWatchlist ? "remove" : "add"} />
+        title={isInWatchlist ? (locale === 'ar' ? strings.ar.remove : strings.en.remove)
+          : (locale === 'ar' ? strings.ar.add : strings.en.add)} />
     ) : style === 'text' ? (
       <Button onClick={handleAddToWatchlist} size={"default"} className={className}>
         {
           isInWatchlist ? <IoBookmark size={24} /> : <IoBookmarkOutline size={24} />
         }
-        {isInWatchlist ? 'Remove from Watchlist' : 'Add to Watchlist'}
+        {isInWatchlist ? (locale === 'ar' ? strings.ar.remove : strings.en.remove)
+          : (locale === 'ar' ? strings.ar.add : strings.en.add)}
       </Button>
     ) : style === 'badge' ? (
       <Button onClick={handleAddToWatchlist} size={"lgIcon"}
-      className={`-top-1 left-2 absolute w-8 rounded-none rounded-b ${className}`} >
+        className={`-top-1 left-2 absolute w-8 rounded-none rounded-b ${className}`} >
         {
           isInWatchlist ? <IoBookmark size={32} /> : <IoBookmarkOutline size={32} />
         }
