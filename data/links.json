@@ -3,27 +3,32 @@
     {
       "key": "home",
       "name": "Home",
-      "path": "/"
+      "path": "/",
+      "icon": "GoHomeFill"
     },
     {
       "key": "movies",
       "name": "Movies",
-      "path": "/browse/movies"
+      "path": "/browse/movies",
+      "icon": "BiSolidCameraMovie"
     },
     {
       "key": "shows",
       "name": "Shows",
-      "path": "/browse/tv-shows"
+      "path": "/browse/tv-shows",
+      "icon": "IoTv"
     },
     {
       "key": "support",
       "name": "Support",
-      "path": "/support"
+      "path": "/support",
+      "icon": "MdSupport"
     },
     {
       "key": "subscriptions",
       "name": "Subscriptions",
-      "path": "/#subscriptions"
+      "path": "/#subscriptions",
+      "icon": "BsFillCreditCard2FrontFill"
     }
   ]
 }

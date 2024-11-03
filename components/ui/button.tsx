@@ -22,7 +22,7 @@ const buttonVariants = cva(
       size: {
         default: "h-10 px-4 py-2",
         sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-md px-8",
+        lg: "h-11 rounded-md px-4",
         icon: "h-10 w-10",
         lgIcon: "h-11 w-11 dark:text-white text-black-12 dark:bg-black-6 bg-white dark:hover:bg-black-10 hover:bg-gray-90 transition-colors duration-400",
       },

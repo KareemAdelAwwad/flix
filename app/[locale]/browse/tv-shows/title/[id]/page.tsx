@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import OpenTitleInfoCard from '@/components/OpenTitleInfoCard';
 import ReadyTooltip from '@/components/ui/ready-tooltip';
 import dynamic from 'next/dynamic';
+import YoutubeVideo from '@/types/youtube';
 
 // Import components
 import { Hero } from '@/components/TitlePage/HeroSection';
@@ -60,8 +61,9 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import Recommendations from '@/components/TitlePage/Recommendations';
-import AudioPlayer from '@/components/AudioPlayer';
+import AudioPlayer from '@/components/TitlePage/AudioPlayer';
 import WatchlistButton from '@/components/AddToWatchlistButton';
+import Trailer from '@/components/TitlePage/Trailer';
 
 // Font configuration
 const manropes = Manrope({
@@ -103,6 +105,8 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
   const [cast, setCast] = useState<SeriesCast>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [providers, setProviders] = useState<any>({});
+  const [musicList, setMusicList] = useState<YoutubeVideo[]>([]);
+  const [showTrailer, setShowTrailer] = useState(false);
   const [imageLoading, setImageLoading] = useState(true);
   const [loading, setLoading] = useState(true);
   const [episodeLoading, setEpisodeLoading] = useState(true);
@@ -117,14 +121,15 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
     images: `${API_CONFIG.baseUrl}/tv/${params.id}/images?language=${locale}&include_image_language=ar,en`,
     cast: `${API_CONFIG.baseUrl}/tv/${params.id}/aggregate_credits?language=${locale}`,
     reviews: `${API_CONFIG.baseUrl}/tv/${params.id}/reviews?language=en-US`,
-    providers: `${API_CONFIG.baseUrl}/tv/${params.id}/watch/providers`
+    providers: `${API_CONFIG.baseUrl}/tv/${params.id}/watch/providers`,
+    youtubeUrl: `https://www.googleapis.com/youtube/v3/search?part=snippet&key=${process.env.NEXT_PUBLIC_YOUTUBE_API_KEY}&type=video&q=${series.name}+Song&maxResults=2`,
   }), [params.id, locale]);
 
   // Fetch data using Promise.all for parallel requests
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [seriesData, imagesData, reviewsData, castData] = await Promise.all([
+        const [seriesData, imagesData, reviewsData, castData, youtubeData] = await Promise.all([
           fetch(urls.series, API_CONFIG.options).then(res => {
             if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
             return res.json();
@@ -144,7 +149,11 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
           fetch(urls.providers, API_CONFIG.options).then(res => {
             if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
             return res.json();
-          })
+          }),
+          // fetch(urls.youtubeUrl).then(res => {
+          //   if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+          //   return res.json();
+          // })
         ]);
 
         setSeries(seriesData);
@@ -163,6 +172,7 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
         setImages(imagesData);
         setReviews(reviewsData.results);
         setCast(castData.cast.slice(0, 28));
+        // setMusicList(youtubeData.items);
         setProviders(reviewsData.results.EG);
       } catch (err) {
         setError(err instanceof Error ? err : new Error('An error occurred while fetching data'));
@@ -301,7 +311,7 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
             </Button>} title={t('play')} />
             <div className='flex justify-center items-center gap-2'>
               {series.id && <WatchlistButton titleId={series.id.toString()} titleType='tv' style='icon' />}
-              <ReadyTooltip children={<Button size='lgIcon'><PiFilmSlateDuotone /></Button>} title={t('trailer')} />
+              <Trailer titleName={`${series.original_name} (${new Date(series.first_air_date).getFullYear()})`} status={showTrailer} string={t('trailer')} />
               {
                 locale === 'en' && <AudioPlayer songName={`${series.name} - opening`} tooltipTitle={t('themeSong')} />
               }
@@ -518,7 +528,22 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
               }
               icon={<BiNetworkChart size={24} />} />
 
-            <Info title={t('music')} content={series.first_air_date} icon={<CgMusicNote size={24} />} />
+            <Info title={t('music')} content={
+              
+                musicList && musicList.map((song, i) => (
+                  <div className='dark:text-white font-medium p-2.5 py-2 dark:bg-black-8 bg-gray-50 border-[1px] 
+                  dark:border-black-15 rounded-lg flex gap-2 items-center w-full overflow-hidden'>
+                    <div className='w-[80px] h-fit overflow-hidden rounded-lg flex justify-center items-center'>
+                      <Image src={song.snippet.thumbnails.medium.url}
+                        alt={song.snippet.title} className='object-cover w-full h-full' width={200} height={150} />
+                    </div>
+                    <div className='relative w-full overflow-hidden'>
+                      <h4 className='text-[14px] w-[80%] truncate'>{song.snippet.title}</h4>
+                    </div>
+                  </div>
+                ))
+            
+            } icon={<CgMusicNote size={24} />} />
           </div>
         </div>
 
