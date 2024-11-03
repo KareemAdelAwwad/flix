@@ -3,6 +3,7 @@
 import { Manrope } from 'next/font/google'
 import React, { Suspense, useMemo } from 'react'
 import { useLocale, useTranslations } from 'next-intl';
+import ReactPlayer from 'react-player';
 import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';

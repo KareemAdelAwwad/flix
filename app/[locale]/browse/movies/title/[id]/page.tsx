@@ -7,9 +7,8 @@ import NextIntlClientProvider from 'next-intl';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import OpenTitleInfoCard from '@/components/OpenTitleInfoCard';
-import ReadyTooltip from '@/components/ui/ready-tooltip';
-
-// Import Icons
+import VideosPage from '@/components/VideosPage' ; 
+import ReadyTooltip from '@/components/ui/ready-tooltip';// Import Icons
 import { FaPlay, FaPlus } from "react-icons/fa6";
 import { SlVolume2 } from "react-icons/sl";
 import { AiOutlineLike } from "react-icons/ai";
@@ -29,9 +28,6 @@ import Info from '@/components/ui/Info';
 import RatingStars from '@/components/ui/RatingStars';
 import Recommendations from '@/components/TitlePage/Recommendations';
 import AudioPlayer from '@/components/AudioPlayer';
-import WatchlistButton from '@/components/AddToWatchlistButton';
-
-
 interface Movie {
   "id": number,
   "imdb_id": string | null,
@@ -126,6 +122,7 @@ interface Review {
 
 export default function page({ params }: { params: { id: number } }) {
   const [movie, setMovie] = useState({} as Movie);
+  const [isVideoPopupOpen, setVideoPopupOpen] = useState(false); // Step 1: State for video popup 
   const [images, setImages] = useState({} as MovieImages);
   const [cast, setCast] = useState([] as Cast[]);
   const [reviews, setReviews] = useState([] as Review[]);
@@ -225,11 +222,13 @@ export default function page({ params }: { params: { id: number } }) {
     },
     defaultImagesPerPage: 2 // Default when width is larger than all breakpoints
   };
-
+  const toggleVideoPopup = () => {
+    setVideoPopupOpen(!isVideoPopupOpen);
+  }; 
   return (
     <main className='flex flex-col justify-center items-center gap-20 container'>
       <title>{movie.title}</title>
-      {/* Movie Background */}
+    {/* Movie Background */}
       <section className='w-full h-[835px] mt-5 rounded-t-lg overflow-hidden felx justify-center items-center relative'>
         <div className='
         flex flex-col justify-end items-center text-white text-center pb-10
@@ -239,20 +238,33 @@ export default function page({ params }: { params: { id: number } }) {
             <p className='text-lg text-gray-60'>{movie.tagline ? movie.tagline : movie.overview}</p>
           </div>
           {/* Movie controles */}
-          <div className='flex justify-center items-center gap-2 w-full h-16 bg-transparent flex-wrap'>
-            <ReadyTooltip children={<Button className='text-white text-2xl font-bold bg-red-45 hover:bg-red-50 transition-colors duration-400' size="lg">
+          <div  onClick={toggleVideoPopup}  className='flex justify-center items-center gap-2 w-full h-16 bg-transparent flex-wrap'>
+            <ReadyTooltip children={
+              <Button   className='text-white text-2xl font-bold bg-red-45 hover:bg-red-50 transition-colors duration-400' size="lg">
               <FaPlay /> {t('title')}
-            </Button>} title={t('play')} />
+            </Button> } title={t('play')} />  
             <div className='flex justify-center items-center gap-2'>
-              {movie.id && <WatchlistButton titleId={movie.id.toString()} titleType='movie' style='icon' />}
+              <ReadyTooltip children={<Button size='lgIcon'><FaPlus /></Button>} title={t('watchlist')} />
               <ReadyTooltip children={<Button size='lgIcon'><PiFilmSlateDuotone /></Button>} title={t('trailer')} />
-              {
-                locale === 'en' && <AudioPlayer songName={`${movie.title} - Movie - Music`} tooltipTitle={t('themeSong')} />
-              }
+              <AudioPlayer songName={`${movie.title} - Movie - Music`} tooltipTitle={t('themeSong')} />
               <ReadyTooltip children={<Button size='lgIcon'><GoCheckCircle /></Button>} title={t('watched')} />
             </div>
           </div>
         </div>
+    {/* Step 2: Video Popup Component */}
+{isVideoPopupOpen && (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
+        <div className="bg-gray-900 rounded-lg p-4"> {/* Changed background to gray */}
+            <VideosPage />
+            <button onClick={toggleVideoPopup} className="text-white flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+    </div>
+)}
+
         {/* Movie Background Image */}
         {
           imageLoaing ? null
@@ -404,8 +416,7 @@ export default function page({ params }: { params: { id: number } }) {
       <section className='w-full flex flex-col'>
         <Recommendations titleType='movie' titleID={params.id} header={t('recommended')} />
       </section>
-
-
+     
     </main >
   )
 }
