@@ -5,9 +5,7 @@ import { SignedIn, SignedOut, RedirectToSignIn } from '@clerk/nextjs';
 import { useLocale } from 'next-intl';
 import { fetchWatchlist } from '@/lib/FetchWatchlist';
 import { Movie, Series } from '@/types/title';
-import { json } from 'stream/consumers';
 import Image from 'next/image';
-import { Link } from 'lucide-react';
 
 interface WatchlistItem {
   titleId: string;
@@ -27,6 +25,7 @@ const Page = () => {
   const [watchlist, setWatchlist] = useState([] as WatchlistItem[]);
   const [loading, setLoading] = useState(true);
   const { userId } = useAuth();
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null); // Track hovered item
 
   useEffect(() => {
     if (!userId) return;
@@ -67,7 +66,15 @@ const Page = () => {
     fetchMovies();
   }, [watchlist]);
 
-  console.log(title);
+  const handleRemoveFromWatchlist = (titleId: string) => {
+    setWatchlist(prev => prev.filter(item => item.titleId !== titleId));
+    setTitle(prev => prev.filter(item => item.id !== titleId)); // Assuming 'id' is the field in your title data
+  };
+
+  const getButtonLabel = () => {
+    return locale === 'ar' ? 'شاهد الفيلم' : 'Watch Film';
+  };
+
   if (loading) return <p>Loading your watchlist...</p>;
 
   return (
@@ -84,13 +91,36 @@ const Page = () => {
         ) : (
           <div className='flex flex-row flex-wrap gap-6'>
             {title.map(item => (
-                <Image src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
-                  alt={item.original_title || 'No title available'} width={250} height={300}
-                  className="pointer-events-none" />
+              <div 
+                key={item.id} 
+                className="relative group" 
+                onMouseEnter={() => setHoveredItem(item.id)} 
+                onMouseLeave={() => setHoveredItem(null)}
+              >
+                <Image 
+                  src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
+                  alt={item.original_title || 'No title available'} 
+                  width={250} 
+                  height={300}
+                  className="pointer-events-none"
+                />
+                {hoveredItem === item.id && (
+                  <>
+                    <button 
+                      onClick={() => handleRemoveFromWatchlist(item.id)} 
+                      className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full"
+                    >
+                      X
+                    </button>
+                    <button className="absolute bottom-0 left-0 bg-blue-500 text-white py-1 px-2 rounded">
+                      {getButtonLabel()}
+                    </button>
+                  </>
+                )}
+              </div>
             ))}
           </div>
         )}
-
       </SignedIn>
     </main>
   );

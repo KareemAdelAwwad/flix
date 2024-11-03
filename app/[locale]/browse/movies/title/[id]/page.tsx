@@ -27,8 +27,6 @@ import ReviewCard from '@/components/ReviewCard';
 import Info from '@/components/ui/Info';
 import RatingStars from '@/components/ui/RatingStars';
 import Recommendations from '@/components/TitlePage/Recommendations';
-<<<<<<< HEAD
-import AudioPlayer from '@/components/AudioPlayer';
 interface Movie {
   "id": number,
   "imdb_id": string | null,
@@ -74,14 +72,11 @@ interface Movie {
   "tagline": string,
   "vote_average": number
 }
-=======
 import AudioPlayer from '@/components/TitlePage/AudioPlayer';
 import WatchlistButton from '@/components/AddToWatchlistButton';
 import Trailer from '@/components/TitlePage/Trailer';
 import { Movie, MovieCastMember as Cast, Review } from '@/types/title';
 import YoutubeVideo from '@/types/youtube';
-
->>>>>>> 06cf32e6823fe04043a2a3ac8c829363fb97a942
 interface MovieImages {
   "id": number,
   "backdrops": {
@@ -230,18 +225,17 @@ export default function page({ params }: { params: { id: number } }) {
               <FaPlay /> {t('title')}
             </Button> } title={t('play')} />  
             <div className='flex justify-center items-center gap-2'>
-<<<<<<< HEAD
+
               <ReadyTooltip children={<Button size='lgIcon'><FaPlus /></Button>} title={t('watchlist')} />
               <ReadyTooltip children={<Button size='lgIcon'><PiFilmSlateDuotone /></Button>} title={t('trailer')} />
               <AudioPlayer songName={`${movie.title} - Movie - Music`} tooltipTitle={t('themeSong')} />
-=======
+
               {movie.id && <WatchlistButton titleId={movie.id.toString()} titleType='movie' style='icon' />}
               <Trailer titleName={movie.title} status={showTrailer} string={t('trailer')} />
 
               {
                 locale === 'en' && <AudioPlayer songName={`${movie.title} - Movie - Music`} tooltipTitle={t('themeSong')} />
               }
->>>>>>> 06cf32e6823fe04043a2a3ac8c829363fb97a942
               <ReadyTooltip children={<Button size='lgIcon'><GoCheckCircle /></Button>} title={t('watched')} />
             </div>
           </div>
