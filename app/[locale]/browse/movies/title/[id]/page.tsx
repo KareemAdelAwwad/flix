@@ -182,7 +182,7 @@ export default function page({ params }: { params: { id: number } }) {
               <Trailer titleName={movie.title} status={showTrailer} string={t('trailer')} />
 
               {
-                locale === 'en' && <AudioPlayer songName={`${movie.title} - Movie - Music`} tooltipTitle={t('themeSong')} />
+                locale === 'en' && <AudioPlayer songName={`${movie.title} - Movie - Song`} tooltipTitle={t('themeSong')} />
               }
               <ReadyTooltip children={<Button size='lgIcon'><GoCheckCircle /></Button>} title={t('watched')} />
             </div>

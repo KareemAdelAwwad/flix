@@ -1,4 +1,4 @@
-import { useState, useEffect, use } from 'react'
+import { useState, useEffect, use, useRef } from 'react'
 import { Link } from '@/i18n/routing';
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -25,8 +25,8 @@ const Search = ({ isMobile }: { isMobile: boolean }) => {
   const t = useTranslations('Header');
   const [searchValue, setSearchValue] = useState('');
   const [activateSearch, setActivateSearch] = useState(false);
-  const [titleType, setTitleType] = useState('movie');
   const [searchResults, setSearchResults] = useState<SearchResults[]>([]);
+  const inputRef = useRef<HTMLInputElement>(null);
   const url = `https://api.themoviedb.org/3/search/multi?query=${searchValue}&include_adult=false&language=${locale}&page=1`;
   const options = {
     method: 'GET',
@@ -189,7 +189,13 @@ const Search = ({ isMobile }: { isMobile: boolean }) => {
       </Link>
     )
   }
-
+  useEffect(() => {
+    if (activateSearch && inputRef.current) {
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 300);
+    }
+  }, [activateSearch]);
 
   return (
     <>
@@ -203,7 +209,9 @@ const Search = ({ isMobile }: { isMobile: boolean }) => {
             <IoClose className={`text-white cursor-pointer `} size={16} onClick={() => clickHandler()} />
             : <IoSearch className={`text-white cursor-pointer`} size={16} onClick={() => clickHandler()} />
         }
-        <Input id='search' type='text' placeholder={t('search')} value={searchValue}
+        <Input
+          ref={inputRef}
+          id='search' type='text' placeholder={t('search')} value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
           className={`absolute text-black-6 dark:text-white ${locale === 'en' ? 'left-1' : 'right-1'}
           ${isMobile ? (locale === 'en' ? "top-0 left-0" : 'top-0 right-0') : 'top-1'} 
