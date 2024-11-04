@@ -6,6 +6,8 @@ import { useLocale } from 'next-intl';
 import { fetchWatchlist } from '@/lib/FetchWatchlist';
 import { Movie, Series } from '@/types/title';
 import Image from 'next/image';
+import Link from 'next/link';
+import { MdDelete } from 'react-icons/md'; // استيراد أيقونة الحذف
 
 interface WatchlistItem {
   titleId: string;
@@ -20,12 +22,14 @@ const Page = () => {
       accept: 'application/json',
       Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_ACCESS_TOKEN}`
     }
-  };
+  }; 
+
+  const movieURLFormat = (item: Movie | Series) => `/${locale}/browse/movies/title/${item.id}`;
   const [title, setTitle] = useState([] as (Movie | Series)[]);
   const [watchlist, setWatchlist] = useState([] as WatchlistItem[]);
   const [loading, setLoading] = useState(true);
   const { userId } = useAuth();
-  const [hoveredItem, setHoveredItem] = useState<string | null>(null); // Track hovered item
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   useEffect(() => {
     if (!userId) return;
@@ -67,8 +71,8 @@ const Page = () => {
   }, [watchlist]);
 
   const handleRemoveFromWatchlist = (titleId: string) => {
-    setWatchlist(prev => prev.filter(item => item.titleId !== titleId));
-    setTitle(prev => prev.filter(item => item.id !== titleId)); // Assuming 'id' is the field in your title data
+    setWatchlist(prev => prev.filter(item => item.titleId !== titleId)); // إزالة من قائمة المراقبة
+    setTitle(prev => prev.filter(item => item.id !== titleId)); // إزالة من قائمة العناوين
   };
 
   const getButtonLabel = () => {
@@ -93,7 +97,7 @@ const Page = () => {
             {title.map(item => (
               <div 
                 key={item.id} 
-                className="relative group" 
+                className="movie-card" 
                 onMouseEnter={() => setHoveredItem(item.id)} 
                 onMouseLeave={() => setHoveredItem(null)}
               >
@@ -104,19 +108,23 @@ const Page = () => {
                   height={300}
                   className="pointer-events-none"
                 />
-                {hoveredItem === item.id && (
-                  <>
-                    <button 
-                      onClick={() => handleRemoveFromWatchlist(item.id)} 
-                      className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full"
-                    >
-                      X
-                    </button>
-                    <button className="absolute bottom-0 left-0 bg-blue-500 text-white py-1 px-2 rounded">
-                      {getButtonLabel()}
-                    </button>
-                  </>
-                )}
+                <div className="movie-card-overlay">
+                  {hoveredItem === item.id && (
+                    <>
+                      <button 
+                        onClick={() => handleRemoveFromWatchlist(item.id)} 
+                        className="absolute top-2 right-2 bg-white/80 text-gray-800 p-1 rounded-full hover:bg-white hover:text-gray-900"
+                      >
+                        <MdDelete /> {/* عرض أيقونة الحذف */}
+                      </button>
+                      <Link href={movieURLFormat(item)}>
+                        <button className="watch-button">
+                          {getButtonLabel()}
+                        </button>
+                      </Link>
+                    </>
+                  )}
+                </div>
               </div>
             ))}
           </div>
