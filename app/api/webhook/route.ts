@@ -12,7 +12,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
   const dateTime = new Date(response?.created * 1000).toLocaleDateString();
   const timeString = new Date(response?.created * 1000).toLocaleDateString();
-  const userEmail = response.email;
+
+  const userEmail = response.object.customer_email;
+  const planId = response.object.lines.data[0].plan.product;
 
   try {
     const event = stripe.webhooks.constructEvent(
@@ -21,7 +23,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       process.env.STRIPE_WEBHOOK_SECRET!
     )
     console.log('Event:', event.type);
-    return NextResponse.json({ status: 'success', event: console.log(`The user email: ${userEmail ? userEmail : 'not found'}`) });
+    return NextResponse.json({ status: 'success', event: console.log(`The user email: ${userEmail}`) });
   } catch (error) {
     return NextResponse.json({ status: 'error', error });
   }
