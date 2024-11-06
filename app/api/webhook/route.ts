@@ -12,6 +12,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
   const dateTime = new Date(response?.created * 1000).toLocaleDateString();
   const timeString = new Date(response?.created * 1000).toLocaleDateString();
+  const userEmail = response?.data.object.customer_email;
+  const amount = response?.data.object.amount_total / 100;
+  const productId = response?.data.object.display_items[0].custom.name;
 
   try {
     const event = stripe.webhooks.constructEvent(
@@ -20,7 +23,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       process.env.STRIPE_WEBHOOK_SECRET!
     )
     console.log('Event:', event.type);
-    return NextResponse.json({ status: 'success', event: console.log('the payment succese ya Kimo') });
+    return NextResponse.json({ status: 'success', event: productId });
   } catch (error) {
     return NextResponse.json({ status: 'error', error });
   }
