@@ -9,7 +9,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
   const payload = await req.text();
   const response = JSON.parse(payload);
   const sig = req.headers.get('Stripe-Signature')!;
-  
+
   const dateTime = new Date(response?.created * 1000).toLocaleDateString();
   const timeString = new Date(response?.created * 1000).toLocaleDateString();
 
@@ -20,7 +20,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       process.env.STRIPE_WEBHOOK_SECRET!
     )
     console.log('Event:', event.type);
-    return NextResponse.json({ status: 'success', event: redirect('/success') });
+    return NextResponse.json({ status: 'success', event: console.log('the payment succese ya Kimo') });
   } catch (error) {
     return NextResponse.json({ status: 'error', error });
   }
