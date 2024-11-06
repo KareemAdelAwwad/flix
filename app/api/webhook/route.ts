@@ -32,8 +32,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
         // charge.succeeded event
         const charge = data as Stripe.Charge;
         userEmail = charge.billing_details.email;
-        planId = charge.metadata.product_id || charge.payment_intent;
-        amount = charge.amount;
+        amount = charge.amount/100;
       }
 
       if (!userEmail || !planId || !amount) {
@@ -41,9 +40,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       }
 
       console.log({
-        eventType: event.type,
         userEmail,
-        planId,
         amount
       });
 
