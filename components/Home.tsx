@@ -10,8 +10,7 @@ import { IoTvSharp } from "react-icons/io5";
 // import { Dice1 } from 'lucide-react';
 import PMSECTION from "@/components/PopularMoviesSection"
 import BgHome from "@/components/BgHome"
-
-
+import { Link } from '@/i18n/routing';
 
 
 interface PlanCardProps {
@@ -23,9 +22,10 @@ interface PlanCardProps {
   downloads: number;
   spatialAudio?: boolean;
   mostPopular?: boolean;
+  paymentLink: string;
 }
 
-function PlanCard({ style, name, price, resolution, devices, downloads, spatialAudio, mostPopular }: PlanCardProps) {
+function PlanCard({ style, name, price, resolution, devices, downloads, spatialAudio, mostPopular, paymentLink }: PlanCardProps) {
   const t = useTranslations('HomePage');
   const listStyle = `border-t border-black-6 pt-4 dark:border-black-30`
   const h1Style = `text-lg font-medium text-black-20 dark:text-gray-70`
@@ -78,9 +78,11 @@ function PlanCard({ style, name, price, resolution, devices, downloads, spatialA
         )}
       </ul>
 
-      <Button size={'lg'} className="bg-red-50 text-white hover:bg-red-60">
-        {t("choose_plan")}
-      </Button>
+      <Link href={paymentLink} target="_blank" className='!w-full'>
+        <Button size={'lg'} className="bg-red-50 text-white hover:bg-red-60 w-full">
+          {t("choose_plan")}
+        </Button>
+      </Link>
     </div>)
 };
 
@@ -123,6 +125,7 @@ const Home = () => {
       resolution: '720p',
       devices: 1,
       downloads: 1,
+      paymentLink: '#',
     },
     {
       style: 'bg-gradient-to-br from-blue-800 to-purple-600',
@@ -131,6 +134,7 @@ const Home = () => {
       resolution: '1080p',
       devices: 2,
       downloads: 2,
+      paymentLink: '#',
     },
     {
       style: ' bg-gradient-to-br from-blue-600 to-red-50',
@@ -141,6 +145,7 @@ const Home = () => {
       downloads: 6,
       spatialAudio: true,
       mostPopular: true,
+      paymentLink: 'https://buy.stripe.com/test_8wMeVo59a9HP39CbII',
     },
   ];
 
