@@ -1,6 +1,6 @@
 import { ThemeProvider } from "@/app/[locale]/theme-provider";
-import { NextIntlClientProvider, useLocale, useMessages } from 'next-intl';
-// import { getMessages } from 'next-intl/server';
+import { NextIntlClientProvider } from 'next-intl';
+import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import type { Metadata } from "next";
@@ -9,7 +9,7 @@ import {
   ClerkProvider,
 } from '@clerk/nextjs'
 import { arSA, enUS } from '@clerk/localizations'
-import { dark, neobrutalism } from '@clerk/themes'
+import { dark } from '@clerk/themes'
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   description: "Flix is a subscription-based streaming service that allows our members to watch TV shows and movies on an internet-connected device",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
   params: { locale },
 }: Readonly<{
@@ -29,9 +29,9 @@ export default function RootLayout({
     notFound();
   }
 
-  const messages = useMessages();
+  const messages = await getMessages();
   return (
-    <ClerkProvider localization={locale === "ar" ? arSA : enUS} appearance={{ baseTheme: dark }}>
+    <ClerkProvider dynamic localization={locale === "ar" ? arSA : enUS} appearance={{ baseTheme: dark }}>
       <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
         <body>
           <ThemeProvider

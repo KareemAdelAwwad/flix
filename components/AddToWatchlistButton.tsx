@@ -78,7 +78,7 @@ const WatchlistButton: React.FC<WatchlistButtonProps> = ({ titleId, titleType, s
       </Button>
     ) : style === 'badge' ? (
       <Button onClick={handleAddToWatchlist} size={"lgIcon"}
-        className={`-top-1 left-2 absolute w-8 rounded-none rounded-b ${className}`} >
+        className={`-top-1 left-2 absolute w-8 rounded-none rounded-b z-10 ${className}`} >
         {
           isInWatchlist ? <IoBookmark size={32} /> : <IoBookmarkOutline size={32} />
         }

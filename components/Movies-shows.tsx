@@ -5,16 +5,8 @@ import { useEffect, useState } from 'react';
 import HorizontalCarousel from '@/components/carousel';
 import { Button } from './ui/button';
 import WatchlistButton from './AddToWatchlistButton';
+import { Movie } from '@/types/title';
 
-interface Movie {
-  id: number;
-  title: string;
-  poster_path: string;
-  runtime?: number | null;
-  overview?: string;
-  backdrop_path?: string;
-  vote_average?: number;
-}
 
 const MoviesShows = () => {
   const t = useTranslations('MoviesShows');
@@ -55,7 +47,7 @@ const MoviesShows = () => {
   const addRuntimes = async (movies: any[]) => {
     return await Promise.all(
       movies.map(async (movie: { id: any; }) => {
-        const runtimeRes = await fetch(`https://api.themoviedb.org/3/movie/${movie.id}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=${local}`);
+        const runtimeRes = await fetch(`https://api.themoviedb.org/3/movie/${movie.id}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=${locale}`);
         const movieDetails = await runtimeRes.json();
         const runtime = movieDetails.runtime;
 
@@ -69,14 +61,7 @@ const MoviesShows = () => {
           console.warn(`Runtime is NaN for movie ID ${movie.id}`);
         }
 
-        return {
-          ...movie,
-          title: movieDetails.title,
-          poster_path: movieDetails.poster_path,
-          runtime: typeof runtime === 'number' && runtime >= 0 ? runtime : null, // التأكد من أن هناك قيمة صحيحة
-          overview: movieDetails.overview,
-          vote_average: movieDetails.vote_average,
-        };
+        return { ...movieDetails, runtime };
       })
     );
   };
@@ -89,8 +74,8 @@ const MoviesShows = () => {
   };
 
 
-  const local = useLocale();
-  const movieURLFormat = (movie: Movie) => `/${local}/browse/movies/title/${movie.id}`;
+  const locale = useLocale();
+  const movieURLFormat = (movie: Movie) => `/${locale}/browse/movies/title/${movie.id}`;
 
   const renderMoviesSection = (title: string, movies: Movie[]) => {
     return (
@@ -121,7 +106,7 @@ const MoviesShows = () => {
                   <h3 className='movie-title dark:text-white text-blac</section>k mx-2'>{item.title}</h3>
                   <Link href={movieURLFormat(item)}>
                     <Button className="mt-4 bg-red-50 text-white hover:bg-red-60">
-                      {t('watchFilm')}
+                      {t('watchMovie')}
                     </Button>
                   </Link>
                   <div className="flex justify-between items-center absolute bottom-2.5 w-full px-4">
@@ -164,12 +149,12 @@ const MoviesShows = () => {
               layout="fill"
               className="object-cover rounded-lg"
             />
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4 bg-black bg-opacity-50 rounded-lg">
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4 bg-black bg-opacity-50 rounded-lg bg-gradient-to-t from-black-6 to-transparent">
               <h3 className="text-3xl text-white font-bold">{featuredMovie.title}</h3>
-              <p className="text-white mt-2">{featuredMovie.overview || t('noDescription')}</p>
+              <p className="text-white mt-2 w-[80vw] md:w-[60vw]">{featuredMovie.tagline || featuredMovie.overview}</p>
               <Link href={movieURLFormat(featuredMovie)}>
                 <Button className="mt-4 bg-red-50 text-white hover:bg-red-60">
-                  {t('watchFilm')}
+                  {t('watchMovie')}
                 </Button>
               </Link>
             </div>
