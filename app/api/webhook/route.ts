@@ -7,6 +7,9 @@ import { getAuth } from '@clerk/nextjs/server';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(req: NextRequest, res: NextResponse) {
+  console.log('Webhook request URL:', req.url);
+  console.log('Webhook request headers:', req.headers);
+
   const payload = await req.text();
   const sig = req.headers.get('Stripe-Signature')!;
 
