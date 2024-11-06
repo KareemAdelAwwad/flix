@@ -7,6 +7,11 @@ const middleware = async (req: NextRequest) => {
   console.log('Middleware request URL:', req.url);
   console.log('Middleware request headers:', req.headers);
 
+  // Skip Clerk middleware for webhook endpoint
+  if (req.nextUrl.pathname === '/api/webhook') {
+    return NextResponse.next();
+  }
+
   const intlMiddleware = createMiddleware(routing)(req);
   if (intlMiddleware) return intlMiddleware;
 
@@ -16,5 +21,9 @@ const middleware = async (req: NextRequest) => {
 export default middleware;
 
 export const config = {
-  matcher: ['/', '/(ar|en)/:path*', '/api/webhook'],
+  matcher: [
+    '/', 
+    '/(ar|en)/:path*', 
+    '/api/webhook'
+  ]
 };
