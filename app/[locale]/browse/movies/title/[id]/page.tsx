@@ -315,21 +315,24 @@ export default function page({ params }: { params: { id: number } }) {
                 </div>
               }
               icon={<BiCategoryAlt size={24} />} />
-            <Info title={t('director')}
-              content={
+            {
+              director &&
+              <Info title={t('director')}
+                content={
 
-                <div className='dark:text-white font-medium p-2.5 dark:bg-black-8 bg-gray-50 border-[1px] dark:border-black-15 rounded-lg flex gap-2 items-center'>
-                  <div className='w-[48px] h-[50px] overflow-hidden rounded-lg flex justify-center items-center'>
-                    <Image src={director.profile_path ? `https://image.tmdb.org/t/p/original${director.profile_path}` : "/images/robot-image.jpg"}
-                      alt={director.name} className='object-center' width={48} height={48} />
+                  <div className='dark:text-white font-medium p-2.5 dark:bg-black-8 bg-gray-50 border-[1px] dark:border-black-15 rounded-lg flex gap-2 items-center'>
+                    <div className='w-[48px] h-[50px] overflow-hidden rounded-lg flex justify-center items-center'>
+                      <Image src={director.profile_path ? `https://image.tmdb.org/t/p/original${director.profile_path}` : "/images/robot-image.jpg"}
+                        alt={director.name} className='object-center' width={48} height={48} />
+                    </div>
+                    <div>
+                      <h4 className='text-[16px]'>{director.name}</h4>
+                      <p className='text-sm text-gray-60'>{director.name}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className='text-[16px]'>{director.name}</h4>
-                    <p className='text-sm text-gray-60'>{director.name}</p>
-                  </div>
-                </div>
-              }
-              icon={<PiFilmReel size={24} />} />
+                }
+                icon={<PiFilmReel size={24} />} />
+            }
             <Info title={t('music')} content={
               <div className='flex flex-col gap-2.5 flex-wrap'>
                 {
