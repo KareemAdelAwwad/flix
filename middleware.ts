@@ -10,9 +10,8 @@ const middleware = async (req: NextRequest) => {
   return clerkMiddleware(req, {} as NextFetchEvent);
 };
 
-
 export default middleware;
 
 export const config = {
-  matcher: ['/', '/(ar|en)/:path*'],
+  matcher: ['/', '/(ar|en)/:path*', '/api/webhook'],
 };
