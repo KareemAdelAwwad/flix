@@ -2,14 +2,10 @@ import { db } from '@/lib/firebase';
 import { collection, query, where, getDocs, addDoc } from 'firebase/firestore';
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
-import { getAuth } from '@clerk/nextjs/server';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-export async function POST(req: NextRequest, res: NextResponse) {
-  console.log('Webhook request URL:', req.url);
-  console.log('Webhook request headers:', req.headers);
-
+export async function POST(req: NextRequest) {
   const payload = await req.text();
   const sig = req.headers.get('Stripe-Signature')!;
 
@@ -22,10 +18,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
     console.log('Received event type:', event.type);
 
-    // Handle both invoice payment and charge succeeded events
     if (event.type === 'invoice.payment_succeeded' || event.type === 'charge.succeeded') {
       const data = event.data.object;
-      let userEmail, planId, amount, clerkUserId;
+      let userEmail, planId, amount;
 
       if (event.type === 'invoice.payment_succeeded') {
         const invoice = data as Stripe.Invoice;
@@ -33,34 +28,27 @@ export async function POST(req: NextRequest, res: NextResponse) {
         planId = invoice.lines.data[0].plan?.product;
         amount = invoice.amount_due;
       } else {
-        // charge.succeeded event
         const charge = data as Stripe.Charge;
         userEmail = charge.billing_details.email;
         planId = charge.metadata.product_id || charge.payment_intent;
         amount = charge.amount;
       }
 
-      // Get Clerk user ID from the request
-      const auth = getAuth(req);
-      clerkUserId = auth.userId;
-
-      if (!userEmail || !planId || !amount || !clerkUserId) {
+      if (!userEmail || !planId || !amount) {
         throw new Error('Missing required payment data');
       }
 
-      // Check if the user already exists in the "Subscriptions" collection
+      // Check if subscription exists using email
       const subscriptionsRef = collection(db, 'Subscriptions');
-      const q = query(subscriptionsRef, where('userId', '==', clerkUserId));
+      const q = query(subscriptionsRef, where('email', '==', userEmail));
       const querySnapshot = await getDocs(q);
 
       if (querySnapshot.empty) {
-        // Add new subscription document with correct key names
         await addDoc(subscriptionsRef, {
           email: userEmail,
           planId: planId,
-          userId: clerkUserId,
           price: amount,
-          createdAt: new Date(),
+          createdAt: new Date()
         });
         console.log('Subscription added to Firebase');
       } else {
@@ -69,16 +57,10 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
       return NextResponse.json({
         status: 'success',
-        data: {
-          email: userEmail,
-          planId: planId,
-          userId: clerkUserId,
-          price: amount
-        }
+        data: { email: userEmail, planId, price: amount }
       });
     }
 
-    // If we get here, it's an event type we don't handle
     console.log('Unhandled event type:', event.type);
     return NextResponse.json({ status: 'success', message: 'Unhandled event type' });
 
