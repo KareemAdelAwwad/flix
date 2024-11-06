@@ -16,30 +16,34 @@ export async function POST(req: NextRequest, res: NextResponse) {
       process.env.STRIPE_WEBHOOK_SECRET!
     );
 
-    // Log entire event for debugging
-    console.log('Webhook event:', JSON.stringify(event, null, 2));
-
-    // Safely access properties using optional chaining
-    const session = event.data.object as Stripe.Checkout.Session;
-    const userEmail = session?.customer_email;
-    const planId = session.line_items?.data?.[0]?.price?.product;
+    if (event.type !== 'invoice.payment_succeeded') {
+      throw new Error('Unexpected event type');
+    }
     
-    // If you need the date/time
-    const dateTime = event.created ? new Date(event.created * 1000).toLocaleDateString() : '';
+    // Extract data from invoice object
+    const invoice = event.data.object as Stripe.Invoice;
+    const userEmail = invoice.customer_email;
+    const planId = invoice.lines.data[0].plan?.product;
+    const amount = invoice.amount_due; // Amount in smallest currency unit
 
-    return NextResponse.json({ 
+    console.log({
+      userEmail, // "kareemadel10110@gmail.com"
+      planId,    // "prod_RAUddbvqp0D378"
+      amount     // 16500
+    });
+
+    return NextResponse.json({
       status: 'success',
       data: {
         userEmail,
         planId,
-        dateTime,
-        eventType: event.type
+        amount
       }
     });
   } catch (error) {
     console.error('Webhook error:', error);
     return NextResponse.json({ 
-      status: 'error', 
+      status: 'error',
       message: error instanceof Error ? error.message : 'Unknown error'
     }, { status: 400 });
   }
