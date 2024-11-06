@@ -33,6 +33,7 @@ const Page = () => {
   const [watchlist, setWatchlist] = useState([] as WatchlistItem[]);
   const [loading, setLoading] = useState(true);
   const { userId } = useAuth();
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   useEffect(() => {
     if (!userId) return;
