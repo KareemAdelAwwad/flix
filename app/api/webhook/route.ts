@@ -1,11 +1,11 @@
 import { db } from '@/lib/firebase';
 import { collection, query, where, getDocs, addDoc } from 'firebase/firestore';
 import { NextRequest, NextResponse } from 'next/server';
-import { useAuth } from '@clerk/nextjs';
 import Stripe from 'stripe';
+import { getAuth } from '@clerk/nextjs/server';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
-const { userId } = useAuth();
+
 export async function POST(req: NextRequest, res: NextResponse) {
   const payload = await req.text();
   const sig = req.headers.get('Stripe-Signature')!;
@@ -37,8 +37,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
         amount = charge.amount;
       }
 
-      // Assuming you have a way to get the Clerk user ID
-      clerkUserId = userId;
+      // Get Clerk user ID from the request
+      const auth = getAuth(req);
+      clerkUserId = auth.userId;
 
       if (!userEmail || !planId || !amount || !clerkUserId) {
         throw new Error('Missing required payment data');
@@ -73,6 +74,11 @@ export async function POST(req: NextRequest, res: NextResponse) {
         }
       });
     }
+
+    // If we get here, it's an event type we don't handle
+    console.log('Unhandled event type:', event.type);
+    return NextResponse.json({ status: 'success', message: 'Unhandled event type' });
+
   } catch (error) {
     console.error('Webhook error:', error);
     return NextResponse.json({
