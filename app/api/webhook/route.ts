@@ -7,24 +7,40 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(req: NextRequest, res: NextResponse) {
   const payload = await req.text();
-  const response = JSON.parse(payload);
   const sig = req.headers.get('Stripe-Signature')!;
-
-  const dateTime = new Date(response?.created * 1000).toLocaleDateString();
-  const timeString = new Date(response?.created * 1000).toLocaleDateString();
-
-  const userEmail = response.object.customer_email;
-  const planId = response.object.lines.data[0].plan.product;
 
   try {
     const event = stripe.webhooks.constructEvent(
       payload,
-      sig!,
+      sig,
       process.env.STRIPE_WEBHOOK_SECRET!
-    )
-    console.log('Event:', event.type);
-    return NextResponse.json({ status: 'success', event: console.log(`The user email: ${userEmail}`) });
+    );
+
+    // Log entire event for debugging
+    console.log('Webhook event:', JSON.stringify(event, null, 2));
+
+    // Safely access properties using optional chaining
+    const session = event.data.object as Stripe.Checkout.Session;
+    const userEmail = session?.customer_email;
+    const planId = session.line_items?.data?.[0]?.price?.product;
+    
+    // If you need the date/time
+    const dateTime = event.created ? new Date(event.created * 1000).toLocaleDateString() : '';
+
+    return NextResponse.json({ 
+      status: 'success',
+      data: {
+        userEmail,
+        planId,
+        dateTime,
+        eventType: event.type
+      }
+    });
   } catch (error) {
-    return NextResponse.json({ status: 'error', error });
+    console.error('Webhook error:', error);
+    return NextResponse.json({ 
+      status: 'error', 
+      message: error instanceof Error ? error.message : 'Unknown error'
+    }, { status: 400 });
   }
 }
