@@ -20,21 +20,19 @@ export async function POST(req: NextRequest) {
 
     if (event.type === 'invoice.payment_succeeded' || event.type === 'charge.succeeded') {
       const data = event.data.object;
-      let userEmail, planId, amount;
+      let userEmail, amount;
 
       if (event.type === 'invoice.payment_succeeded') {
         const invoice = data as Stripe.Invoice;
         userEmail = invoice.customer_email;
-        planId = invoice.lines.data[0].plan?.product;
         amount = invoice.amount_due;
       } else {
         const charge = data as Stripe.Charge;
         userEmail = charge.billing_details.email;
-        planId = charge.metadata.product_id || charge.payment_intent;
         amount = charge.amount / 100;
       }
 
-      if (!userEmail || !planId || !amount) {
+      if (!userEmail || !amount) {
         throw new Error('Missing required payment data');
       }
 
@@ -46,7 +44,6 @@ export async function POST(req: NextRequest) {
       if (querySnapshot.empty) {
         await addDoc(subscriptionsRef, {
           email: userEmail,
-          planId: planId,
           price: amount,
           createdAt: new Date()
         });
@@ -57,7 +54,7 @@ export async function POST(req: NextRequest) {
 
       return NextResponse.json({
         status: 'success',
-        data: { email: userEmail, planId, price: amount }
+        data: { email: userEmail, price: amount }
       });
     }
 
