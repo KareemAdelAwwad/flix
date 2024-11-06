@@ -1,10 +1,11 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState ,useEffect } from 'react';
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/inputUA";
 import { useTranslations } from 'next-intl';
 import { Button } from './ui/button';
 import { cn } from "@/lib/utils";
+import Image from 'next/image';
 import {
   IconBrandGithub,
   IconBrandGoogle,
@@ -39,7 +40,7 @@ const supportPage = () => {
 
 
 
-
+// for the webs3 forms 
       async function handleSubmit(event) {
         event.preventDefault();
         const formData = new FormData(event.target);
@@ -63,91 +64,116 @@ const supportPage = () => {
         }
     }
 
+
+    //for the img 
+
+    interface Movie {
+      id: number;
+      poster_path: string;
+      title: string;
+    }
+  
+    const [popularMovies, setPopularMovies] = useState<Movie[]>([]);
+  
+    const options = {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_ACCESS_TOKEN}`,
+      }
+    };
+  
+    useEffect(() => {
+      const fetchMovies = async () => {
+        try {
+          const responses = await Promise.all([
+            fetch(`https://api.themoviedb.org/3/trending/movie/week?language=en-US&page=1`, options),
+            fetch(`https://api.themoviedb.org/3/trending/movie/week?language=en-US&page=2`, options)
+          ]);
+  
+          const data = await Promise.all(responses.map(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json();
+          }));
+  
+          const movies = [...data[0].results, ...data[1].results].slice(0, 30);
+          setPopularMovies(movies);
+        } catch (error) {
+          console.error('Error fetching movies:', error);
+        }
+      };
+  
+      fetchMovies();
+    }, []);
+  
+
       return (
-     <section className="">
-            <div className="max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black-12">
-              <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200">
-                Welcome to Aceternity
-              </h2>
-              <p className="text-neutral-600 text-sm max-w-sm mt-2 dark:text-neutral-300">
-                Login to aceternity if you can because we don&apos;t have a login flow
-                yet
-              </p>
-        
+     <section className=" px-6">
+
+ <div className=' h-fit md:h-screen w-full flex flex-col md:flex-row justify-center items-center gap-10 max-w-screen-2xl'>
+    {/* the img  */}
+  <div className=' h-96 md:h-full w-full  md:w-2/4  flex  flex-col items-center justify-center ' > 
+
+  <h1 className='text-2xl md:text-5xl font-bold'>Welcome to our support page! </h1>
+  <p className='text-sm md:text-base text-gray-500 dark:text-gray-65 p-4 max-w-4xl '>
+    We're here to help you with any problems you may be having with our product.
+  </p>
+         
+          
+          <div className="relative h-5/6 md:h-2/5 w-full overflow-hidden  bg-black-6 border-black-12 border-8 rounded-lg ">
+      {/* Movie Posters Background */}
+      <div className="absolute grid  grid-cols-4 flex-wrap gap-6  ">
+        {popularMovies.map((movie) => (
+          <div className='' >
+            <Image
+              key={movie.id}
+              src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
+              alt={movie.title}
+              width={150}
+              height={150}
+              className="object-cover w-full h-full rounded-xl opacity-70"
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+
+</div>
+
+    {/* -------------form---------------- */}
+                <div className=" h-fit  w-full md:w-2/4 lg:w-3/4 mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black-12 border-2 border-black-6">
+              
               <form className="my-8" onSubmit={handleSubmit}>
-                <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
-                  <LabelInputContainer>
-                    <Label htmlFor="firstname">First name</Label>
-                    <Input id="firstname" placeholder="Tyler" type="text" />
+               
+                  <LabelInputContainer className="mb-4  shadow-lg dark:shadow-none">
+                    <Label htmlFor="name">Your Name</Label>
+                    <Input name='name' placeholder="Tyler Ali" type="text" />
                   </LabelInputContainer>
-                  <LabelInputContainer>
-                    <Label htmlFor="lastname">Last name</Label>
-                    <Input id="lastname" placeholder="Durden" type="text" />
-                  </LabelInputContainer>
-                </div>
-                <LabelInputContainer className="mb-4">
+           
+             
+                <LabelInputContainer className="mb-4 shadow-lg dark:shadow-none">
                   <Label htmlFor="email">Email Address</Label>
-                  <Input id="email" placeholder="projectmayhem@fc.com" type="email" />
+                  <Input placeholder="projectmayhem@fc.com" type="email" name='email'/>
                 </LabelInputContainer>
-                <LabelInputContainer className="mb-4">
-                  <Label htmlFor="password">Password</Label>
-                  <Input id="password" placeholder="••••••••" type="password" />
+                
+                <LabelInputContainer className="mb-4 shadow-lg dark:shadow-none">
+                  <Label htmlFor="Massage">Massage</Label>
+                  <Input  placeholder=" Enter Your Massage" type="Massage" name='massage' />
                 </LabelInputContainer>
-                <LabelInputContainer className="mb-8">
-                  <Label htmlFor="twitterpassword">Your twitter password</Label>
-                  <Input
-                    id="twitterpassword"
-                    placeholder="••••••••"
-                    type="twitterpassword"
-                  />
-                </LabelInputContainer>
-        
                 <button
-                  className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
+                  className="bg-gradient-to-br relative group/btn from-black-6 dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
                   type="submit"
                 >
-                  Sign up &rarr;
+                  send  &rarr;
                   <BottomGradient />
                 </button>
-        
-                <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-8 h-[1px] w-full" />
-        
-                <div className="flex flex-col space-y-4">
-                  <button
-                    className=" relative group/btn flex space-x-2 items-center justify-start px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
-                    type="submit"
-                  >
-                    <IconBrandGithub className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
-                    <span className="text-neutral-700 dark:text-neutral-300 text-sm">
-                      GitHub
-                    </span>
-                    <BottomGradient />
-                  </button>
-                  <button
-                    className=" relative group/btn flex space-x-2 items-center justify-start px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
-                    type="submit"
-                  >
-                    <IconBrandGoogle className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
-                    <span className="text-neutral-700 dark:text-neutral-300 text-sm">
-                      Google
-                    </span>
-                    <BottomGradient />
-                  </button>
-                  <button
-                    className=" relative group/btn flex space-x-2 items-center justify-start px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
-                    type="submit"
-                  >
-                    <IconBrandOnlyfans className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
-                    <span className="text-neutral-700 dark:text-neutral-300 text-sm">
-                      OnlyFans
-                    </span>
-                    <BottomGradient />
-                  </button>
-                </div>
+      
               </form>
             </div>
             
-        
+ </div>
 
 
         {/* questions */}
