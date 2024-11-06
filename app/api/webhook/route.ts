@@ -16,35 +16,56 @@ export async function POST(req: NextRequest, res: NextResponse) {
       process.env.STRIPE_WEBHOOK_SECRET!
     );
 
-    if (event.type !== 'invoice.payment_succeeded') {
-      throw new Error('Unexpected event type');
-    }
-    
-    // Extract data from invoice object
-    const invoice = event.data.object as Stripe.Invoice;
-    const userEmail = invoice.customer_email;
-    const planId = invoice.lines.data[0].plan?.product;
-    const amount = invoice.amount_due; // Amount in smallest currency unit
+    console.log('Received event type:', event.type);
 
-    console.log({
-      userEmail, // "kareemadel10110@gmail.com"
-      planId,    // "prod_RAUddbvqp0D378"
-      amount     // 16500
-    });
+    // Handle both invoice payment and charge succeeded events
+    if (event.type === 'invoice.payment_succeeded' || event.type === 'charge.succeeded') {
+      const data = event.data.object;
+      let userEmail, planId, amount;
 
-    return NextResponse.json({
-      status: 'success',
-      data: {
+      if (event.type === 'invoice.payment_succeeded') {
+        const invoice = data as Stripe.Invoice;
+        userEmail = invoice.customer_email;
+        planId = invoice.lines.data[0].plan?.product;
+        amount = invoice.amount_due;
+      } else {
+        // charge.succeeded event
+        const charge = data as Stripe.Charge;
+        userEmail = charge.billing_details.email;
+        planId = charge.metadata.product_id || charge.payment_intent;
+        amount = charge.amount;
+      }
+
+      if (!userEmail || !planId || !amount) {
+        throw new Error('Missing required payment data');
+      }
+
+      console.log({
+        eventType: event.type,
         userEmail,
         planId,
         amount
-      }
-    });
-  } catch (error) {
+      });
+
+      return NextResponse.json({
+        status: 'success',
+        data: {
+          userEmail,
+          planId,
+          amount
+        }
+      });
+    }
+
+    // If we get here, it's an event type we don't handle
+    console.log('Unhandled event type:', event.type);
+    return NextResponse.json({ status: 'success', message: 'Unhandled event type' });
+
+} catch (error) {
     console.error('Webhook error:', error);
     return NextResponse.json({ 
       status: 'error',
       message: error instanceof Error ? error.message : 'Unknown error'
     }, { status: 400 });
-  }
+}
 }

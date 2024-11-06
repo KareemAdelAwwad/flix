@@ -78,7 +78,7 @@ function PlanCard({ style, name, price, resolution, devices, downloads, spatialA
         )}
       </ul>
 
-      <Link href={paymentLink} target="_blank" className='!w-full'>
+      <Link href={paymentLink} className='!w-full'>
         <Button size={'lg'} className="bg-red-50 text-white hover:bg-red-60 w-full">
           {t("choose_plan")}
         </Button>
