@@ -1,14 +1,13 @@
 'use client';
 // data
 import links from '@/data/links.json';
+import { useSubscriptionStore } from '@/store';
 
 import React, { useEffect, useState } from 'react';
 import { Link } from '@/i18n/routing';
 import { usePathname } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import { SignInButton, SignedIn, SignedOut, UserButton, useUser } from '@clerk/nextjs';
-import { collection, query, where, getDocs } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
 
 //icons
 import { RiMenuFill } from "react-icons/ri";
@@ -34,14 +33,13 @@ import Search from './Search';
 
 
 const Header = () => {
-  const { user } = useUser();
+  const { price } = useSubscriptionStore();
 
   //for translate 
   const t = useTranslations('Header');
 
   // for side bar visible 
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
-  const [plan, setPlan] = useState<any>();
   const toggleSidebar = () => {
     setIsSidebarVisible(!isSidebarVisible);
   };
@@ -58,7 +56,7 @@ const Header = () => {
     setIsSidebarVisible(false);
   }, [currentPath]);
 
-  
+
 
   return (
     <header className='flex items-center justify-between container py-4 text-black' >
@@ -81,31 +79,28 @@ const Header = () => {
         <ModeToggle />
         <LangToggle isMobile={false} />
         <SignedOut>
-          <Button className='bg-red-45 text-white rounded-lg hover:bg-red-60'>
-            <SignInButton mode='modal'>
+          <SignInButton mode='modal'>
+            <Button className='bg-red-45 text-white rounded-lg hover:bg-red-60'>
               {t('signin')}
-            </SignInButton>
-          </Button>
+            </Button>
+          </SignInButton>
         </SignedOut>
-        <SignedIn>
-          <UserButton>
-            <UserButton.MenuItems>
-              <UserButton.Action
-                label={`Your on the ${plan} plan`}
-                labelIcon={<IoTv size={18} />}
-                onClick={() => { }}
-              />
-            </UserButton.MenuItems>
-            <UserButton.MenuItems>
-              <UserButton.Link
-                label="Watchlist"
-                labelIcon={<IoBookmark size={18} />}
-                href={`${locale}/watchlist`}
-              />
-              <UserButton.Action label="manageAccount" />
-            </UserButton.MenuItems>
-          </UserButton>
-        </SignedIn>
+        <div className={`flex justify-center items-center p-1 rounded-full
+          ${price === 165 ? 'golden-gradient' : price === 120 ? 'silver-gradient'
+            : price === 75 ? 'bronze-gradient' : null}`}>
+          <SignedIn>
+            <UserButton>
+              <UserButton.MenuItems>
+                <UserButton.Link
+                  label="Watchlist"
+                  labelIcon={<IoBookmark size={18} />}
+                  href={`${locale}/watchlist`}
+                />
+                <UserButton.Action label="manageAccount" />
+              </UserButton.MenuItems>
+            </UserButton>
+          </SignedIn>
+        </div>
 
       </div>
 
