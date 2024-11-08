@@ -102,7 +102,7 @@ const MoviesShows = () => {
                   </span>
                   <Link href={movieURLFormat(item)}>
                     <Button className="mt-4 bg-red-50 text-white hover:bg-red-60">
-                      {t('watchFilm')}
+                      {t('watchMovie')}
                     </Button>
                   </Link>
                 </div>
