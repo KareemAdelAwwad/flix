@@ -95,6 +95,18 @@
     @apply border-[1px] dark:border-black-15 border-gray-75;
   }
 }
+
+@layer utilities {
+  .golden-gradient {
+    background-image: repeating-linear-gradient(to right top, #a2682a 0%, #be8c3c 8%, #be8c3c 18%, #d3b15f 27%, #faf0a0 35%, #ffffc2 40%, #faf0a0 50%, #d3b15f 58%, #be8c3c 67%, #b17b32 77%, #bb8332 83%, #d4a245 88%, #e1b453 93%, #a4692a 100%);;
+  }
+  .silver-gradient {
+    background-image: repeating-linear-gradient(to right top, #a0a0a0 0%, #b0b0b0 8%, #b0b0b0 18%, #c0c0c0 27%, #f0f0f0 35%, #ffffff 40%, #f0f0f0 50%, #c0c0c0 58%, #b0b0b0 67%, #a0a0a0 77%, #b0b0b0 83%, #c0c0c0 88%, #d0d0d0 93%, #a0a0a0 100%);
+  }
+  .bronze-gradient {
+    background-image: repeating-linear-gradient(to right top, #673208, #db6c2b);
+  }
+}
 /* ملف CSS */
 .section-title {
   color: red; /* اللون الأحمر بشكل دائم */ 

@@ -14,7 +14,8 @@ import PMSECTION from "@/components/PopularMoviesSection"
 import BgHome from "@/components/BgHome"
 import { Link } from '@/i18n/routing';
 import { useUser } from '@clerk/nextjs';
-import firebase from 'firebase/compat/app';
+import { useSubscriptionStore } from '@/store';
+import { useSubscriptionCheck } from '@/hooks/useSubscriptionCheck';
 
 interface PlanCardProps {
   style: string;
@@ -88,91 +89,11 @@ function PlanCard({ style, name, price, resolution, devices, downloads, spatialA
     </div>)
 };
 
-interface SubscriptionStatus {
-  isActive: boolean;
-  expirationDate?: Date;
-  isLoading: boolean;
-}
 
 const Home = () => {
   const { user } = useUser();
-  const [subscriptionStatus, setSubscriptionStatus] = useState<SubscriptionStatus>({
-    isActive: false,
-    isLoading: true
-  });
-
-  const checkSubscription = async () => {
-    if (!user?.emailAddresses?.[0]?.emailAddress) return;
-    
-    try {
-      const userEmail = user.emailAddresses[0].emailAddress;
-      const subscriptionsRef = collection(db, 'Subscriptions');
-      const q = query(subscriptionsRef, where('email', '==', userEmail));
-      const querySnapshot = await getDocs(q);
-      
-      if (!querySnapshot.empty) {
-        const subscriptionDoc = querySnapshot.docs[0];
-        const subscriptionData = subscriptionDoc.data();
-        const expirationDate = subscriptionData.expirationDate.toDate();
-        const now = new Date();
-
-        let isActive = false;
-
-        if (subscriptionData.status === 'cancelled') {
-          isActive = false;
-        } else if (subscriptionData.status === 'active') {
-          isActive = expirationDate > now;
-          
-          // If subscription is expired, update status to cancelled
-          if (!isActive) {
-            await updateDoc(doc(db, 'Subscriptions', subscriptionDoc.id), {
-              status: 'cancelled'
-            });
-          }
-        }
-        
-        setSubscriptionStatus({
-          isActive,
-          expirationDate,
-          isLoading: false
-        });
-
-      } else {
-        setSubscriptionStatus({
-          isActive: false,
-          isLoading: false
-        });
-      }
-    } catch (error) {
-      console.error('Error checking subscription:', error);
-      setSubscriptionStatus({
-        isActive: false,
-        isLoading: false
-      });
-    }
-  };
-
-  useEffect(() => {
-    checkSubscription();
-  }, [user]);
-
-  // Render subscription status
-  const renderSubscriptionStatus = () => {
-    if (subscriptionStatus.isLoading) {
-      return <div>Loading subscription status...</div>;
-    }
-
-    if (subscriptionStatus.isActive) {
-      return (
-        <div className="text-green-500">
-          Active subscription until {subscriptionStatus.expirationDate?.toLocaleDateString()}
-        </div>
-      );
-    }
-
-    return <div className="text-red-500">No active subscription</div>;
-  };
-
+  useSubscriptionCheck();
+  const { isActive, isLoading, expirationDate, price } = useSubscriptionStore();
   const t = useTranslations('HomePage');
 
   //for device section 
@@ -210,7 +131,7 @@ const Home = () => {
       resolution: '720p',
       devices: 1,
       downloads: 1,
-      paymentLink: '#',
+      paymentLink: 'https://buy.stripe.com/test_8wMbJc1WY7zH39CcMO',
     },
     {
       style: 'bg-gradient-to-br from-blue-800 to-purple-600',
@@ -219,7 +140,7 @@ const Home = () => {
       resolution: '1080p',
       devices: 2,
       downloads: 2,
-      paymentLink: '#',
+      paymentLink: 'https://buy.stripe.com/test_00gaF8cBCbPX7pS5kl',
     },
     {
       style: ' bg-gradient-to-br from-blue-600 to-red-50',
@@ -237,7 +158,6 @@ const Home = () => {
 
   return (
     <>
-      {renderSubscriptionStatus()}
       {/* bg- and logo  */}
       <div className='flex flex-col gap-4 w-[100%] h-screen mb-10'>
         <BgHome />
@@ -323,7 +243,7 @@ const Home = () => {
 
 
         {/* plans  */}
-        {!subscriptionStatus.isActive &&
+        {!isActive &&
           <div className="py-8" id='subscriptions'>
             <h2 className=" text-3xl font-bold mb-6">{t('PLANS-TITLE')}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-2xl">
