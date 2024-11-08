@@ -1,7 +1,5 @@
 import Stripe from 'stripe';
 import { NextResponse, NextRequest } from 'next/server';
-import { stat } from 'fs';
-import { redirect } from 'next/navigation';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -20,7 +18,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       process.env.STRIPE_WEBHOOK_SECRET!
     )
     console.log('Event:', event.type);
-    return NextResponse.json({ status: 'success', event: console.log('the payment succese ya Kimo') });
+    return NextResponse.json({ status: 'success', event: console.log('Payment succesed ya Kimo') });
   } catch (error) {
     return NextResponse.json({ status: 'error', error });
   }

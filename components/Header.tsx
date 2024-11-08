@@ -3,11 +3,13 @@
 import links from '@/data/links.json';
 
 import React, { useEffect, useState } from 'react';
-// import { useTheme } from 'next-themes';
 import { Link } from '@/i18n/routing';
 import { usePathname } from 'next/navigation';
 import { useLocale } from 'next-intl';
-import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
+import { SignInButton, SignedIn, SignedOut, UserButton, useUser } from '@clerk/nextjs';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+
 //icons
 import { RiMenuFill } from "react-icons/ri";
 import { CgClose } from "react-icons/cg";
@@ -32,12 +34,14 @@ import Search from './Search';
 
 
 const Header = () => {
+  const { user } = useUser();
 
   //for translate 
   const t = useTranslations('Header');
 
   // for side bar visible 
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+  const [plan, setPlan] = useState<any>();
   const toggleSidebar = () => {
     setIsSidebarVisible(!isSidebarVisible);
   };
@@ -53,6 +57,9 @@ const Header = () => {
   useEffect(() => {
     setIsSidebarVisible(false);
   }, [currentPath]);
+
+  
+
   return (
     <header className='flex items-center justify-between container py-4 text-black' >
 
@@ -82,6 +89,13 @@ const Header = () => {
         </SignedOut>
         <SignedIn>
           <UserButton>
+            <UserButton.MenuItems>
+              <UserButton.Action
+                label={`Your on the ${plan} plan`}
+                labelIcon={<IoTv size={18} />}
+                onClick={() => { }}
+              />
+            </UserButton.MenuItems>
             <UserButton.MenuItems>
               <UserButton.Link
                 label="Watchlist"
