@@ -2,6 +2,7 @@
 // data
 import links from '@/data/links.json';
 import { useSubscriptionStore } from '@/store';
+import { useSubscriptionCheck } from '@/hooks/useSubscriptionCheck';
 
 import React, { useEffect, useState } from 'react';
 import { Link } from '@/i18n/routing';
@@ -33,6 +34,7 @@ import Search from './Search';
 
 
 const Header = () => {
+  useSubscriptionCheck();
   const { price } = useSubscriptionStore();
 
   //for translate 
