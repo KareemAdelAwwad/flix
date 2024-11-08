@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { SlVolume2, SlVolumeOff  } from 'react-icons/sl';
+import { SlVolume2, SlVolumeOff } from 'react-icons/sl';
 import { Button } from '@/components/ui/button';
 import ReadyTooltip from '@/components/ui/ready-tooltip';
 
@@ -45,7 +45,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ songName, tooltipTitle }) => 
     <div>
       <audio
         ref={audioRef}
-        src={`http://84.235.244.198:6868/convert?name=${encodeURIComponent(songName)}`}
+        src={`https://musicapi.kareemadel.com/convert?name=${encodeURIComponent(songName)}`}
         onEnded={() => setIsPlaying(false)}
       />
       <ReadyTooltip children={
