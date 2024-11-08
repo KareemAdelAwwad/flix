@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore';
-
 import { db } from '@/lib/firebase';
 import { Button } from './ui/button';
 import { useTranslations } from 'next-intl';
@@ -176,25 +175,6 @@ const Home = () => {
 
   const t = useTranslations('HomePage');
 
-  const { user } = useUser();
-  useEffect(() => {
-    const checkSubscription = async () => {
-      if (!user?.emailAddresses?.[0]?.emailAddress) return;
-
-      const userEmail = user.emailAddresses[0].emailAddress;
-      const subscriptionsRef = collection(db, 'Subscriptions');
-      const q = query(subscriptionsRef, where('email', '==', userEmail));
-      const querySnapshot = await getDocs(q);
-
-      if (!querySnapshot.empty) {
-        setSubscritper(true);
-      }
-    };
-
-    checkSubscription();
-  }, [user]);
-
-
   //for device section 
   const deviceData = [
     { icon: <FaMobile />, title: 'smartPhone', descriptionKey: 'APPS-P' },
@@ -358,4 +338,3 @@ const Home = () => {
 };
 
 export default Home;
-

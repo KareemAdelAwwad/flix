@@ -13,11 +13,6 @@ import {
 } from "@tabler/icons-react";
 
 const page = () => {
-  // const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-  //     e.preventDefault();
-  //     console.log("Form submitted");
-  //   };
-
   const t = useTranslations('HomePage');
 
 
@@ -150,45 +145,46 @@ const page = () => {
 
           <form className="my-8" onSubmit={handleSubmit}>
             <input type="checkbox" name="botcheck" className="hidden"></input>
+            <input type="hidden" name="subject" value="New Submission from Flix"></input>
 
-              <div className='flex justify-between'>
-                <LabelInputContainer className="mb-4  w-[48%]">
-                  <Label htmlFor="first">First Name</Label>
-                  <Input name='first' placeholder="Kareem" type="text" />
-                </LabelInputContainer>
-                <LabelInputContainer className="mb-4  w-[48%]">
-                  <Label htmlFor="last">Last Name</Label>
-                  <Input name='last' placeholder="Ibrahim" type="text" />
-                </LabelInputContainer>
+            <div className='flex justify-between'>
+              <LabelInputContainer className="mb-4  w-[48%]">
+                <Label htmlFor="first">First Name</Label>
+                <Input name='first' placeholder="Kareem" type="text" />
+              </LabelInputContainer>
+              <LabelInputContainer className="mb-4  w-[48%]">
+                <Label htmlFor="last">Last Name</Label>
+                <Input name='last' placeholder="Ibrahim" type="text" />
+              </LabelInputContainer>
+            </div>
+
+
+            <LabelInputContainer className="mb-4">
+              <Label htmlFor="email">Email Address</Label>
+              <Input placeholder="support@flix.com" type="email" name='email' />
+            </LabelInputContainer>
+
+            <LabelInputContainer className="mb-4">
+              <Label htmlFor="massage">Massage</Label>
+              <textarea name="massage" placeholder=' Enter Your Massage'
+                className='bg-gray-50 dark:bg-zinc-800 text-black dark:text-white  placeholder:text-neutral-400 dark:placeholder-text-neutral-600 focus-visible:ring-neutral-400 dark:focus-visible:ring-neutral-600 p-2 rounded-lg' rows={5}></textarea>
+            </LabelInputContainer>
+            <button
+              className="bg-gradient-to-br relative group/btn dark:from-black-6 from-gray-90 dark:to-black-10 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
+              type="submit"
+            >
+              send  &rarr;
+              <BottomGradient />
+            </button>
+
+            {
+              emailSent &&
+              <div className="mt-4 text-center text-green-600">
+                <p>
+                  Email sent successfully
+                </p>
               </div>
-
-
-              <LabelInputContainer className="mb-4">
-                <Label htmlFor="email">Email Address</Label>
-                <Input placeholder="support@flix.com" type="email" name='email' />
-              </LabelInputContainer>
-
-              <LabelInputContainer className="mb-4">
-                <Label htmlFor="massage">Massage</Label>
-                <textarea name="massage" placeholder=' Enter Your Massage'
-                  className='bg-gray-50 dark:bg-zinc-800 text-black dark:text-white  placeholder:text-neutral-400 dark:placeholder-text-neutral-600 focus-visible:ring-neutral-400 dark:focus-visible:ring-neutral-600 p-2 rounded-lg' rows={5}></textarea>
-              </LabelInputContainer>
-              <button
-                className="bg-gradient-to-br relative group/btn dark:from-black-6 from-gray-90 dark:to-black-10 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
-                type="submit"
-              >
-                send  &rarr;
-                <BottomGradient />
-              </button>
-
-              {
-                emailSent &&
-                <div className="mt-4 text-center text-green-600">
-                  <p>
-                    Email sent successfully
-                  </p>
-                </div>
-              }
+            }
 
           </form>
         </div>
