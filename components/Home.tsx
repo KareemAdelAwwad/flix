@@ -1,5 +1,7 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 import { Button } from './ui/button';
 import { useTranslations } from 'next-intl';
 import { FaPlay, FaMobile, FaTablet } from "react-icons/fa";
@@ -11,6 +13,7 @@ import { IoTvSharp } from "react-icons/io5";
 import PMSECTION from "@/components/PopularMoviesSection"
 import BgHome from "@/components/BgHome"
 import { Link } from '@/i18n/routing';
+import { useUser } from '@clerk/nextjs';
 
 
 interface PlanCardProps {
@@ -24,7 +27,6 @@ interface PlanCardProps {
   mostPopular?: boolean;
   paymentLink: string;
 }
-
 function PlanCard({ style, name, price, resolution, devices, downloads, spatialAudio, mostPopular, paymentLink }: PlanCardProps) {
   const t = useTranslations('HomePage');
   const listStyle = `border-t border-black-6 pt-4 dark:border-black-30`
@@ -78,7 +80,7 @@ function PlanCard({ style, name, price, resolution, devices, downloads, spatialA
         )}
       </ul>
 
-      <Link href={paymentLink} target="_blank" className='!w-full'>
+      <Link href={paymentLink} className='!w-full'>
         <Button size={'lg'} className="bg-red-50 text-white hover:bg-red-60 w-full">
           {t("choose_plan")}
         </Button>
@@ -88,7 +90,28 @@ function PlanCard({ style, name, price, resolution, devices, downloads, spatialA
 
 
 const Home = () => {
+  const [subscritper, setSubscritper] = useState(false)
+  const [plan, setPlan] = useState('Free')
   const t = useTranslations('HomePage');
+
+  const { user } = useUser();
+  useEffect(() => {
+    const checkSubscription = async () => {
+      if (!user?.emailAddresses?.[0]?.emailAddress) return;
+
+      const userEmail = user.emailAddresses[0].emailAddress;
+      const subscriptionsRef = collection(db, 'Subscriptions');
+      const q = query(subscriptionsRef, where('email', '==', userEmail));
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        setSubscritper(true);
+      }
+    };
+
+    checkSubscription();
+  }, [user]);
+
 
   //for device section 
   const deviceData = [
@@ -237,14 +260,15 @@ const Home = () => {
 
 
         {/* plans  */}
-        <div className="py-8" id='subscriptions'>
-          <h2 className=" text-3xl font-bold mb-6">{t('PLANS-TITLE')}</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-2xl">
-            {plans.map((plan, index) => (
-              <PlanCard {...plan} />
-            ))}
-          </div>
-        </div>
+        {!subscritper &&
+          <div className="py-8" id='subscriptions'>
+            <h2 className=" text-3xl font-bold mb-6">{t('PLANS-TITLE')}</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-2xl">
+              {plans.map((plan) => (
+                <PlanCard {...plan} />
+              ))}
+            </div>
+          </div>}
 
 
       </section>
