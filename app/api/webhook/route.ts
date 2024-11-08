@@ -1,5 +1,5 @@
 import { db } from '@/lib/firebase';
-import { collection, query, where, getDocs, addDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs, addDoc, updateDoc } from 'firebase/firestore';
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
@@ -23,17 +23,21 @@ export async function POST(req: NextRequest) {
       let userEmail, amount;
 
       if (event.type === 'invoice.payment_succeeded') {
-        const invoice = data as Stripe.Invoice;
-        userEmail = invoice.customer_email;
-        amount = invoice.amount_due;
+      const invoice = data as Stripe.Invoice;
+      userEmail = invoice.customer_email;
+      amount = invoice.amount_due;
       } else {
-        const charge = data as Stripe.Charge;
-        userEmail = charge.billing_details.email;
-        amount = charge.amount / 100;
+      const charge = data as Stripe.Charge;
+      userEmail = charge.billing_details.email;
+      amount = charge.amount / 100;
       }
 
       if (!userEmail || !amount) {
-        throw new Error('Missing required payment data');
+      throw new Error('Missing required payment data');
+      }
+
+      if (amount <= 0) {
+      throw new Error('Invalid payment amount');
       }
 
       // Check if subscription exists using email
@@ -41,20 +45,45 @@ export async function POST(req: NextRequest) {
       const q = query(subscriptionsRef, where('email', '==', userEmail));
       const querySnapshot = await getDocs(q);
 
+      try {
       if (querySnapshot.empty) {
         await addDoc(subscriptionsRef, {
-          email: userEmail,
-          price: amount,
-          createdAt: new Date()
+        email: userEmail,
+        price: amount,
+        createdAt: new Date(),
+        status: 'active',
+        expirationDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
         });
         console.log('Subscription added to Firebase');
       } else {
-        console.log('Subscription already exists for this user');
+        const doc = querySnapshot.docs[0];
+        const currentData = doc.data();
+        const expirationDate = currentData.expirationDate.toDate();
+        
+        if (expirationDate < new Date()) {
+        await updateDoc(doc.ref, {
+          price: amount,
+          status: 'active',
+          expirationDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+        });
+        console.log('Subscription updated in Firebase');
+        } else if (currentData.status === 'cancelled') {
+        await updateDoc(doc.ref, {
+          status: 'active'
+        });
+        console.log('Subscription reactivated');
+        } else {
+        console.log('Subscription already exists and is active');
+        }
+      }
+      } catch (error) {
+      console.error('Firebase operation failed:', error);
+      throw new Error('Failed to update subscription data');
       }
 
       return NextResponse.json({
-        status: 'success',
-        data: { email: userEmail, price: amount }
+      status: 'success',
+      data: { email: userEmail, price: amount }
       });
     }
 
