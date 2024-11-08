@@ -60,18 +60,13 @@ export async function POST(req: NextRequest) {
           const currentData = doc.data();
           const expirationDate = currentData.expirationDate.toDate();
 
-          if (expirationDate < new Date()) {
+          if ((expirationDate < new Date()) || (currentData.status === 'cancelled')) {
             await updateDoc(doc.ref, {
               price: amount,
               status: 'active',
               expirationDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
             });
             console.log('Subscription updated in Firebase');
-          } else if (currentData.status === 'cancelled') {
-            await updateDoc(doc.ref, {
-              status: 'active'
-            });
-            console.log('Subscription reactivated');
           } else {
             console.log('Subscription already exists and is active');
           }
