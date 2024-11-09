@@ -12,9 +12,6 @@ import ReadyTooltip from '@/components/ui/ready-tooltip';
 import dynamic from 'next/dynamic';
 import YoutubeVideo from '@/types/youtube';
 
-// Import components
-import { Hero } from '@/components/TitlePage/HeroSection';
-
 // Import types
 import {
   Series,

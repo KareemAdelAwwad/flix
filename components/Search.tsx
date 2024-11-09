@@ -200,14 +200,15 @@ const Search = ({ isMobile }: { isMobile: boolean }) => {
   return (
     <>
       <span className={`p-3 
-      ${isMobile ? 'rounded-xl' : 'rounded-full'} bg-black-20 hover:hover:bg-black-30 transition-all duration-300
+      ${isMobile ? 'rounded-xl' : 'rounded-full'} dark:bg-black-20 bg-white borders 
+      dark:hover:bg-black-30 transition-all duration-300
         ${isMobile && 'w-full flex flex-row-reverse'}`}
         onClick={() => isMobile && setActivateSearch(true)}
       >
         {
           (activateSearch === true || searchValue !== "") ?
-            <IoClose className={`text-white cursor-pointer `} size={16} onClick={() => clickHandler()} />
-            : <IoSearch className={`text-white cursor-pointer`} size={16} onClick={() => clickHandler()} />
+            <IoClose className={`dark:text-white cursor-pointer `} size={16} onClick={() => clickHandler()} />
+            : <IoSearch className={`dark:text-white cursor-pointer`} size={16} onClick={() => clickHandler()} />
         }
         <Input
           ref={inputRef}
