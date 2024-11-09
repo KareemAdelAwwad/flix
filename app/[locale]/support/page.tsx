@@ -150,23 +150,23 @@ const page = () => {
             <div className='flex justify-between'>
               <LabelInputContainer className="mb-4  w-[48%]">
                 <Label htmlFor="first">First Name</Label>
-                <Input name='first' placeholder="Kareem" type="text" />
+                <Input name='first' placeholder="Kareem" type="text" required />
               </LabelInputContainer>
               <LabelInputContainer className="mb-4  w-[48%]">
                 <Label htmlFor="last">Last Name</Label>
-                <Input name='last' placeholder="Ibrahim" type="text" />
+                <Input name='last' placeholder="Ibrahim" type="text" required />
               </LabelInputContainer>
             </div>
 
 
             <LabelInputContainer className="mb-4">
               <Label htmlFor="email">Email Address</Label>
-              <Input placeholder="support@flix.com" type="email" name='email' />
+              <Input placeholder="support@flix.com" type="email" name='email' required />
             </LabelInputContainer>
 
             <LabelInputContainer className="mb-4">
               <Label htmlFor="massage">Massage</Label>
-              <textarea name="massage" placeholder=' Enter Your Massage'
+              <textarea name="massage" placeholder=' Enter Your Massage' required
                 className='bg-gray-50 dark:bg-zinc-800 text-black dark:text-white  placeholder:text-neutral-400 dark:placeholder-text-neutral-600 focus-visible:ring-neutral-400 dark:focus-visible:ring-neutral-600 p-2 rounded-lg' rows={5}></textarea>
             </LabelInputContainer>
             <button
