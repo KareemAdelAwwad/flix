@@ -1,6 +1,6 @@
 {
   "Header": {
-    "title": "Movie App",
+    "title": "Flix App",
     "home": "Home",
     "movies": "Movies",
     "shows": "TV Shows",
@@ -97,7 +97,7 @@
     "ContactWithUs": "Contact With Us"
   },
   "TitlePage": {
-    "title": "Player",
+    "title": "Play",
     "play": "Play Movie",
     "playEpisode": "Play Episode",
     "pause": "Pause Movie",

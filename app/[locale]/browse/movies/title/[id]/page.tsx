@@ -29,10 +29,12 @@ import Info from '@/components/ui/Info';
 import RatingStars from '@/components/ui/RatingStars';
 import Recommendations from '@/components/TitlePage/Recommendations';
 import AudioPlayer from '@/components/TitlePage/AudioPlayer';
+import VideoPlayer from '@/components/TitlePage/VideoPlayer';
 import WatchlistButton from '@/components/AddToWatchlistButton';
 import Trailer from '@/components/TitlePage/Trailer';
 import { Movie, MovieCastMember as Cast, Review } from '@/types/title';
 import YoutubeVideo from '@/types/youtube';
+import WatchingServer from '@/components/TitlePage/WatchingServer';
 
 interface MovieImages {
   "id": number,
@@ -67,6 +69,7 @@ export default function page({ params }: { params: { id: number } }) {
   const [director, setDirector] = useState({} as Cast);
   const [musicList, setMusicList] = useState([] as YoutubeVideo[]);
   const [showTrailer, setShowTrailer] = useState(false);
+  const [showPlayer, setShowPlayer] = useState(false);
   const [imageLoaing, setImageLoading] = useState(true);
   const [loading, setLoading] = useState(true);
   const locale = useLocale();
@@ -160,9 +163,57 @@ export default function page({ params }: { params: { id: number } }) {
     defaultImagesPerPage: 2 // Default when width is larger than all breakpoints
   };
 
+
+  // Player Events and Handlers
+  useEffect(() => {
+    if (showPlayer) {
+      document.body.style.overflow = 'hidden';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [showPlayer]);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setShowPlayer(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
+  const handleContainerClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    if ((event.target as HTMLElement).id === 'player-container') {
+      setShowPlayer(false);
+    }
+  };
+
   return (
     <main className='flex flex-col justify-center items-center gap-20 container'>
       <title>{movie.title}</title>
+
+      {
+        showPlayer &&
+        <div
+          id='player-container'
+          onClick={handleContainerClick}
+          className="fixed top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center
+      bg-black-6 bg-opacity-70 w-full h-full">
+          <div className="rounded-lg w-[900px] ">
+            <VideoPlayer />
+          </div>
+        </div>
+      }
+
       {/* Movie Background */}
       <section className='w-full h-[835px] mt-5 rounded-t-lg overflow-hidden felx justify-center items-center relative'>
         <div className='
@@ -174,10 +225,14 @@ export default function page({ params }: { params: { id: number } }) {
           </div>
           {/* Movie controles */}
           <div className='flex justify-center items-center gap-2 w-full h-16 bg-transparent flex-wrap'>
-            <ReadyTooltip children={<Button className='text-white text-2xl font-bold bg-red-45 hover:bg-red-50 transition-colors duration-400' size="lg">
-              <FaPlay /> {t('title')}
-            </Button>} title={t('play')} />
+            <ReadyTooltip children={
+              <Button
+                onClick={() => setShowPlayer(true)}
+                className='text-white text-2xl font-bold bg-red-45 hover:bg-red-50 transition-colors duration-400' size="lg">
+                <FaPlay /> {t('title')}
+              </Button>} title={t('play')} />
             <div className='flex justify-center items-center gap-2'>
+              <WatchingServer titleID={movie.id} titleType='movie' status={false} string='Watching Server' />
               {movie.id && <WatchlistButton titleId={movie.id.toString()} titleType='movie' style='icon' />}
               <Trailer titleName={movie.title} status={showTrailer} string={t('trailer')} />
 

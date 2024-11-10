@@ -3,7 +3,7 @@
 import { Manrope } from 'next/font/google'
 import React, { Suspense, useMemo } from 'react'
 import { useLocale, useTranslations } from 'next-intl';
-import ReactPlayer from 'react-player';
+import VideoPlayer from '@/components/TitlePage/VideoPlayer';
 import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -25,7 +25,6 @@ import {
 
 // Import Icons
 import { FaPlay, FaPlus } from "react-icons/fa6";
-import { SlVolume2 } from "react-icons/sl";
 import { GoCheckCircle } from "react-icons/go";
 import { CiCalendar, CiStar } from "react-icons/ci";
 import { PiTranslate, PiFilmSlateDuotone } from "react-icons/pi";
@@ -61,6 +60,7 @@ import Recommendations from '@/components/TitlePage/Recommendations';
 import AudioPlayer from '@/components/TitlePage/AudioPlayer';
 import WatchlistButton from '@/components/AddToWatchlistButton';
 import Trailer from '@/components/TitlePage/Trailer';
+import WatchingServer from '@/components/TitlePage/WatchingServer';
 
 // Font configuration
 const manropes = Manrope({
@@ -102,9 +102,11 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
   const [cast, setCast] = useState<SeriesCast>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [providers, setProviders] = useState<any>({});
+  const [showPlayer, setShowPlayer] = useState(false);
   const [musicList, setMusicList] = useState<YoutubeVideo[]>([]);
   const [showTrailer, setShowTrailer] = useState(false);
   const [imageLoading, setImageLoading] = useState(true);
+  const [imdpId, setImdpId] = useState('');
   const [loading, setLoading] = useState(true);
   const [episodeLoading, setEpisodeLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -119,14 +121,15 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
     cast: `${API_CONFIG.baseUrl}/tv/${params.id}/aggregate_credits?language=${locale}`,
     reviews: `${API_CONFIG.baseUrl}/tv/${params.id}/reviews?language=en-US`,
     providers: `${API_CONFIG.baseUrl}/tv/${params.id}/watch/providers`,
-    youtubeUrl: `https://www.googleapis.com/youtube/v3/search?part=snippet&key=${process.env.NEXT_PUBLIC_YOUTUBE_API_KEY}&type=video&q=${series.name}+Song&maxResults=2`,
+    imdpId: `${API_CONFIG.baseUrl}/tv/${params.id}/external_ids`,
+    youtubeUrl: `https://www.googleapis.com/youtube/v3/search?part=snippet&key=${process.env.NEXT_PUBLIC_YOUTUBE_API_KEY}&type=video&q=${series.name}+Song&maxResults=1`,
   }), [params.id, locale]);
 
   // Fetch data using Promise.all for parallel requests
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [seriesData, imagesData, reviewsData, castData, youtubeData] = await Promise.all([
+        const [seriesData, imagesData, reviewsData, castData, , IMDBid] = await Promise.all([
           fetch(urls.series, API_CONFIG.options).then(res => {
             if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
             return res.json();
@@ -147,10 +150,10 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
             if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
             return res.json();
           }),
-          // fetch(urls.youtubeUrl).then(res => {
-          //   if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-          //   return res.json();
-          // })
+          fetch(urls.imdpId, API_CONFIG.options).then(res => {
+            if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+            return res.json();
+          }),
         ]);
 
         setSeries(seriesData);
@@ -169,8 +172,9 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
         setImages(imagesData);
         setReviews(reviewsData.results);
         setCast(castData.cast.slice(0, 28));
-        // setMusicList(youtubeData.items);
         setProviders(reviewsData.results.EG);
+        setImdpId(IMDBid.imdb_id);
+
       } catch (err) {
         setError(err instanceof Error ? err : new Error('An error occurred while fetching data'));
         console.error('Error fetching data:', err);
@@ -211,33 +215,6 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
     }
   }, [params.id, locale, cachedSeasonData]);
 
-  // Optimized image component
-  const IMG = useCallback(({ src, height, width, className, ratio }: ImageProps) => {
-    const closestImage = useMemo(() => {
-      if (!Array.isArray(images[src])) return null;
-      return images[src].reduce((prev, curr) => {
-        return (Math.abs(curr.aspect_ratio - ratio) < Math.abs(prev.aspect_ratio - ratio) ? curr : prev);
-      }, images[src][0]);
-    }, [src, ratio]);
-
-    if (!closestImage) return null;
-
-    return (
-      <Image
-        src={`${API_CONFIG.imageBase}${closestImage.file_path}`}
-        alt={series.original_title || 'Series image'}
-        className={`w-full h-full object-cover ${className}`}
-        width={closestImage.width || width}
-        height={closestImage.height || height}
-        priority={src === 'backdrops'}
-        loading={src === 'backdrops' ? 'eager' : 'lazy'}
-        onError={(e) => {
-          const target = e.target as HTMLImageElement;
-          target.src = '/placeholder-image.jpg'; // Add a placeholder image
-        }}
-      />
-    );
-  }, [images, series.original_title]);
 
   // Format runtime utility
   const formatRuntime = useCallback((runtime: number) => {
@@ -267,24 +244,73 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
     } as SliderSettings
   }), []);
 
-  // Loading state
-  if (loading) {
-    return (
-      <div className="w-full h-screen container">
-        <div className="animate-pulse bg-black-20 h-[835px] w-full rounded-lg mb-8" />
-      </div>
-    );
-  }
+  // // Loading state
+  // if (loading) {
+  //   return (
+  //     <div className="w-full h-screen container">
+  //       <div className="animate-pulse bg-black-20 h-[835px] w-full rounded-lg mb-8" />
+  //     </div>
+  //   );
+  // }
 
-  // Error state
-  if (error) {
-    return <ErrorFallback error={error} resetErrorBoundary={() => window.location.reload()} />;
-  }
+  // // Error state
+  // if (error) {
+  //   return <ErrorFallback error={error} resetErrorBoundary={() => window.location.reload()} />;
+  // }
+
+
+  // Player Events and Handlers
+  useEffect(() => {
+    if (showPlayer) {
+      document.body.style.overflow = 'hidden';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [showPlayer]);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setShowPlayer(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
+  const handleContainerClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    if ((event.target as HTMLElement).id === 'player-container') {
+      setShowPlayer(false);
+    }
+  };
 
   return (
     <main className={`flex flex-col justify-center items-center gap-20 container ${manropes.className}`}>
       {/* Meta */}
       <title>{series.name}</title>
+
+      {
+        showPlayer &&
+        <div
+          id='player-container'
+          onClick={handleContainerClick}
+          className="fixed top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center
+      bg-black-6 bg-opacity-70 w-full h-full">
+          <div className="rounded-lg w-[900px] ">
+            <VideoPlayer url='https://b.top4top.io/m_3235cyxtw1.mp4' />
+          </div>
+        </div>
+      }
+
+      {/* Meta Tags */}
       <meta name="description" content={series.overview} />
       <meta property="og:title" content={series.name} />
       <meta property="og:description" content={series.overview} />
@@ -303,10 +329,14 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
           </div>
           {/* Series controles */}
           <div className='flex justify-center items-center gap-2 w-full h-16 bg-transparent flex-wrap'>
-            <ReadyTooltip children={<Button className='text-white text-2xl font-bold bg-red-45 hover:bg-red-50 transition-colors duration-400' size="lg">
-              <FaPlay /> {t('title')}
-            </Button>} title={t('play')} />
+            <ReadyTooltip children={
+              <Button
+                onClick={() => setShowPlayer(true)}
+                className='text-white text-2xl font-bold bg-red-45 hover:bg-red-50 transition-colors duration-400' size="lg">
+                <FaPlay /> {t('title')}
+              </Button>} title={t('play')} />
             <div className='flex justify-center items-center gap-2'>
+              <WatchingServer titleID={imdpId} titleType='tv' status={false} string='Watching Server' />
               {series.id && <WatchlistButton titleId={series.id.toString()} titleType='tv' style='icon' />}
               <Trailer titleName={`${series.original_name} (${new Date(series.first_air_date).getFullYear()})`} status={showTrailer} string={t('trailer')} />
               {
@@ -355,7 +385,9 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
                             </span>
 
                             <Suspense fallback={<div className='w-[175px] h-[115px] rounded-md bg-black-20 animate-pulse'>{t('loading')}</div>}>
-                              <div className='w-[175px] h-[100px] relative rounded-md overflow-hidden borders group'>
+                              <div
+                              onClick={() => setShowPlayer(true)}
+                              className='w-[175px] h-[100px] relative rounded-md overflow-hidden borders group cursor-pointer'>
 
                                 <IoPlayCircleOutline size={30}
                                   className='w-14 h-14 p-2 dark:bg-black-6 bg-gray-90 bg-opacity-60 rounded-full text-white group-hover:animate-pulse transition-all duration-300
@@ -526,20 +558,20 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
               icon={<BiNetworkChart size={24} />} />
 
             <Info title={t('music')} content={
-              
-                musicList && musicList.map((song, i) => (
-                  <div className='dark:text-white font-medium p-2.5 py-2 dark:bg-black-8 bg-gray-50 border-[1px] 
+
+              musicList && musicList.map((song) => (
+                <div className='dark:text-white font-medium p-2.5 py-2 dark:bg-black-8 bg-gray-50 border-[1px] 
                   dark:border-black-15 rounded-lg flex gap-2 items-center w-full overflow-hidden'>
-                    <div className='w-[80px] h-fit overflow-hidden rounded-lg flex justify-center items-center'>
-                      <Image src={song.snippet.thumbnails.medium.url}
-                        alt={song.snippet.title} className='object-cover w-full h-full' width={200} height={150} />
-                    </div>
-                    <div className='relative w-full overflow-hidden'>
-                      <h4 className='text-[14px] w-[80%] truncate'>{song.snippet.title}</h4>
-                    </div>
+                  <div className='w-[80px] h-fit overflow-hidden rounded-lg flex justify-center items-center'>
+                    <Image src={song.snippet.thumbnails.medium.url}
+                      alt={song.snippet.title} className='object-cover w-full h-full' width={200} height={150} />
                   </div>
-                ))
-            
+                  <div className='relative w-full overflow-hidden'>
+                    <h4 className='text-[14px] w-[80%] truncate'>{song.snippet.title}</h4>
+                  </div>
+                </div>
+              ))
+
             } icon={<CgMusicNote size={24} />} />
           </div>
         </div>

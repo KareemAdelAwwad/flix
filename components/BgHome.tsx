@@ -70,8 +70,8 @@ const BackgroundCollage = () => {
       <div className="absolute inset-0 bg-gradient-to-t dark:from-black-8 from-white dark:via-transparent via-transparent dark:to-black-8 to-white bg-opacity-30 "></div>
 
       {/* Content on Top */}
-      <div className="relative z-10 flex items-center justify-center h-full  text-7xl font-bold px-4 text-center text-black-6 dark:text-white">
-        {t('title')}
+      <div className="relative z-10 flex items-center justify-center h-full pointer-events-none">
+        <img src="/logo.png" alt="Logo" />
       </div>
     </div>
   );
