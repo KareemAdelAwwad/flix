@@ -7,7 +7,9 @@
     "support": "Support",
     "subscriptions": "Subscriptions",
     "signin": "Sign-in",
-    "search": "Search"
+    "search": "Search",
+    "watched": "Watched",
+    "watchlist": "Watchlist"
   },
   "ThemeToggle": {
     "title": "Toggle theme",
@@ -159,5 +161,9 @@
     "trendingMovies": "Trending Movies",
     "actionMovies": "Action Movies",
     "loading": "Loading..."
+  },
+  "Lists": {
+    "watchlist": "Your Watchlist",
+    "watched": "Titles You Have Watched"
   }
 }

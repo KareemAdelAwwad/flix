@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import HorizontalCarousel from "@/components/carousel";
 import { Link } from "@/i18n/routing";
-import WatchlistButton from "../AddToWatchlistButton";
+import WatchlistButton from "../ui/AddToWatchlistButton";
 
 interface RecommendationsProps {
   header: string;
@@ -62,7 +62,7 @@ const Recommendations: React.FC<RecommendationsProps> = ({ titleType, titleID, h
                   className="w-full h-full object-cover pointer-events-none " />
               </Link>
               {item.id && <WatchlistButton titleId={item.id.toString()} titleType={titleType} style='badge'
-              className="opacity-0 group-hover:opacity-100 transition-all"/>}
+                className="opacity-0 group-hover:opacity-100 transition-all" />}
             </div>
           </div>
         )}

@@ -107,7 +107,7 @@ const page = () => {
 
   return (
     <section className="container">
-
+      <title>Support</title>
       <div className='h-fit md:h-screen w-full flex flex-col md:flex-row justify-center items-center gap-10 max-w-screen-2xl'>
         {/* the img  */}
         <div className='h-96 md:h-full w-full md:w-2/4 flex flex-col justify-center gap-4' >

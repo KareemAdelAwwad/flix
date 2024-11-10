@@ -14,6 +14,7 @@ import { SignInButton, SignOutButton, SignedIn, SignedOut, UserButton, useUser }
 import { RiMenuFill } from "react-icons/ri";
 import { CgClose } from "react-icons/cg";
 import { IoBookmark } from 'react-icons/io5';
+import { GoCheckCircleFill } from "react-icons/go";
 import { GoHomeFill } from 'react-icons/go';
 import { BiSolidCameraMovie } from 'react-icons/bi';
 import { IoTv } from 'react-icons/io5';
@@ -65,8 +66,8 @@ const Header = () => {
 
       {/* title */}
       <Link className='cursor-pointer text-3xl font-semibold flex items-center gap-2 md:gap-4' href='/'>
-      <img src="/icon.svg" alt="Logo" className='w-[40px] md:w-fit pointer-events-none' />
-      {t('title')}
+        <img src="/icon.svg" alt="Logo" className='w-[40px] md:w-fit pointer-events-none' />
+        {t('title')}
       </Link>
 
 
@@ -97,7 +98,12 @@ const Header = () => {
             <UserButton>
               <UserButton.MenuItems>
                 <UserButton.Link
-                  label="Watchlist"
+                  label={t('watched')}
+                  labelIcon={<GoCheckCircleFill size={18} />}
+                  href={`${locale}/watched`}
+                />
+                <UserButton.Link
+                  label={t('watchlist')}
                   labelIcon={<IoBookmark size={18} />}
                   href={`${locale}/watchlist`}
                 />
@@ -118,8 +124,8 @@ const Header = () => {
         </SignInButton>
       </SignedOut>
       <SignedIn>
-        <RiMenuFill onClick={toggleSidebar} 
-        className={`cursor-pointer w-8 h-8 aspect-square ${themeTriger}  duration-500 lg:hidden `} />
+        <RiMenuFill onClick={toggleSidebar}
+          className={`cursor-pointer w-8 h-8 aspect-square ${themeTriger}  duration-500 lg:hidden `} />
       </SignedIn>
 
       {/* sideBar for mobile and tablet  its disappear at lg*/}
@@ -133,7 +139,12 @@ const Header = () => {
               <UserButton>
                 <UserButton.MenuItems>
                   <UserButton.Link
-                    label="Watchlist"
+                    label={t('watched')}
+                    labelIcon={<GoCheckCircleFill size={18} />}
+                    href={`${locale}/watched`}
+                  />
+                  <UserButton.Link
+                    label={t('watchlist')}
                     labelIcon={<IoBookmark size={18} />}
                     href={`${locale}/watchlist`}
                   />

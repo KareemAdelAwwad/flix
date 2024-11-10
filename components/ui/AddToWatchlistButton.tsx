@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '@clerk/nextjs';
 import { addToWatchlist } from '@/lib/AddToWatchlist';
 import { db } from '@/lib/firebase';
-import { Button } from './ui/button';
-import ReadyTooltip from './ui/ready-tooltip';
+import { Button } from './button';
+import ReadyTooltip from './ready-tooltip';
 import { IoBookmarkOutline, IoBookmark } from "react-icons/io5";
 import { useLocale } from 'next-intl';
 

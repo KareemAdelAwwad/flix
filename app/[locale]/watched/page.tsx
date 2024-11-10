@@ -3,18 +3,17 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '@clerk/nextjs';
 import { SignedIn, SignedOut, RedirectToSignIn } from '@clerk/nextjs';
 import { useLocale } from 'next-intl';
-import { fetchWatchlist, subscribeToWatchlist } from '@/lib/FetchWatchlist';
+import { fetchCompleted, subscribeToCompleted } from '@/lib/FetchCompleted';
 import { Movie, Series } from '@/types/title';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { Link } from '@/i18n/routing';
-import WatchlistButton from '@/components/ui/AddToWatchlistButton';
+import CompletedButton from '@/components/ui/AddToCompletedButton';
 import { Button } from '@/components/ui/button';
-
 import { FaStar } from "react-icons/fa";
 
 
-interface WatchlistItem {
+interface CompletedItem {
   titleId: string;
   titleType: 'movie' | 'tv';
 }
@@ -30,23 +29,22 @@ const Page = () => {
   };
   const [movies, setMovies] = useState([] as Movie[]);
   const [series, setSeries] = useState([] as Series[]);
-  const [watchlist, setWatchlist] = useState([] as WatchlistItem[]);
+  const [completed, setCompleted] = useState([] as CompletedItem[]);
   const [loading, setLoading] = useState(true);
   const { userId } = useAuth();
-  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   useEffect(() => {
     if (!userId) return;
 
-    const loadWatchlist = async () => {
-      const items = await fetchWatchlist(userId);
-      setWatchlist(items);
+    const loadCompleted = async () => {
+      const items = await fetchCompleted(userId);
+      setCompleted(items);
       setLoading(false);
     };
-    loadWatchlist();
+    loadCompleted();
 
-    const unsubscribe = subscribeToWatchlist(userId, (items) => {
-      setWatchlist(items);
+    const unsubscribe = subscribeToCompleted(userId, (items) => {
+      setCompleted(items);
     });
 
     return () => unsubscribe();
@@ -54,20 +52,20 @@ const Page = () => {
 
   useEffect(() => {
     const fetchTitles = async () => {
-      if (watchlist.length === 0) {
+      if (completed.length === 0) {
         setLoading(false);
         return;
       }
 
       try {
-        const moviePromises = watchlist
+        const moviePromises = completed
           .filter(item => item.titleType === 'movie')
           .map(item =>
             fetch(`https://api.themoviedb.org/3/movie/${item.titleId}?language=${locale}`, options)
               .then(response => response.json())
           );
 
-        const seriesPromises = watchlist
+        const seriesPromises = completed
           .filter(item => item.titleType === 'tv')
           .map(item =>
             fetch(`https://api.themoviedb.org/3/tv/${item.titleId}?language=${locale}`, options)
@@ -82,14 +80,14 @@ const Page = () => {
         setMovies(movieData);
         setSeries(seriesData);
       } catch (error) {
-        console.error('Error fetching watchlist titles data:', error);
+        console.error('Error fetching completed titles data:', error);
       } finally {
         setLoading(false);
       }
     };
 
     fetchTitles();
-  }, [watchlist]);
+  }, [completed]);
 
   const t = useTranslations('MoviesShows');
   const pTranslation = useTranslations('Lists');
@@ -105,13 +103,13 @@ const Page = () => {
   const containerClasses = 'relative flex flex-row justify-center flex-wrap gap-4 w-full borders rounded-lg p-4 pt-12';
   return (
     <main className='container'>
-      <title>{hTranslation('watchlist')}</title>
+      <title>{hTranslation('watched')}</title>
       <SignedOut>
         <RedirectToSignIn />
       </SignedOut>
 
       <SignedIn>
-        <h1 className='text-3xl my-6 text-center'>{pTranslation('watchlist')}</h1>
+        <h1 className='text-3xl my-6 text-center'>{pTranslation('watched')}</h1>
 
         <section className='flex flex-col gap-16'>
           {movies.length === 0 ? (
@@ -125,7 +123,7 @@ const Page = () => {
               {movies.map(item => (
                 <div className="relative movie-card group max-w-8 mb-100" key={item.id}>
                   <div className="aspect-w-2 aspect-h-3">
-                    <WatchlistButton
+                    <CompletedButton
                       titleId={item.id.toString()}
                       titleType="movie"
                       style="badge"
@@ -172,7 +170,7 @@ const Page = () => {
               {series.map(item => (
                 <div className="relative movie-card group max-w-8 mb-100" key={item.id}>
                   <div className="aspect-w-2 aspect-h-3">
-                    <WatchlistButton
+                    <CompletedButton
                       titleId={item.id.toString()}
                       titleType="tv"
                       style="badge"

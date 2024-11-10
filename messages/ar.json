@@ -7,7 +7,9 @@
     "support": "الدعم",
     "subscriptions": "الاشتراكات",
     "signin": "تسجيل دخول",
-    "search": "بحث"
+    "search": "بحث",
+    "watched": "مُشاهد",
+    "watchlist": "قائمة المشاهدة"
   },
   "ThemeToggle": {
     "title": "تبديل المظهر",
@@ -136,17 +138,24 @@
     "recommended": "موصى به"
   },
   "MoviesShows": {
+    "movies": "الأفلام",
+    "shows": "المسلسلات",
     "popular": "الأفلام الشائعة",
     "top10": "أفضل 10 أفلام",
     "trending": "الأفلام الرائجة",
     "action": "أفلام الأكشن",
     "featuredMovie": "فيلم مميز",
-    "watchFilm": "شاهد الفيلم",
+    "watchMovie": "شاهد الفيلم",
+    "watchSeries": "شاهد المسلسل",
     "noRuntime": "لا توجد مدة",
     "noDescription": "لا توجد وصف",
     "allMovies": "كل الأفلام",
     "top10Movies": "أفضل 10 أفلام",
     "trendingMovies": "الأفلام الرائجة",
     "actionMovies": "أفلام الأكشن"
+  },
+  "Lists": {
+    "watchlist": "قائمة المشاهدة خاصتك",
+    "watched": "العناوين التي شاهدتها"
   }
 }
