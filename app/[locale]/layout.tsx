@@ -17,6 +17,9 @@ import Footer from '@/components/Footer';
 export const metadata: Metadata = {
   title: "Flix App",
   description: "Flix is a subscription-based streaming service that allows our members to watch TV shows and movies on an internet-connected device",
+  icons: {
+    icon: "/icon.svg",
+  }
 };
 
 export default async function RootLayout({

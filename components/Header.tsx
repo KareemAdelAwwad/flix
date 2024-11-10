@@ -64,7 +64,10 @@ const Header = () => {
     <header className='flex items-center justify-between container py-4 text-black' >
 
       {/* title */}
-      <Link className=' cursor-pointer text-3xl font-semibold  ' href='/'>{t('title')}  </Link>
+      <Link className='cursor-pointer text-3xl font-semibold flex items-center gap-2 md:gap-4' href='/'>
+      <img src="/icon.svg" alt="Logo" className='w-[40px] md:w-fit pointer-events-none' />
+      {t('title')}
+      </Link>
 
 
       {/* buttons and section */}
