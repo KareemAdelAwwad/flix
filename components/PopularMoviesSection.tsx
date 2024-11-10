@@ -4,6 +4,8 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import HorizontalCarousel from '@/components/carousel';
 import { Button } from './ui/button';
+import WatchlistButton from './ui/AddToWatchlistButton';
+import { FaStar } from 'react-icons/fa6';
 
 interface Movie {
   id: number;
@@ -82,6 +84,12 @@ const MoviesShows = () => {
           ItemComponent={({ item }: { item: Movie }) => {
             return (
               <div className="relative movie-card group mb-100">
+                <WatchlistButton
+                  titleId={item.id.toString()}
+                  titleType="movie"
+                  style="badge"
+                  className="text-white opacity-0 group-hover:opacity-100 transition-all duration-300"
+                />
                 <div className="aspect-w-2 aspect-h-3">
                   {loading ? (
                     <div className="bg-gray-300 animate-pulse h-full w-full rounded-lg" />
@@ -97,9 +105,15 @@ const MoviesShows = () => {
                 </div>
                 <div className="movie-card-overlay text-center">
                   <h3 className='movie-title dark:text-white text-black mx-2'>{item.title}</h3>
-                  <span className="movie-runtime hidden group-hover:block">
-                    {item.runtime ? formatRuntime(item.runtime) : t('noRuntime')}
-                  </span>
+                  <div className="flex justify-between items-center absolute bottom-2.5 w-full px-4">
+                    <span className="text-white bg-black-60 rounded-md px-2 py-1 bg-black-6 flex items-center justify-center gap-1">
+                      {item.runtime ? formatRuntime(item.runtime) : t('noRuntime')}
+                    </span>
+                    <span className="text-white bg-black-60 rounded-md px-2 py-1 bg-black-6 flex items-center justify-center gap-1">
+                      <FaStar className="inline-block text-yellow-50" />
+                      {((item.vote_average ?? 0) / 2).toFixed(1)}
+                    </span>
+                  </div>
                   <Link href={movieURLFormat(item)}>
                     <Button className="mt-4 bg-red-50 text-white hover:bg-red-60">
                       {t('watchMovie')}
@@ -128,10 +142,10 @@ const MoviesShows = () => {
   const featuredMovie = popularMovies[0];
 
   return (
-      <section className="my-10">
-        {/* Only show popular movies section */}
-        {renderMoviesSection('popular', popularMovies)}
-      </section>
+    <section className="my-10">
+      {/* Only show popular movies section */}
+      {renderMoviesSection('popular', popularMovies)}
+    </section>
   );
 };
 

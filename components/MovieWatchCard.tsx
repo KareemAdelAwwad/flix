@@ -2,7 +2,7 @@ import Image from 'next/image'
 import { Link } from '@/i18n/routing'
 import { Button } from '@/components/ui/button'
 import { FaStar } from 'react-icons/fa'
-import WatchlistButton from '@/components/AddToWatchlistButton'
+import WatchlistButton from '@/components/ui/AddToWatchlistButton'
 import { Movie } from '@/types/title'
 import { getTranslations } from 'next-intl/server'
 
