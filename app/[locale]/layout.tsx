@@ -15,11 +15,48 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
 export const metadata: Metadata = {
-  title: "Flix App",
-  description: "Flix is a subscription-based streaming service that allows our members to watch TV shows and movies on an internet-connected device",
   icons: {
     icon: "/icon.svg",
-  }
+  },
+  title: "Flix App",
+  description: "Flix is a subscription-based streaming service that allows our members to watch TV shows and movies on an internet-connected device",
+  referrer: 'origin-when-cross-origin',
+  keywords: [
+    "Flix", "Netflix", "streaming", "movies", "TV shows", "entertainment", "watch", "stream", "subscription", "streaming service",
+    "فليكس", "نتفليكس", "بث", "أفلام", "مسلسلات", "ترفيه", "مشاهدة", "بث", "اشتراك", "خدمة بث", "خدمة بث مباشر", "موقع أفلام", "موقع مسلسلات", "موقع ترفيه"
+  ],
+  authors: [
+    { name: 'Kareem Adel', url: 'https://www.kareem-adel.com' },
+    { name: 'Ibrahim Wael', url: 'https://github.com/ibrahimwael951' }
+  ],
+  metadataBase: new URL("https://flix.kareemadel.com"),
+  alternates: {
+    canonical: 'https://flix.kareemadel.com/',
+  },
+  openGraph: {
+    title: "Flix",
+    description: "Flix is a subscription-based streaming service that allows our members to watch TV shows and movies on an internet-connected device",
+    url: "https://flix.kareemadel.com",
+    siteName: "Flix App",
+    images: [
+      {
+        url: "/meta_bg.png",
+        width: 1200,
+        height: 630,
+        alt: "Flix App - Subscription-based streaming service",
+        type: "image/png"
+      }
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  // robots: {
+  //   index: true,
+  //   follow: true,
+  //   "max-snippet": -1,
+  //   "max-image-preview": "large",
+  //   "max-video-preview": -1
+  // },
 };
 
 export default async function RootLayout({
