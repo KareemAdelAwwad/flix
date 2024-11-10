@@ -1,7 +1,11 @@
 'use client';
 import React from 'react'
-import Link from 'next/link'
+import links from '@/data/links.json';
 import { useTheme } from 'next-themes';
+import { Link } from '@/i18n/routing';
+import { usePathname } from 'next/navigation';
+import { useLocale } from 'next-intl';
+import { SignInButton, SignOutButton, SignedIn, SignedOut, UserButton, useUser } from '@clerk/nextjs';
 
 // img
 import { FaFacebook } from "react-icons/fa";
@@ -12,6 +16,11 @@ import { FaXTwitter } from "react-icons/fa6";
 import { useTranslations } from 'next-intl';
 
 const Footer = () => {
+
+  const locale = useLocale();
+  const currentPath = usePathname(); 
+   const navItemsClassName = '  text-gray-60';
+
 
   //for translate 
   const t = useTranslations('Footer');
@@ -26,45 +35,106 @@ const Footer = () => {
       <div className='flex flex-wrap items-start justify-between w-full gap-8 py-10'>
 
 
-        <div className='flex flex-col text-lg'>
-          <h2 className='dark:text-white text-black-6'>{t('Home')} </h2>
-          <Link href='/' className=' text-gray-60  '>{t('Categories')}  </Link>
-          <Link href='/' className=' text-gray-60  '> {t('Devices')} </Link>
-          <Link href='/' className=' text-gray-60  '> {t('Pricing')} </Link>
-          <Link href='/' className=' text-gray-60  '> {t('FAQ')}  </Link>
-        </div>
 
-        <div className='flex flex-col text-lg'>
-          <h2 className='dark:text-white text-black-6'> {t('Movies')} </h2>
-          <Link href='/' className=' text-gray-60  '>{t('Trending')}  </Link>
-          <Link href='/' className=' text-gray-60  '>{t('NewRelease')}  </Link>
-          <Link href='/' className=' text-gray-60  '>{t('Popular')}  </Link>
-        </div>
-
-
-
-        <div className='flex flex-col text-lg'>
-          <h2 className='dark:text-white text-black-6'> {t('Shows')} </h2>
-          <Link href='/' className=' text-gray-60  '> {t('Trending')} </Link>
-          <Link href='/' className=' text-gray-60  '>{t('NewRelease')}   </Link>
-          <Link href='/' className=' text-gray-60  '>{t('Popular')}  </Link>
-        </div>
-
-
-        <div className='flex flex-col text-lg'>
-          <h2 className='dark:text-white text-black-6'> {t('Support')} </h2>
-          <Link href='/' className=' text-gray-60  '>{t('ContactUs')}</Link>
-
-        </div>
+{/* home  */}
+<div className='flex flex-col text-lg'>
+  <h2 className='dark:text-white text-black-6'>{t('Home')} </h2>
+          {links.footer.find(section => section.key === "Home").links.map((link, index) => (
+      <Link
+        key={index}
+        href={link.path}
+        className={`${navItemsClassName} ${
+          (currentPath === `/${locale}${link.path === '/' ? "" : link.path}` || 
+          currentPath.includes(link.path !== '/' ? link.path : 'no')) && 
+          "!bg-red-45 text-white"
+        }`}
+      >
+        {t(link.key)}
+      </Link>
+    ))}
+</div>
 
 
 
 
-        <div className='flex flex-col text-lg'>
-          <h2 className='dark:text-white text-black-6'>{t('Subscription')} </h2>
-          <Link href='/' className=' text-gray-60  '>  {t('Plans')} </Link>
-          <Link href='/' className=' text-gray-60  '> {t('Features')} </Link>
-        </div>
+       {/* Movies */}
+<div className='flex flex-col text-lg'>
+  <h2 className='dark:text-white text-black-6'>{t('Movies')} </h2>
+          {links.footer.find(section => section.key === "Movies").links.map((link, index) => (
+      <Link
+        key={index}
+        href={link.path}
+        className={`${navItemsClassName} ${
+          (currentPath === `/${locale}${link.path === '/' ? "" : link.path}` || 
+          currentPath.includes(link.path !== '/' ? link.path : 'no')) && 
+          "!bg-red-45 text-white"
+        }`}
+      >
+        {t(link.key)}
+      </Link>
+    ))}
+</div>
+
+               {/* Shows */}
+<div className='flex flex-col text-lg'>
+  <h2 className='dark:text-white text-black-6'>{t('Shows')} </h2>
+          {links.footer.find(section => section.key === "Shows").links.map((link, index) => (
+      <Link
+        key={index}
+        href={link.path}
+        className={`${navItemsClassName} ${
+          (currentPath === `/${locale}${link.path === '/' ? "" : link.path}` || 
+          currentPath.includes(link.path !== '/' ? link.path : 'no')) && 
+          "!bg-red-45 text-white"
+        }`}
+      >
+        {t(link.key)}
+      </Link>
+    ))}
+</div>
+
+        
+
+
+
+
+       {/* support */}
+       <div className='flex flex-col text-lg'>
+  <h2 className='dark:text-white text-black-6'>{t('Support')} </h2>
+          {links.footer.find(section => section.key === "Support").links.map((link, index) => (
+      <Link
+        key={index}
+        href={link.path}
+        className={`${navItemsClassName} ${
+          (currentPath === `/${locale}${link.path === '/' ? "" : link.path}` || 
+          currentPath.includes(link.path !== '/' ? link.path : 'no')) && 
+          "!bg-red-45 text-white"
+        }`}
+      >
+        {t(link.key)}
+      </Link>
+    ))}
+</div>
+
+        
+
+    {/* Subscription */}
+    <div className='flex flex-col text-lg'>
+  <h2 className='dark:text-white text-black-6'>{t('Subscription')} </h2>
+          {links.footer.find(section => section.key === "Subscription").links.map((link, index) => (
+      <Link
+        key={index}
+        href={link.path}
+        className={`${navItemsClassName} ${
+          (currentPath === `/${locale}${link.path === '/' ? "" : link.path}` || 
+          currentPath.includes(link.path !== '/' ? link.path : 'no')) && 
+          "!bg-red-45 text-white"
+        }`}
+      >
+        {t(link.key)}
+      </Link>
+    ))}
+</div>
 
 
         <div className='flex flex-col text-lg'>
