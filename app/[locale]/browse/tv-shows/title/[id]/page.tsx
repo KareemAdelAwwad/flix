@@ -58,9 +58,10 @@ import {
 } from "@/components/ui/accordion";
 import Recommendations from '@/components/TitlePage/Recommendations';
 import AudioPlayer from '@/components/TitlePage/AudioPlayer';
-import WatchlistButton from '@/components/AddToWatchlistButton';
+import WatchlistButton from '@/components/ui/AddToWatchlistButton';
 import Trailer from '@/components/TitlePage/Trailer';
 import WatchingServer from '@/components/TitlePage/WatchingServer';
+import CompletedButton from '@/components/ui/AddToCompletedButton';
 
 // Font configuration
 const manropes = Manrope({
@@ -342,7 +343,7 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
               {
                 locale === 'en' && <AudioPlayer songName={`${series.name} - opening`} tooltipTitle={t('themeSong')} />
               }
-              <ReadyTooltip children={<Button size='lgIcon'><GoCheckCircle /></Button>} title={t('watched')} />
+              {series.id && <CompletedButton titleId={series.id.toString()} titleType='tv' style='icon' />}
             </div>
           </div>
         </div>
@@ -386,8 +387,8 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
 
                             <Suspense fallback={<div className='w-[175px] h-[115px] rounded-md bg-black-20 animate-pulse'>{t('loading')}</div>}>
                               <div
-                              onClick={() => setShowPlayer(true)}
-                              className='w-[175px] h-[100px] relative rounded-md overflow-hidden borders group cursor-pointer'>
+                                onClick={() => setShowPlayer(true)}
+                                className='w-[175px] h-[100px] relative rounded-md overflow-hidden borders group cursor-pointer'>
 
                                 <IoPlayCircleOutline size={30}
                                   className='w-14 h-14 p-2 dark:bg-black-6 bg-gray-90 bg-opacity-60 rounded-full text-white group-hover:animate-pulse transition-all duration-300

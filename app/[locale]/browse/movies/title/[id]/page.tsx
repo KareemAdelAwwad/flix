@@ -30,11 +30,12 @@ import RatingStars from '@/components/ui/RatingStars';
 import Recommendations from '@/components/TitlePage/Recommendations';
 import AudioPlayer from '@/components/TitlePage/AudioPlayer';
 import VideoPlayer from '@/components/TitlePage/VideoPlayer';
-import WatchlistButton from '@/components/AddToWatchlistButton';
+import WatchlistButton from '@/components/ui/AddToWatchlistButton';
 import Trailer from '@/components/TitlePage/Trailer';
 import { Movie, MovieCastMember as Cast, Review } from '@/types/title';
 import YoutubeVideo from '@/types/youtube';
 import WatchingServer from '@/components/TitlePage/WatchingServer';
+import CompletedButton from '@/components/ui/AddToCompletedButton';
 
 interface MovieImages {
   "id": number,
@@ -239,7 +240,7 @@ export default function page({ params }: { params: { id: number } }) {
               {
                 locale === 'en' && <AudioPlayer songName={`${movie.title} - Movie - Song`} tooltipTitle={t('themeSong')} />
               }
-              <ReadyTooltip children={<Button size='lgIcon'><GoCheckCircle /></Button>} title={t('watched')} />
+              {movie.id && <CompletedButton titleId={movie.id.toString()} titleType='movie' style='icon' />}
             </div>
           </div>
         </div>
