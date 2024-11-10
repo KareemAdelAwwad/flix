@@ -98,12 +98,12 @@ const Header = () => {
             <UserButton>
               <UserButton.MenuItems>
                 <UserButton.Link
-                  label="Watched"
+                  label={t('watched')}
                   labelIcon={<GoCheckCircleFill size={18} />}
                   href={`${locale}/watched`}
                 />
                 <UserButton.Link
-                  label="Watchlist"
+                  label={t('watchlist')}
                   labelIcon={<IoBookmark size={18} />}
                   href={`${locale}/watchlist`}
                 />
@@ -139,12 +139,12 @@ const Header = () => {
               <UserButton>
                 <UserButton.MenuItems>
                   <UserButton.Link
-                    label="Watched"
+                    label={t('watched')}
                     labelIcon={<GoCheckCircleFill size={18} />}
                     href={`${locale}/watched`}
                   />
                   <UserButton.Link
-                    label="Watchlist"
+                    label={t('watchlist')}
                     labelIcon={<IoBookmark size={18} />}
                     href={`${locale}/watchlist`}
                   />
