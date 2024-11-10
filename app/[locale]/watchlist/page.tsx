@@ -92,6 +92,8 @@ const Page = () => {
   }, [watchlist]);
 
   const t = useTranslations('MoviesShows');
+  const pTranslation = useTranslations('Lists');
+  const hTranslation = useTranslations('Header');
 
   const formatRuntime = (runtime: number | null) => {
     if (runtime === null || isNaN(runtime)) return t('noRuntime'); // تحقق من NaN أيضًا
@@ -103,21 +105,21 @@ const Page = () => {
   const containerClasses = 'relative flex flex-row justify-center flex-wrap gap-4 w-full borders rounded-lg p-4 pt-12';
   return (
     <main className='container'>
-      <title>Watchlist</title>
+      <title>{hTranslation('watchlist')}</title>
       <SignedOut>
         <RedirectToSignIn />
       </SignedOut>
 
       <SignedIn>
-        <h1 className='text-3xl my-6 text-center'>Your Watchlist</h1>
+        <h1 className='text-3xl my-6 text-center'>{pTranslation('watchlist')}</h1>
 
         <section className='flex flex-col gap-16'>
           {movies.length === 0 ? (
             <div className='bg-black-20 animate-pulse h-96 w-full' />
           ) : (
             <div className={containerClasses}>
-              <span className='text-lg font-semibold px-6 py-2 bg-red-45 rounded-lg
-            absolute top-0 left-0 translate-x-[50%] translate-y-[-50%]'>
+              <span className={`text-lg font-semibold px-6 py-2 bg-red-45 rounded-lg
+            absolute top-0 translate-y-[-50%] ${locale === 'ar' ? 'right-0 -translate-x-[50%]' : 'left-0 translate-x-[50%]'}`}>
                 {t('movies')}
               </span>
               {movies.map(item => (
@@ -163,8 +165,8 @@ const Page = () => {
             <div className='bg-black-20 animate-pulse h-96 w-full' />
           ) : (
             <div className={containerClasses}>
-              <span className='text-lg font-semibold px-6 py-2 bg-red-45 rounded-lg
-            absolute top-0 left-0 translate-x-[50%] translate-y-[-50%]'>
+<span className={`text-lg font-semibold px-6 py-2 bg-red-45 rounded-lg
+            absolute top-0 translate-y-[-50%] ${locale === 'ar' ? 'right-0 -translate-x-[50%]' : 'left-0 translate-x-[50%]'}`}>
                 {t('shows')}
               </span>
               {series.map(item => (
