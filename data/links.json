@@ -31,115 +31,92 @@
       "icon": "BsFillCreditCard2FrontFill"
     }
   ],
-  
-    "footer": [
-      {
-        "key": "Home",
-        "links": [
-          {
-            "key": "Categories",
-            "name": "Categories",
-            "path": "/Categories",
-            "icon": "MdCategories"
-          },
-          {
-            "key": "Devices",
-            "name": "Devices",
-            "path": "/Devices",
-            "icon": "MdDevices"
-          },
-          {
-            "key": "Pricing",
-            "name": "Pricing",
-            "path": "/Pricing",
-            "icon": "MdPricing"
-          },
-          {
-            "key": "FAQ",
-            "name": "FAQ",
-            "path": "/FAQ",
-            "icon": "MdFAQ"
-          }
-        ]
-      },
-      {
-        "key": "Movies",
-        "links": [
-          {
-            "key": "Trending",
-            "name": "Trending",
-            "path": "/movies/Trending",
-            "icon": "MdTrending"
-          },
-          {
-            "key": "NewRelease",
-            "name": "New Release",
-            "path": "/movies/NewRelease",
-            "icon": "MdNewRelease"
-          },
-          {
-            "key": "Popular",
-            "name": "Popular",
-            "path": "/movies/Popular",
-            "icon": "MdPopular"
-          }
-        ]
-      },
-      {
-        "key": "Shows",
-        "links": [
-          {
-            "key": "Trending",
-            "name": "Trending",
-            "path": "/shows/Trending",
-            "icon": "MdTrending"
-          },
-          {
-            "key": "NewRelease",
-            "name": "New Release",
-            "path": "/shows/NewRelease",
-            "icon": "MdNewRelease"
-          },
-          {
-            "key": "Popular",
-            "name": "Popular",
-            "path": "/shows/Popular",
-            "icon": "MdPopular"
-          }
-        ]
-      },
-      {
-        "key": "Support",
-        "links": [
-          {
-            "key": "Support",
-            "name": "Support",
-            "path": "/support",
-            "icon": "MdSupport"
-          }
-        ]
-      },
-      {
-        "key": "Subscription",
-        "links": [
-          {
-            "key": "Plans",
-            "name": "Plans",
-            "path": "/Plans",
-            "icon": "MdPlans"
-          },
-          {
-            "key": "Features",
-            "name": "Features",
-            "path": "/Features",
-            "icon": "MdFeatures"
-          }
-        ]
-      }
-    ]
-  }
-  
 
-  
-  
-  
+  "footer": [
+    {
+      "key": "Home",
+      "links": [
+        {
+          "key": "Categories",
+          "name": "Categories",
+          "path": "/#Categories"
+        },
+        {
+          "key": "Devices",
+          "name": "Devices",
+          "path": "/#Devices"
+        },
+        {
+          "key": "Pricing",
+          "name": "Pricing",
+          "path": "/#Plans"
+        }
+      ]
+    },
+    {
+      "key": "Movies",
+      "links": [
+        {
+          "key": "Trending",
+          "name": "Trending",
+          "path": "/browse/movies/#trending"
+        },
+        {
+          "key": "NewRelease",
+          "name": "New Release",
+          "path": "/browse/movies/#top10"
+        },
+        {
+          "key": "Popular",
+          "name": "Popular",
+          "path": "/browse/movies/#Popular"
+        }
+      ]
+    },
+    {
+      "key": "Shows",
+      "links": [
+        {
+          "key": "Trending",
+          "name": "Trending",
+          "path": "/browse/tv-shows/#Trending"
+        },
+        {
+          "key": "NewRelease",
+          "name": "New Release",
+          "path": "/browse/tv-shows/#NewRelease"
+        },
+        {
+          "key": "Popular",
+          "name": "Popular",
+          "path": "/browse/tv-shows/#Popular"
+        }
+      ]
+    },
+    {
+      "key": "Support",
+      "links": [
+        {
+          "key": "Support",
+          "name": "Support",
+          "path": "/support"
+        },
+        {
+          "key": "FAQ",
+          "name": "FAQ",
+          "path": "/support/#Questions"
+        }
+      ]
+    },
+    {
+      "key": "Subscription",
+      "links": [
+        {
+          "key": "Plans",
+          "name": "Plans",
+          "path": "/#Plans"
+        }
+      ]
+    }
+  ]
+}
