@@ -83,7 +83,7 @@ const MoviesShows = () => {
       <section id={title} className='my-20 pt-0'>
         <h2 className="text-3xl font-bold  mb-12 ">
           {t(title)}
-         
+
         </h2>
         <HorizontalCarousel
           data={movies}

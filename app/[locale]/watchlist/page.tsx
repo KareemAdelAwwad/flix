@@ -105,7 +105,7 @@ const Page = () => {
 
   const containerClasses = 'relative flex flex-row justify-center flex-wrap gap-4 w-full borders rounded-lg p-4 pt-12';
   return (
-    <main className='container'>
+    <main className={`container ${loading && 'h-svh'}`}>
       <title>{hTranslation('watchlist')}</title>
       <SignedOut>
         <RedirectToSignIn />
@@ -115,15 +115,15 @@ const Page = () => {
         <h1 className='text-4xl font-bold my-6 text-center'>{pTranslation('watchlist')}</h1>
 
         <section className='flex flex-col gap-16'>
-          {movies.length === 0 ? (
-            <div className='bg-black-20 animate-pulse h-96 w-full' />
-          ) : (
-            <div className={containerClasses}>
-              <span className={`text-lg font-semibold px-6 py-2 bg-red-45 rounded-lg text-white
+          <div className={containerClasses}>
+            <span className={`text-lg font-semibold px-6 py-2 bg-red-45 rounded-lg text-white
             absolute top-0 translate-y-[-50%] ${locale === 'ar' ? 'right-0 -translate-x-[50%]' : 'left-0 translate-x-[50%]'}`}>
-                {t('movies')}
-              </span>
-              {movies.map(item => (
+              {t('movies')}
+            </span>
+            {movies.length === 0 ? (
+              <div className='bg-black-20 animate-pulse h-96 w-full rounded-lg' />
+            ) : (
+              movies.map(item => (
                 <div className="relative movie-card group max-w-8 mb-100" key={item.id}>
                   <div className="aspect-w-2 aspect-h-3">
                     <WatchlistButton
@@ -158,19 +158,19 @@ const Page = () => {
                     </div>
                   </div>
                 </div>
-              ))}
-            </div>
-          )}
+              ))
+            )}
+          </div>
 
-          {series.length === 0 ? (
-            <div className='bg-black-20 animate-pulse h-96 w-full' />
-          ) : (
-            <div className={containerClasses}>
-<span className={`text-lg font-semibold px-6 py-2 bg-red-45 rounded-lg text-white
+          <div className={containerClasses}>
+            <span className={`text-lg font-semibold px-6 py-2 bg-red-45 rounded-lg text-white
             absolute top-0 translate-y-[-50%] ${locale === 'ar' ? 'right-0 -translate-x-[50%]' : 'left-0 translate-x-[50%]'}`}>
-                {t('shows')}
-              </span>
-              {series.map(item => (
+              {t('shows')}
+            </span>
+            {series.length === 0 ? (
+              <div className='bg-black-20 animate-pulse h-96 w-full rounded-lg' />
+            ) : (
+              series.map(item => (
                 <div className="relative movie-card group max-w-8 mb-100" key={item.id}>
                   <div className="aspect-w-2 aspect-h-3">
                     <WatchlistButton
@@ -208,9 +208,9 @@ const Page = () => {
                     </div>
                   </div>
                 </div>
-              ))}
-            </div>
-          )}
+              ))
+            )}
+          </div>
         </section>
       </SignedIn>
     </main>

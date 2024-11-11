@@ -72,7 +72,7 @@ const WatchingServer = ({ string, status, titleType, titleID, seanonNumber, epis
             ref={iframeRef}
             className='rounded-xl'
             src={titleType === 'tv' ? `https://vidsrc.to/embed/tv/${titleID}`
-              : `https://vidsrc.to/embed/movie/${titleID}`}
+              : `https://vidsrc.icu/embed/movie/${titleID}`}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             width={800}
             height={450}

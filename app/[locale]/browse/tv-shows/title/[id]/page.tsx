@@ -309,7 +309,7 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
           className="fixed top-0 left-0 right-0 bottom-0 z-[101] flex items-center justify-center
       bg-black-6 bg-opacity-70 w-full h-full">
           <div className="rounded-lg w-[900px] ">
-            <VideoPlayer url='https://b.top4top.io/m_3235cyxtw1.mp4' />
+            <VideoPlayer />
           </div>
         </div>
       }
@@ -369,10 +369,10 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
               {
                 series.seasons && series.seasons.sort((a, b) => a.season_number - b.season_number).map(season => (
                   <AccordionItem value={`item-${season.season_number}`}
-                    className={`dark:bg-black-6 bg-gray-90 px-[50px] py-2.5 rounded-lg borders ${season.season_number !== 0 && "mt-5"}`}>
+                    className={`dark:bg-black-6 bg-gray-90 md:px-[50px] px-6 py-2.5 rounded-lg borders ${season.season_number !== 0 && "mt-5"}`}>
                     <AccordionTrigger onClick={() => LoadSeasonData(season.season_number)}>
-                      <h4 className='text-xl font-semibold'>{`${t('season')} ${season.season_number.toString().padStart(2, '0')}`}</h4>
-                      <p className='text-lg font-medium text-gray-60'>
+                      <h4 className='sm:text-xl text-base font-semibold'>{`${t('season')} ${season.season_number.toString().padStart(2, '0')}`}</h4>
+                      <p className='sm:text-lg text-sm font-medium text-gray-60'>
                         {`${season.episode_count} ${season.episode_count === 1 ? t('episode') : t('episodes')}`}
                       </p>
                     </AccordionTrigger>
@@ -383,7 +383,7 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
                       ) : (
                         cachedSeasonData[season.season_number]?.episodes?.map(episode => (
                           <div key={episode.episode_number}
-                            className='dark:bg-black-6 bg-gray-90 flex gap-5 justify-center items-center py-10 border-t-[1px] px-6'>
+                            className='dark:bg-black-6 bg-gray-90 flex md:flex-row flex-col gap-5 justify-center items-center py-10 border-t-[1px] px-6'>
                             <span className='text-[30px] font-semibold text-gray-60'>
                               {episode.episode_number.toString().padStart(2, '0')}
                             </span>
@@ -396,21 +396,21 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
                                 <IoPlayCircleOutline size={30}
                                   className='w-14 h-14 p-2 dark:bg-black-6 bg-gray-90 bg-opacity-60 rounded-full text-white group-hover:animate-pulse transition-all duration-300
                                 absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]' />
-                                <Image src={episode.still_path ? `https://image.tmdb.org/t/p/original${episode.still_path}` 
-                                : `https://placehold.co/300x200.png?text=${episode.name}`}
+                                <Image src={episode.still_path ? `https://image.tmdb.org/t/p/original${episode.still_path}`
+                                  : `https://placehold.co/300x200.png?text=${episode.name}`}
                                   height={300} width={200} alt={episode.name} className='w-full h-full object-cover pointer-events-none' />
                               </div>
                             </Suspense>
 
                             <div className='w-5/6'>
-                              <div className='flex justify-between items-center w-full'>
+                              <div className='flex md:flex-row flex-col justify-between items-center w-full'>
                                 <h3 className='text-xl font-semibold'>{episode.name}</h3>
                                 <span className='py-2 px-2.5 dark:bg-black-8 bg-gray-50 borders text-[16px] font-medium flex gap-2 rounded text-nowrap'>
                                   <LuClock4 size={20} />
                                   {formatRuntime(episode.runtime)}
                                 </span>
                               </div>
-                              <p className='text-gray-60 pr-10'>{episode.overview}</p>
+                              <p className='text-gray-60 md:pr-10'>{episode.overview}</p>
                             </div>
                           </div>
                         ))
@@ -489,10 +489,10 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
             {
               images.logos && images.logos[0] &&
               <div className='flex justify-center items-center'>
-              <Image loading='lazy' 
-              src={`https://image.tmdb.org/t/p/original${images.logos[0].file_path}`}
-              alt="Series Logo" width={240} height={160} />
-            </div>
+                <Image loading='lazy'
+                  src={`https://image.tmdb.org/t/p/original${images.logos[0].file_path}`}
+                  alt="Series Logo" width={240} height={160} />
+              </div>
             }
             <Info title={t('first_air_date')}
               content={<p className='dark:text-white text-[16px] font-semibold'>{series.first_air_date}</p>}

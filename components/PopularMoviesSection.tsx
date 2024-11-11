@@ -99,6 +99,7 @@ const MoviesShows = () => {
                       alt={item.title}
                       width={200}
                       height={300}
+                      loading='eager'
                       className="w-full h-[300px] object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                   )}
