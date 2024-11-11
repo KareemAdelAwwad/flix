@@ -1,9 +1,9 @@
 
 'use client'
+import { generateMetadata } from '@/lib/metadata';
 import React from 'react'
 import { useLocale, useTranslations } from 'next-intl';
 import { useState, useEffect } from 'react';
-import NextIntlClientProvider from 'next-intl';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import OpenTitleInfoCard from '@/components/OpenTitleInfoCard';
@@ -11,10 +11,6 @@ import ReadyTooltip from '@/components/ui/ready-tooltip';
 
 // Import Icons
 import { FaPlay, FaPlus } from "react-icons/fa6";
-import { SlVolume2 } from "react-icons/sl";
-import { AiOutlineLike } from "react-icons/ai";
-import { IoBookmarkOutline, IoShareSocialOutline } from "react-icons/io5";
-import { GoCheckCircle, GoCheckCircleFill } from "react-icons/go";
 import { CiCalendar } from "react-icons/ci";
 import { CiStar } from "react-icons/ci";
 import { PiTranslate, PiFilmReel, PiFilmSlateDuotone } from "react-icons/pi";
@@ -36,6 +32,7 @@ import { Movie, MovieCastMember as Cast, Review } from '@/types/title';
 import YoutubeVideo from '@/types/youtube';
 import WatchingServer from '@/components/TitlePage/WatchingServer';
 import CompletedButton from '@/components/ui/AddToCompletedButton';
+import { Metadata } from 'next';
 
 interface MovieImages {
   "id": number,
@@ -61,6 +58,8 @@ interface MovieImages {
     "width": number
   }[]
 }
+
+
 
 export default function page({ params }: { params: { id: number } }) {
   const [movie, setMovie] = useState({} as Movie);
@@ -198,6 +197,8 @@ export default function page({ params }: { params: { id: number } }) {
     }
   };
 
+  const metadata: Metadata = generateMetadata(movie, locale);
+
   return (
     <main className='flex flex-col justify-center items-center gap-20 container'>
       <title>{movie.title}</title>
@@ -207,7 +208,7 @@ export default function page({ params }: { params: { id: number } }) {
         <div
           id='player-container'
           onClick={handleContainerClick}
-          className="fixed top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center
+          className="fixed top-0 left-0 right-0 bottom-0 z-[101] flex items-center justify-center
       bg-black-6 bg-opacity-70 w-full h-full">
           <div className="rounded-lg w-[900px] ">
             <VideoPlayer />
@@ -219,10 +220,10 @@ export default function page({ params }: { params: { id: number } }) {
       <section className='w-full h-[835px] mt-5 rounded-t-lg overflow-hidden felx justify-center items-center relative'>
         <div className='
         flex flex-col justify-end items-center text-white text-center pb-10
-        inset-0 bg-gradient-to-t from-black-8  to-transparent w-full h-full absolute z-10'>
+        inset-0 bg-gradient-to-t dark:from-black-8 from-white  to-transparent w-full h-full absolute z-10'>
           <div className='flex flex-col gap-2'>
-            <h1 className='text-4xl font-bold'>{movie.title}</h1>
-            <p className='text-lg text-gray-60'>{movie.tagline ? movie.tagline : movie.overview}</p>
+            <h1 className='text-4xl font-bold dark:text-white text-black-6'>{movie.title}</h1>
+            <p className='text-lg dark:text-gray-60 text-black-30'>{movie.tagline ? movie.tagline : movie.overview}</p>
           </div>
           {/* Movie controles */}
           <div className='flex justify-center items-center gap-2 w-full h-16 bg-transparent flex-wrap'>
@@ -259,7 +260,7 @@ export default function page({ params }: { params: { id: number } }) {
 
           {/* Movie Description */}
           <OpenTitleInfoCard title={t('description')}>
-            {movie.overview && <p className='text-white'>{movie.overview}</p>}
+            {movie.overview && <p className='dark:text-gray-60 text-black-30'>{movie.overview}</p>}
           </OpenTitleInfoCard>
 
 
@@ -316,7 +317,7 @@ export default function page({ params }: { params: { id: number } }) {
 
         {/* Rightside Info */}
         <div className='w-full lg:w-[34%]'>
-          <div className='dark:bg-black-10 bg-gray-90 rounded-lg p-12 font-semibold text-lg border-[1px] dark:border-black-15 border-gray-75 flex flex-col gap-8'>
+          <div className='dark:bg-black-10 bg-gray-95 rounded-lg p-12 font-semibold text-lg border-[1px] dark:border-black-15 border-gray-75 flex flex-col gap-8'>
             {
               images.logos && images.logos.length > 0
               &&
@@ -421,3 +422,4 @@ export default function page({ params }: { params: { id: number } }) {
     </main >
   )
 }
+

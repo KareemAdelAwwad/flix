@@ -62,6 +62,8 @@ import WatchlistButton from '@/components/ui/AddToWatchlistButton';
 import Trailer from '@/components/TitlePage/Trailer';
 import WatchingServer from '@/components/TitlePage/WatchingServer';
 import CompletedButton from '@/components/ui/AddToCompletedButton';
+import { generateMetadata } from '@/lib/metadata';
+import { Metadata } from 'next';
 
 // Font configuration
 const manropes = Manrope({
@@ -293,6 +295,7 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
     }
   };
 
+
   return (
     <main className={`flex flex-col justify-center items-center gap-20 container ${manropes.className}`}>
       {/* Meta */}
@@ -303,7 +306,7 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
         <div
           id='player-container'
           onClick={handleContainerClick}
-          className="fixed top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center
+          className="fixed top-0 left-0 right-0 bottom-0 z-[101] flex items-center justify-center
       bg-black-6 bg-opacity-70 w-full h-full">
           <div className="rounded-lg w-[900px] ">
             <VideoPlayer url='https://b.top4top.io/m_3235cyxtw1.mp4' />
@@ -326,7 +329,7 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
     inset-0 bg-gradient-to-t dark:from-black-8 from-white via-transparent to-transparent w-full h-full absolute z-10'>
           <div>
             <h1 className='text-4xl font-bold dark:text-white text-black-6'>{series.name}</h1>
-            <p className='text-lg dark:text-gray-60 text-black-12'>{series.tagline ? series.tagline : series.overview}</p>
+            <p className='text-lg dark:text-gray-60 text-black-30'>{series.tagline ? series.tagline : series.overview}</p>
           </div>
           {/* Series controles */}
           <div className='flex justify-center items-center gap-2 w-full h-16 bg-transparent flex-wrap'>
@@ -393,7 +396,8 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
                                 <IoPlayCircleOutline size={30}
                                   className='w-14 h-14 p-2 dark:bg-black-6 bg-gray-90 bg-opacity-60 rounded-full text-white group-hover:animate-pulse transition-all duration-300
                                 absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]' />
-                                <Image src={episode.still_path ? `https://image.tmdb.org/t/p/original${episode.still_path}` : `https://placehold.co/300x200.png?text=${episode.name}`}
+                                <Image src={episode.still_path ? `https://image.tmdb.org/t/p/original${episode.still_path}` 
+                                : `https://placehold.co/300x200.png?text=${episode.name}`}
                                   height={300} width={200} alt={episode.name} className='w-full h-full object-cover pointer-events-none' />
                               </div>
                             </Suspense>
@@ -482,9 +486,14 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
         {/* Rightside Info */}
         <div className='w-full lg:w-[34%]'>
           <div className='dark:bg-black-10 bg-gray-95 rounded-lg p-12 font-semibold text-lg borders flex flex-col gap-8'>
-            <div className='flex justify-center items-center'>
-              <Image loading='lazy' src={`https://image.tmdb.org/t/p/original${images.logos && images.logos[0].file_path}`} alt="Series Logo" width={240} height={160} />
+            {
+              images.logos && images.logos[0] &&
+              <div className='flex justify-center items-center'>
+              <Image loading='lazy' 
+              src={`https://image.tmdb.org/t/p/original${images.logos[0].file_path}`}
+              alt="Series Logo" width={240} height={160} />
             </div>
+            }
             <Info title={t('first_air_date')}
               content={<p className='dark:text-white text-[16px] font-semibold'>{series.first_air_date}</p>}
               icon={<CiCalendar size={24} />} />

@@ -38,7 +38,7 @@ function PlanCard({ style, name, price, resolution, devices, downloads, spatialA
     p-4 pb-10 ${mostPopular && "rounded-t-none"} dark:bg-black-10 rounded-2xl shadow-md flex flex-col justify-between gap-10`}>
       {
         mostPopular && (
-          <div className='bg-red-45 rounded-t-2xl absolute top-0 -translate-y-[100%] right-[50%] -translate-x-[-50%] w-[calc(100%+2.5px)] text-center text-base font-medium capitalize'>
+          <div className='bg-red-45 text-white rounded-t-2xl absolute top-0 -translate-y-[100%] right-[50%] -translate-x-[-50%] w-[calc(100%+2.5px)] text-center text-base font-medium capitalize'>
             {t('most_popular')}
           </div>
         )
@@ -91,9 +91,8 @@ function PlanCard({ style, name, price, resolution, devices, downloads, spatialA
 
 
 const Home = () => {
-  const { user } = useUser();
   useSubscriptionCheck();
-  const { isActive, isLoading, expirationDate, price } = useSubscriptionStore();
+  const { isActive } = useSubscriptionStore();
   const t = useTranslations('HomePage');
 
   //for device section 
@@ -164,7 +163,7 @@ const Home = () => {
 
         <div className='flex flex-col items-center justify-center'>
           <h1 className='text-2xl md:text-5xl font-bold'>{t('SECTION-ONE-H1')}</h1>
-          <p className='text-sm md:text-base text-gray-500 dark:text-gray-65 p-4 max-w-4xl text-center'>{t('DES-ONE')}</p>
+          <p className='text-sm md:text-base dark:text-gray-60 text-black-30 p-4 max-w-4xl text-center'>{t('DES-ONE')}</p>
           <Button className='bg-red-50 text-white hover:bg-red-50'>
             <FaPlay /> {t("SECTION-ONE-BTN")}
           </Button>
@@ -183,7 +182,7 @@ const Home = () => {
         <div className=' flex flex-col mt-20 gap-10'>
           <div className='flex flex-col'>
             <h1 className='text-2xl md:text-4xl font-bold'>{t('SECTION-TWO-H1')}</h1>
-            <p className='text-sm md:text-base text-gray-500 dark:text-gray-65 max-w-6xl'>{t('DES-TWO')}</p>
+            <p className='text-sm md:text-base dark:text-gray-60 text-black-30 max-w-6xl'>{t('DES-TWO')}</p>
           </div>
 
           {/* apps  */}
@@ -195,9 +194,9 @@ const Home = () => {
                   <div className='text-red-45 p-2 dark:bg-black-8 bg-gray-90 rounded-lg' style={{ fontSize: '30px' }}>
                     {device.icon}
                   </div>
-                  <h1 className='text-base'>{t(device.title)}</h1>
+                  <h1 className='text-base font-semibold'>{t(device.title)}</h1>
                 </div>
-                <p className='mt-2 text-sm text-gray-65'>{t(device.descriptionKey)}</p>
+                <p className='mt-2 text-sm dark:text-gray-60 text-black-30'>{t(device.descriptionKey)}</p>
               </div>
             ))}
           </div>
@@ -205,14 +204,16 @@ const Home = () => {
 
         {/* questions */}
         <div className="py-8  mt-10">
-          <div className='flex justify-between'>
+          <div className='flex justify-between items-center'>
             <div>
               <h2 className="text-3xl font-semibold mb-4"> {t("Q-H1")}</h2>
-              <p className="text-gray-60  mb-6">{t("Q-P")}</p>
+              <p className="dark:text-gray-60 text-black-30 mb-6">{t("Q-P")}</p>
             </div>
-            <Button className="mt-6 bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700">
-              {t("Q-BTN")}
-            </Button>
+            <Link href='/support'>
+              <Button className="bg-red-600 text-white hover:bg-red-700" size={'lg'}>
+                {t("Q-BTN")}
+              </Button>
+            </Link>
           </div>
           <div className=" flex flex-wrap w-full ">
             {faqs.map((faq, index) => (
@@ -234,7 +235,7 @@ const Home = () => {
                   </span>
                 </button>
                 {activeIndex === index && (
-                  <p className="text-gray-60 mt-2">{faq.answer}</p>
+                  <p className="dark:text-gray-60 text-black-30 mt-2">{faq.answer}</p>
                 )}
               </div>
             ))}

@@ -17,9 +17,8 @@ export const subscribeToCompleted = (
     const data = snapshot.docs.map(doc => ({
       titleId: doc.data().titleId,
       titleType: doc.data().titleType,
-      createdAt: doc.data().createdAt.toDate(), // Convert Firestore timestamp to Date
+      createdAt: doc.data().createdAt.toDate(),
     })).sort((a, b) => b.createdAt - a.createdAt); // Sort by createdAt date
-    console.log('subscribeToCompleted data:', data); // Add this line
     onUpdate(data);
   });
 };
@@ -31,8 +30,7 @@ export const fetchCompleted = async (userId: string): Promise<CompletedItem[]> =
   const data = snapshot.docs.map(doc => ({
     titleId: doc.data().titleId,
     titleType: doc.data().titleType,
-    createdAt: doc.data().createdAt.toDate(), // Convert Firestore timestamp to Date
+    createdAt: doc.data().createdAt.toDate(),
   })).sort((a, b) => b.createdAt - a.createdAt); // Sort by createdAt date
-  console.log('fetchCompleted data:', data); // Add this line
   return data;
 };

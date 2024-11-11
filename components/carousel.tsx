@@ -81,7 +81,7 @@ function HorizontalCarousel<T>({
   )
 
   const buttonClass = `${navStyle === "style3" ? "rounded-lg" : "rounded-full"} flex justify-center items-center group
-  border-[1px] border-black-15 bg-black-8 p-3 text-white hover:bg-black-10`
+  borders dark:bg-black-8 bg-white p-3 dark:hover:bg-black-10`
 
   // Touch event handlers with memoization
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
@@ -209,7 +209,8 @@ function HorizontalCarousel<T>({
       {/* Navigation buttons and page indicators */}
       <div className={`h-fit flex items-center gap-3 top-0
         ${navStyle === "style1" ? "-translate-y-[13rem]"
-          : navStyle === "style3" ? "absolute top-0 -translate-y-[calc(100%+40px)] bg-black-6 border-[1px] border-black-12 p-2 rounded-xl hidden lg:flex"
+          : navStyle === "style3" ? `absolute top-0 -translate-y-[calc(100%+40px)] 
+          dark:bg-black-6 bg-gray-95 borders p-2 rounded-xl hidden lg:flex`
             : navStyle === "style2" ? "translate-y-6 justify-center hidden lg:flex" : ""}
 
         ${locale === "ar" ? "flex-row-reverse justify-start left-0" : "flex-row justify-end right-0"}`}>
@@ -218,7 +219,7 @@ function HorizontalCarousel<T>({
           onClick={() => setCurrentPage((prev) => prev - 1)}
           className={`${buttonClass} ${currentPage === 0 ? 'opacity-50 cursor-not-allowed' : 'opacity-100'}`}
         >
-          <FaArrowLeft className='text-gray-60 group-hover:text-white' />
+          <FaArrowLeft className='dark:text-gray-60 text-black-25 dark:group-hover:text-white group-hover:text-black-6' />
         </button>
 
         {/* Page Indicators */}
@@ -229,7 +230,7 @@ function HorizontalCarousel<T>({
           onClick={() => setCurrentPage((prev) => prev + 1)}
           className={`${buttonClass} ${currentPage === totalPages - 1 ? 'opacity-50 cursor-not-allowed' : 'opacity-100'}`}
         >
-          <FaArrowRight className='text-gray-60 group-hover:text-white' />
+          <FaArrowRight className='dark:text-gray-60 text-black-25 dark:group-hover:text-white group-hover:text-black-6' />
         </button>
       </div>
     </div>

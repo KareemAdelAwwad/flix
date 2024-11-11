@@ -242,7 +242,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url = 'https://a.top4top.io/m
           py-1 px-4 rounded-lg bg-black-30 bg-opacity-50 backdrop-blur-md">
             <div className="flex items-center space-x-4">
               {/* Play/Pause */}
-              <button onClick={handlePlayPause} className='p-2 hover:bg-white/10 rounded'>
+              <button onClick={handlePlayPause} className='p-2 hover:bg-white/10 rounded text-white'>
                 {isPlaying ? <Pause size={18} /> : <Play size={18} />}
               </button>
 
@@ -250,7 +250,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url = 'https://a.top4top.io/m
               <div className="relative group flex">
                 <button
                   onClick={handleVolumeClick}
-                  className="p-2 hover:bg-white/10 rounded"
+                  className="p-2 hover:bg-white/10 rounded text-white"
                 >
                   {getVolumeIcon()}
                 </button>
@@ -310,7 +310,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url = 'https://a.top4top.io/m
               <div className="relative" ref={menuRef}>
                 <button
                   onClick={() => setShowSpeedMenu(!showSpeedMenu)}
-                  className="group p-2 hover:bg-white/10 rounded transform transition-transform duration-200"
+                  className="group p-2 hover:bg-white/10 rounded text-white transform transition-transform duration-200"
                 >
                   <Settings size={20}
                     className='group-hover:rotate-90 transform transition-transform duration-200'
@@ -339,7 +339,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url = 'https://a.top4top.io/m
               {/* PiP button */}
               <button
                 onClick={togglePictureInPicture}
-                className="p-2 hover:bg-white/10 rounded"
+                className="p-2 hover:bg-white/10 rounded text-white"
               >
                 <PictureInPicture2 size={20} />
               </button>
@@ -347,7 +347,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url = 'https://a.top4top.io/m
               {/* Fullscreen */}
               <button
                 onClick={toggleFullscreen}
-                className="p-2 hover:bg-white/10 rounded"
+                className="p-2 hover:bg-white/10 rounded text-white"
               >
                 {isFullScreen ? <Minimize size={20} /> : <Maximize size={20} />}
               </button>

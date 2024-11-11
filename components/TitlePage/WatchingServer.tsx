@@ -67,6 +67,7 @@ const WatchingServer = ({ string, status, titleType, titleID, seanonNumber, epis
         className={`fixed top-0 left-0 right-0 bottom-0 z-[20] bg-black-6 
         bg-opacity-75 backdrop-blur-md justify-center items-center ${showsEmbed ? 'flex' : 'hidden'}`}>
         {titleID ? (
+          showsEmbed &&
           <iframe
             ref={iframeRef}
             className='rounded-xl'
