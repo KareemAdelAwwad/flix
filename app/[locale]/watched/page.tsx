@@ -109,14 +109,14 @@ const Page = () => {
       </SignedOut>
 
       <SignedIn>
-        <h1 className='text-3xl my-6 text-center'>{pTranslation('watched')}</h1>
+        <h1 className='text-4xl font-bold my-6 text-center'>{pTranslation('watched')}</h1>
 
         <section className='flex flex-col gap-16'>
           {movies.length === 0 ? (
             <div className='bg-black-20 animate-pulse h-96 w-full' />
           ) : (
             <div className={containerClasses}>
-              <span className={`text-lg font-semibold px-6 py-2 bg-red-45 rounded-lg
+              <span className={`text-lg font-semibold px-6 py-2 bg-red-45 rounded-lg text-white
             absolute top-0 translate-y-[-50%] ${locale === 'ar' ? 'right-0 -translate-x-[50%]' : 'left-0 translate-x-[50%]'}`}>
                 {t('movies')}
               </span>
@@ -138,7 +138,7 @@ const Page = () => {
                     />
                   </div>
                   <div className="movie-card-overlay text-center">
-                    <h2 className="text-xl font-bold">{item.title}</h2>
+                    <h2 className="text-xl font-bold text-white">{item.title}</h2>
                     <Link href={`/browse/movies/title/${item.id}`}>
                       <Button className="mt-4 bg-red-50 text-white hover:bg-red-60">
                         {t('watchMovie')}
@@ -163,7 +163,7 @@ const Page = () => {
             <div className='bg-black-20 animate-pulse h-96 w-full' />
           ) : (
             <div className={containerClasses}>
-<span className={`text-lg font-semibold px-6 py-2 bg-red-45 rounded-lg
+<span className={`text-lg font-semibold px-6 py-2 bg-red-45 rounded-lg text-white
             absolute top-0 translate-y-[-50%] ${locale === 'ar' ? 'right-0 -translate-x-[50%]' : 'left-0 translate-x-[50%]'}`}>
                 {t('shows')}
               </span>
@@ -185,7 +185,7 @@ const Page = () => {
                     />
                   </div>
                   <div className="movie-card-overlay text-center">
-                    <h2 className="text-xl font-bold">{item.name}</h2>
+                    <h2 className="text-xl font-bold text-white">{item.name}</h2>
                     <Link href={`/browse/tv-shows/title/${item.id}`}>
                       <Button className="mt-4 bg-red-50 text-white hover:bg-red-60">
                         {t('watchSeries')}

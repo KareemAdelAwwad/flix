@@ -131,13 +131,13 @@ const Search = ({ isMobile }: { isMobile: boolean }) => {
       <Link href={`/browse/${titleType === 'movie' ? 'movies' : 'tv-shows'}/title/${id}`}
         onClick={() => clickHandler()} className='w-full'>
         <div className='flex items-center gap-2 borders p-4 rounded-lg
-      hover:scale-105 dark:bg-black-15 bg-gray-65 dark:hover:bg-black-10 transition-all cursor-pointer'>
+      hover:scale-105 dark:bg-black-15 bg-gray-95 dark:hover:bg-black-10 transition-all cursor-pointer'>
           <Image src={`https://image.tmdb.org/t/p/w500${poster_path}`}
             width={80} height={120}
             alt={title} className='w-20 h-24 rounded-lg' />
           <div className='flex flex-col justify-between gap-2 h-full w-full overflow-hidden'>
             <div className='flex justify-between items-center'>
-              <h3 className='text-lg font-semibold truncate w-[70%]'>{title}</h3>
+              <h3 className='text-lg font-semibold truncate w-[70%] dark:text-white text-black-6'>{title}</h3>
               {
                 !isMobile &&
                 <span className='rounded-full bg-red-50 hover:bg-red-60 p-1 px-2.5 text-sm'>
@@ -168,7 +168,7 @@ const Search = ({ isMobile }: { isMobile: boolean }) => {
       <Link href={`/browse/people/person/${id}`} onClick={() => clickHandler()}
         className='w-full'>
         <div className='flex items-center gap-2 borders p-4 rounded-lg
-      hover:scale-105 dark:bg-black-15 bg-gray-65 dark:hover:bg-black-10 transition-all cursor-pointer'>
+      hover:scale-105 dark:bg-black-15 bg-gray-95 dark:hover:bg-black-10 transition-all cursor-pointer'>
           <div className='w-20 h-20 rounded-lg overflow-hidden'>
             <Image src={profile_path}
               width={60} height={120}
@@ -176,7 +176,7 @@ const Search = ({ isMobile }: { isMobile: boolean }) => {
           </div>
           <div className='flex flex-col justify-between h-full w-full'>
             <div className='flex justify-between items-center w-full'>
-              <h3 className='text-lg font-semibold truncate w-[70%]'>{name}</h3>
+              <h3 className='text-lg font-semibold truncate w-[70%] dark:text-white text-black-6'>{name}</h3>
               {
                 !isMobile &&
                 <span className='rounded-full bg-red-50 hover:bg-red-60 p-1 px-2.5 text-sm'>
@@ -207,15 +207,15 @@ const Search = ({ isMobile }: { isMobile: boolean }) => {
       >
         {
           (activateSearch === true || searchValue !== "") ?
-            <IoClose className={`dark:text-white cursor-pointer `} size={16} onClick={() => clickHandler()} />
-            : <IoSearch className={`dark:text-white cursor-pointer`} size={16} onClick={() => clickHandler()} />
+            <IoClose className={`dark:text-white text-black-8 cursor-pointer `} size={16} onClick={() => clickHandler()} />
+            : <IoSearch className={`dark:text-white text-black-8 cursor-pointer`} size={16} onClick={() => clickHandler()} />
         }
         <Input
           ref={inputRef}
           id='search' type='text' placeholder={t('search')} value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
           className={`absolute text-black-6 dark:text-white ${locale === 'en' ? 'left-1' : 'right-1'}
-          ${isMobile ? (locale === 'en' ? "top-0 left-0" : 'top-0 right-0') : 'top-1'} 
+          ${isMobile ? (locale === 'en' ? "top-0 left-0" : 'top-0 right-0') : 'top-[50%] translate-y-[-50%]'} 
           ${isMobile ? 'rounded-xl' : 'rounded-full'}
           opacity-0 ${(activateSearch === true) && "opacity-100"}`} />
       </span>

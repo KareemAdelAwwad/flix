@@ -54,10 +54,11 @@ const Recommendations: React.FC<RecommendationsProps> = ({ titleType, titleID, h
         data={recommendations}
         settings={settings}
         ItemComponent={({ item }) => (
-          <div key={item.id} className="overflow-hidden rounded-lg p-5 bg-black-12 flex flex-col group">
+          <div key={item.id} className="overflow-hidden rounded-lg p-4 dark:bg-black-12 bg-gray-95 flex flex-col group">
             <div className="relative w-full h-[300px] overflow-hidden rounded-lg group-hover:scale-105 transition-all">
               <Link href={`/browse/${titleType === "movie" ? 'movies' : 'tv-shows'}/title/${item.id}`}>
-                <Image src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
+                <Image src={item.poster_path ? `https://image.tmdb.org/t/p/w500${item.poster_path}`
+                : `https://placehold.co/500x800.png?text=${item.title ? item.title : item.name || 'No Poster Available'}`}
                   alt={item.name ? item.name : item.title || 'No title available'} width={250} height={300}
                   className="w-full h-full object-cover pointer-events-none " />
               </Link>

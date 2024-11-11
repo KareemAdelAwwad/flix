@@ -1,5 +1,4 @@
 import { db } from './firebase';
-import { WatchlistItem } from '@/types/watchlist';
 
 export const addToWatchlist = async (userId: string, titleId: string, titleType: string) => {
   if (!userId) throw new Error("User not authenticated");
@@ -26,6 +25,7 @@ export const addToWatchlist = async (userId: string, titleId: string, titleType:
       userId: userId,
       titleId: titleId,
       titleType: titleType,
+      createdAt: new Date()
     });
     console.log("Movie added to watchlist");
   }
