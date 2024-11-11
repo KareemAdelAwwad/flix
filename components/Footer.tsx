@@ -3,6 +3,8 @@ import React from 'react'
 import links from '@/data/links.json';
 import { useTheme } from 'next-themes';
 import { Link } from '@/i18n/routing';
+import { usePathname } from 'next/navigation';
+import { useLocale } from 'next-intl';
 
 // img
 import { FaFacebook } from "react-icons/fa";
@@ -94,7 +96,6 @@ const Footer = () => {
             </Link>
           ))}
         </div>
-
 
 
         {/* Subscription */}

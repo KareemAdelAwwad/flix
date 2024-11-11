@@ -195,7 +195,7 @@ const page = () => {
 
 
       {/* questions */}
-      <div className="mb-8">
+      <div className="mb-8" id='Questions'>
         <div className='flex justify-between items-center'>
           <div>
             <h2 className="text-3xl font-semibold mb-4"> {t("Q-H1")}</h2>
