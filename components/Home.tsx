@@ -178,9 +178,11 @@ const Home = () => {
 
 
         {/* for the popular movies */}
-        <PMSECTION />
+        <section id='Categories'>
+          <PMSECTION  />
+        </section>
 
-        <div className=' flex flex-col mt-20 gap-10'>
+        <section id='Devices' className=' flex flex-col mt-20 gap-10'>
           <div className='flex flex-col'>
             <h1 className='text-2xl md:text-4xl font-bold'>{t('SECTION-TWO-H1')}</h1>
             <p className='text-sm md:text-base text-gray-500 dark:text-gray-65 max-w-6xl'>{t('DES-TWO')}</p>
@@ -201,10 +203,10 @@ const Home = () => {
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
         {/* questions */}
-        <div className="py-8  mt-10">
+        <section id="Questions" className="py-8  mt-10">
           <div className='flex justify-between'>
             <div>
               <h2 className="text-3xl font-semibold mb-4"> {t("Q-H1")}</h2>
@@ -239,10 +241,11 @@ const Home = () => {
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
 
         {/* plans  */}
+        <section id='Plans'>
         {!isActive &&
           <div className="py-8" id='subscriptions'>
             <h2 className=" text-3xl font-bold mb-6">{t('PLANS-TITLE')}</h2>
@@ -252,6 +255,8 @@ const Home = () => {
               ))}
             </div>
           </div>}
+          </section>
+
       </section>
     </>
   );

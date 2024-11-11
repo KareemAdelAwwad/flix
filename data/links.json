@@ -39,25 +39,25 @@
           {
             "key": "Categories",
             "name": "Categories",
-            "path": "/Categories",
+            "path": "/#Categories",
             "icon": "MdCategories"
           },
           {
             "key": "Devices",
             "name": "Devices",
-            "path": "/Devices",
+            "path": "/#Devices",
             "icon": "MdDevices"
           },
           {
             "key": "Pricing",
             "name": "Pricing",
-            "path": "/Pricing",
+            "path": "/#Plans",
             "icon": "MdPricing"
           },
           {
             "key": "FAQ",
             "name": "FAQ",
-            "path": "/FAQ",
+            "path": "/#Questions",
             "icon": "MdFAQ"
           }
         ]
@@ -68,19 +68,19 @@
           {
             "key": "Trending",
             "name": "Trending",
-            "path": "/movies/Trending",
+            "path": "/browse/movies/#trending",
             "icon": "MdTrending"
           },
           {
             "key": "NewRelease",
             "name": "New Release",
-            "path": "/movies/NewRelease",
+            "path": "/browse/movies//#top10",
             "icon": "MdNewRelease"
           },
           {
             "key": "Popular",
             "name": "Popular",
-            "path": "/movies/Popular",
+            "path": "/browse/movies//#Popular",
             "icon": "MdPopular"
           }
         ]
@@ -91,19 +91,19 @@
           {
             "key": "Trending",
             "name": "Trending",
-            "path": "/shows/Trending",
+            "path": "/browse/tv-shows/#Trending",
             "icon": "MdTrending"
           },
           {
             "key": "NewRelease",
             "name": "New Release",
-            "path": "/shows/NewRelease",
+            "path": "/browse/tv-shows/#NewRelease",
             "icon": "MdNewRelease"
           },
           {
             "key": "Popular",
             "name": "Popular",
-            "path": "/shows/Popular",
+            "path": "/browse/tv-shows/#Popular",
             "icon": "MdPopular"
           }
         ]
@@ -125,14 +125,8 @@
           {
             "key": "Plans",
             "name": "Plans",
-            "path": "/Plans",
+            "path": "/#Plans",
             "icon": "MdPlans"
-          },
-          {
-            "key": "Features",
-            "name": "Features",
-            "path": "/Features",
-            "icon": "MdFeatures"
           }
         ]
       }
