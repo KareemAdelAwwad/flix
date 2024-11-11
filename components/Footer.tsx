@@ -5,8 +5,7 @@ import { useTheme } from 'next-themes';
 import { Link } from '@/i18n/routing';
 import { usePathname } from 'next/navigation';
 import { useLocale } from 'next-intl';
-import { SignInButton, SignOutButton, SignedIn, SignedOut, UserButton, useUser } from '@clerk/nextjs';
-
+ 
 // img
 import { FaFacebook } from "react-icons/fa";
 import { FaLinkedin } from "react-icons/fa";
@@ -45,8 +44,7 @@ const Footer = () => {
         href={link.path}
         className={`${navItemsClassName} ${
           (currentPath === `/${locale}${link.path === '/' ? "" : link.path}` || 
-          currentPath.includes(link.path !== '/' ? link.path : 'no')) && 
-          "!bg-red-45 text-white"
+          currentPath.includes(link.path !== '/' ? link.path : 'no'))  
         }`}
       >
         {t(link.key)}
@@ -66,8 +64,7 @@ const Footer = () => {
         href={link.path}
         className={`${navItemsClassName} ${
           (currentPath === `/${locale}${link.path === '/' ? "" : link.path}` || 
-          currentPath.includes(link.path !== '/' ? link.path : 'no')) && 
-          "!bg-red-45 text-white"
+          currentPath.includes(link.path !== '/' ? link.path : 'no'))  
         }`}
       >
         {t(link.key)}
@@ -84,8 +81,7 @@ const Footer = () => {
         href={link.path}
         className={`${navItemsClassName} ${
           (currentPath === `/${locale}${link.path === '/' ? "" : link.path}` || 
-          currentPath.includes(link.path !== '/' ? link.path : 'no')) && 
-          "!bg-red-45 text-white"
+          currentPath.includes(link.path !== '/' ? link.path : 'no'))  
         }`}
       >
         {t(link.key)}
@@ -107,8 +103,7 @@ const Footer = () => {
         href={link.path}
         className={`${navItemsClassName} ${
           (currentPath === `/${locale}${link.path === '/' ? "" : link.path}` || 
-          currentPath.includes(link.path !== '/' ? link.path : 'no')) && 
-          "!bg-red-45 text-white"
+          currentPath.includes(link.path !== '/' ? link.path : 'no'))  
         }`}
       >
         {t(link.key)}
@@ -127,8 +122,7 @@ const Footer = () => {
         href={link.path}
         className={`${navItemsClassName} ${
           (currentPath === `/${locale}${link.path === '/' ? "" : link.path}` || 
-          currentPath.includes(link.path !== '/' ? link.path : 'no')) && 
-          "!bg-red-45 text-white"
+          currentPath.includes(link.path !== '/' ? link.path : 'no'))  
         }`}
       >
         {t(link.key)}
