@@ -1,19 +1,15 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
-import { Button } from './ui/button';
+import React, { useState } from 'react';
+import { Button } from "@/components/ui/button";
 import { useTranslations } from 'next-intl';
 import { FaPlay, FaMobile, FaTablet } from "react-icons/fa";
 import { MdOutlineLaptopChromebook } from "react-icons/md";
 import { BsHeadsetVr } from "react-icons/bs";
 import { GiConsoleController } from "react-icons/gi";
 import { IoTvSharp } from "react-icons/io5";
-// import { Dice1 } from 'lucide-react';
-import PMSECTION from "@/components/PopularMoviesSection"
+import PopularMoviesSection from "@/components/PopularMoviesSection"
 import BgHome from "@/components/BgHome"
 import { Link } from '@/i18n/routing';
-import { useUser } from '@clerk/nextjs';
 import { useSubscriptionStore } from '@/store';
 import { useSubscriptionCheck } from '@/hooks/useSubscriptionCheck';
 
@@ -28,7 +24,17 @@ interface PlanCardProps {
   mostPopular?: boolean;
   paymentLink: string;
 }
-function PlanCard({ style, name, price, resolution, devices, downloads, spatialAudio, mostPopular, paymentLink }: PlanCardProps) {
+function PlanCard({
+  style,
+  name,
+  price,
+  resolution,
+  devices,
+  downloads,
+  spatialAudio,
+  mostPopular,
+  paymentLink
+}: PlanCardProps) {
   const t = useTranslations('HomePage');
   const listStyle = `border-t border-black-6 pt-4 dark:border-black-30`
   const h1Style = `text-lg font-medium text-black-20 dark:text-gray-70`
@@ -170,15 +176,10 @@ const Home = () => {
         </div>
       </div>
 
-
       <section id='Home' className='container'>
-
-
-
-
         {/* for the popular movies */}
         <section id='Categories'>
-          <PMSECTION  />
+          <PopularMoviesSection />
         </section>
 
         <section id='Devices' className=' flex flex-col mt-20 gap-10'>
@@ -247,16 +248,16 @@ const Home = () => {
 
         {/* plans  */}
         <section id='Plans'>
-        {!isActive &&
-          <div className="py-8" id='subscriptions'>
-            <h2 className=" text-3xl font-bold mb-6">{t('PLANS-TITLE')}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-2xl">
-              {plans.map((plan) => (
-                <PlanCard {...plan} />
-              ))}
-            </div>
-          </div>}
-          </section>
+          {!isActive &&
+            <div className="py-8" id='subscriptions'>
+              <h2 className=" text-3xl font-bold mb-6">{t('PLANS-TITLE')}</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-2xl">
+                {plans.map((plan) => (
+                  <PlanCard {...plan} />
+                ))}
+              </div>
+            </div>}
+        </section>
 
       </section>
     </>
