@@ -1,7 +1,7 @@
 import createMiddleware from 'next-intl/middleware';
 import { routing } from '@/i18n/routing';
 import { clerkMiddleware } from "@clerk/nextjs/server";
-import { NextFetchEvent, NextRequest } from 'next/server';
+import { NextFetchEvent, NextRequest, NextResponse } from 'next/server';
 
 const middleware = async (req: NextRequest) => {
 
