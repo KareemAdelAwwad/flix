@@ -196,7 +196,7 @@ function HorizontalCarousel<T>({
         <div
           ref={carouselRef}
           style={{
-            [isRTL ? 'right' : 'left']: `-${currentPage * 100}%`,
+            [!isRTL ? 'right' : 'left']: `${currentPage * 100}%`,
             position: 'relative',
             transition: 'all 1000ms',
           }}

@@ -45,8 +45,8 @@ class ReviewCard extends React.Component<ReviewProps, ReviewState> {
     const { expanded } = this.state;
 
     return (
-      <div className='dark:bg-black-6 bg-white p-4 sm:p-6 md:p-10 rounded-xl borders'>
-        <div className='flex justify-between items-center mb-5'>
+      <div className='dark:bg-black-6 bg-white p-4 sm:p-6 md:p-10 rounded-xl borders w-full'>
+        <div className='flex justify-between items-center mb-5 w-full'>
           <div className='flex items-center gap-2'>
             <Image
               src={avatar_path ? `https://image.tmdb.org/t/p/original${avatar_path}` : '/images/robot-image.jpg'}
@@ -71,15 +71,16 @@ class ReviewCard extends React.Component<ReviewProps, ReviewState> {
           </div>
         </div>
         <p className='dark:text-gray-60 text-black-30 text-lg'>
-            {expanded ? content : content.slice(0, 160).split(' ').slice(0, -1).join(' ') + (content.length > 160 ? '...' : '')}
-            {content.length > 160 && (
-            <button
-              onClick={this.toggleExpanded}
-              className='text-red-60 ml-2'
-            >
-              {expanded ? 'Show less' : 'Show more'}
-            </button>
-            )}
+          {content.length > 160 ? (
+            <>
+              {expanded ? content : content.slice(0, 160).split(' ').slice(0, -1).join(' ') + '...'}
+              <button onClick={this.toggleExpanded} className='text-red-60 ml-2'>
+                {expanded ? 'Show less' : 'Show more'}
+              </button>
+            </>
+          ) : (
+            content
+          )}
         </p>
       </div>
     );
