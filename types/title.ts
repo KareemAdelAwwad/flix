@@ -187,6 +187,18 @@ export interface Review {
   id: string;
 }
 
+export interface FlixUsersReviews {
+  docId?: string;
+  userId: string;
+  firstName: string;
+  avatarUrl: string | null;
+  titleId: string;
+  titleType: 'movie' | 'tv';
+  lastEditDate: Date;
+  content: string;
+  rating: number;
+}
+
 export interface CachedSeasonData {
   [key: number]: {
     episodes: Episode[];
