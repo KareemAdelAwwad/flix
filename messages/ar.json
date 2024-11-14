@@ -169,7 +169,7 @@
   "popular": "العروض الشعبية",
   "top10": "أفضل 10 عروض",
   "trending": "العروض الرائجة",
-  "action": "عروض الأكشن",
+  "airing_today": "يعرض اليوم",
   "featuredShow": "العروض المميزة",
   "watchShow": "مشاهدة العرض",
   "watchSeries": "مشاهدة السلسلة",
@@ -178,7 +178,7 @@
   "allShows": "جميع العروض",
   "top10Shows": "أفضل 10 عروض",
   "trendingShows": "العروض الرائجة",
-  "actionShows": "عروض الأكشن",
+  "airing_todayShows": "يعرض اليوم",
   "loading": "جاري التحميل..."
 },
 
