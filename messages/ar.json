@@ -154,6 +154,27 @@
     "trendingMovies": "الأفلام الرائجة",
     "actionMovies": "أفلام الأكشن"
   },
+
+
+"TVShows": {
+  "movies": "العروض",
+  "shows": "العروض التلفزيونية",
+  "popular": "العروض الشعبية",
+  "top10": "أفضل 10 عروض",
+  "trending": "العروض الرائجة",
+  "action": "عروض الأكشن",
+  "featuredShow": "العروض المميزة",
+  "watchShow": "مشاهدة العرض",
+  "watchSeries": "مشاهدة السلسلة",
+  "noRuntime": "لا يوجد وقت عرض",
+  "noDescription": "لا يوجد وصف",
+  "allShows": "جميع العروض",
+  "top10Shows": "أفضل 10 عروض",
+  "trendingShows": "العروض الرائجة",
+  "actionShows": "عروض الأكشن",
+  "loading": "جاري التحميل..."
+},
+
   "Lists": {
     "watchlist": "قائمة المشاهدة خاصتك",
     "watched": "العناوين التي شاهدتها"

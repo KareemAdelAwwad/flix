@@ -162,6 +162,25 @@
     "actionMovies": "Action Movies",
     "loading": "Loading..."
   },
+
+  "TVShows": {
+    "movies": "Shows",
+    "shows": "TV Shows",
+    "popular": "Popular Shows",
+    "top10": "Top 10 Shows",
+    "trending": "Trending Shows",
+    "action": "Action Shows",
+    "featuredShow": "Featured Shows",
+    "watchShow": "Watch Show",
+    "watchSeries": "Watch Series",
+    "noRuntime": "No Runtime",
+    "noDescription": "No Description",
+    "allShows": "All Shows",
+    "top10Shows": "Top 10 Shows",
+    "trendingShows": "Trending Shows",
+    "actionShows": "Action Shows",
+    "loading": "Loading..."
+  },
   "Lists": {
     "watchlist": "Your Watchlist",
     "watched": "Titles You Have Watched"
