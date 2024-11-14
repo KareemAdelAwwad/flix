@@ -25,11 +25,11 @@ export const Seasons = ({ series, t, episodeLoading, cachedSeasonData, LoadSeaso
             <AccordionItem
               key={season.season_number}
               value={`item-${season.season_number}`}
-              className={`dark:bg-black-6 bg-gray-90 px-[50px] py-2.5 rounded-lg borders ${season.season_number !== 0 && "mt-5"}`}
+              className={`dark:bg-black-6 bg-gray-90 md:px-[50px] px-5 py-2.5 rounded-lg borders ${season.season_number !== 0 && "mt-5"}`}
             >
               <AccordionTrigger onClick={() => LoadSeasonData(season.season_number)}>
-                <h4 className='text-xl font-semibold'>{`${t('season')} ${season.season_number.toString().padStart(2, '0')}`}</h4>
-                <p className='text-lg font-medium text-gray-60'>
+                <h4 className='md:text-xl text-base font-semibold'>{`${t('season')} ${season.season_number.toString().padStart(2, '0')}`}</h4>
+                <p className='md:text-lg text-sm font-medium text-gray-60'>
                   {`${season.episode_count} ${season.episode_count === 1 ? t('episode') : t('episodes')}`}
                 </p>
               </AccordionTrigger>

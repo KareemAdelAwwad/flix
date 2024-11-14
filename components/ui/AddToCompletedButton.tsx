@@ -81,7 +81,7 @@ const CompletedButton: React.FC<CompletedButtonProps> = ({ titleId, titleType, s
       <Button onClick={handleAddToCompleted} size={"lgIcon"}
         className={`-top-1 left-2 absolute w-8 rounded-none rounded-b z-10 ${className}`} >
         {
-          isInCompleted ? <GoCheckCircleFill size={32} /> : <GoCheckCircle size={32} />
+          isInCompleted ? <GoCheckCircleFill className='dark:text-white text-black-12' size={32} /> : <GoCheckCircle className='dark:text-white text-black-12' size={32} />
         }
       </Button>
     ) : null

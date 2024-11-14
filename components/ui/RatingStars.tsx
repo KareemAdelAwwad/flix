@@ -12,7 +12,7 @@ const RatingStars = ({ rating, maxRating = 5, type }: RatingStarsProps) => {
 
   return (
     <div  className={`${type !== "no-outline" ? 'hidden sm:flex' : 'flex'} items-center gap-0.5
-    ${type !== 'no-outline' ? `bg-black-8 rounded-full px-[12px] py-[6px] border-[1px] border-black-15` : ""}`}>
+    ${type !== 'no-outline' ? `dark:bg-black-8 bg-gray-95 rounded-full px-[12px] py-[6px] borders` : ""}`}>
       {[...Array(maxRating)].map((_, index) => {
         const isFilled = index < Math.floor(roundedRating);
         const isHalf = !isFilled && index < roundedRating;
@@ -44,7 +44,7 @@ const RatingStars = ({ rating, maxRating = 5, type }: RatingStarsProps) => {
           </div>
         );
       })}
-      <span className="text-gray-60 ml-1 text-lg font-medium">
+      <span className="dark:text-gray-60 text-black-30 ml-1 text-lg font-medium">
         {rating.toFixed(1)}
       </span>
     </div>

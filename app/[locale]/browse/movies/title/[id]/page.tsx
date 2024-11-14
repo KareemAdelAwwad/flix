@@ -1,9 +1,9 @@
 
 'use client'
-import React from 'react'
+import { fetchReviews } from '@/lib/FetchReviews';
+import React, { useMemo } from 'react'
 import { useLocale, useTranslations } from 'next-intl';
 import { useState, useEffect } from 'react';
-import NextIntlClientProvider from 'next-intl';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import OpenTitleInfoCard from '@/components/OpenTitleInfoCard';
@@ -11,13 +11,9 @@ import ReadyTooltip from '@/components/ui/ready-tooltip';
 
 // Import Icons
 import { FaPlay, FaPlus } from "react-icons/fa6";
-import { SlVolume2 } from "react-icons/sl";
-import { AiOutlineLike } from "react-icons/ai";
-import { IoBookmarkOutline, IoShareSocialOutline } from "react-icons/io5";
-import { GoCheckCircle, GoCheckCircleFill } from "react-icons/go";
 import { CiCalendar } from "react-icons/ci";
 import { CiStar } from "react-icons/ci";
-import { PiTranslate, PiFilmReel, PiFilmSlateDuotone } from "react-icons/pi";
+import { PiTranslate, PiFilmReel } from "react-icons/pi";
 import { BiCategoryAlt } from "react-icons/bi";
 import { CgMusicNote } from "react-icons/cg";
 
@@ -25,6 +21,7 @@ import { CgMusicNote } from "react-icons/cg";
 import HorizontalCarousel from '@/components/carousel'
 import ActorCard from '@/components/ActorCard';
 import ReviewCard from '@/components/ReviewCard';
+import AddReviewCard from '@/components/AddReviewCard';
 import Info from '@/components/ui/Info';
 import RatingStars from '@/components/ui/RatingStars';
 import Recommendations from '@/components/TitlePage/Recommendations';
@@ -32,10 +29,12 @@ import AudioPlayer from '@/components/TitlePage/AudioPlayer';
 import VideoPlayer from '@/components/TitlePage/VideoPlayer';
 import WatchlistButton from '@/components/ui/AddToWatchlistButton';
 import Trailer from '@/components/TitlePage/Trailer';
-import { Movie, MovieCastMember as Cast, Review } from '@/types/title';
+import { Movie, MovieCastMember as Cast, Review, FlixUsersReviews } from '@/types/title';
 import YoutubeVideo from '@/types/youtube';
 import WatchingServer from '@/components/TitlePage/WatchingServer';
 import CompletedButton from '@/components/ui/AddToCompletedButton';
+import FlixReviewCard from '@/components/FlixReviewCard';
+import { useUser } from '@clerk/nextjs';
 
 interface MovieImages {
   "id": number,
@@ -62,13 +61,17 @@ interface MovieImages {
   }[]
 }
 
+
+
 export default function page({ params }: { params: { id: number } }) {
   const [movie, setMovie] = useState({} as Movie);
   const [images, setImages] = useState({} as MovieImages);
   const [cast, setCast] = useState([] as Cast[]);
   const [reviews, setReviews] = useState([] as Review[]);
+  const [ourReviews, setOurReviews] = useState([] as FlixUsersReviews[]);
   const [director, setDirector] = useState({} as Cast);
   const [musicList, setMusicList] = useState([] as YoutubeVideo[]);
+  const [addReviewCardStatus, setAddReviewCardStatus] = useState(false);
   const [showTrailer, setShowTrailer] = useState(false);
   const [showPlayer, setShowPlayer] = useState(false);
   const [imageLoaing, setImageLoading] = useState(true);
@@ -145,6 +148,30 @@ export default function page({ params }: { params: { id: number } }) {
     }
   }, [movie.title]);
 
+  // Fetch Reviews
+  useEffect(() => {
+    const fetchReviewsData = async () => {
+      const reviewsData = await fetchReviews(movie.id.toString());
+      setOurReviews(reviewsData);
+    }
+
+    fetchReviewsData();
+  }, [movie.id]);
+
+  const user = useUser();
+  const currentUserId = user.user?.id
+
+  const combinedReviews = useMemo(() => [
+    ...ourReviews.map(review => ({ ...review, type: 'flix' as const })),
+    ...reviews.map(review => ({ ...review, type: 'review' as const }))
+  ].sort((a, b) => {
+    if (a.type === 'flix' && a.userId === currentUserId) return -1;
+    if (b.type === 'flix' && b.userId === currentUserId) return 1;
+    if (a.type === 'flix' && b.type === 'review') return -1;
+    if (a.type === 'review' && b.type === 'flix') return 1;
+    return 0;
+  }), [ourReviews, reviews, currentUserId]);
+
 
   const castSliderSettings = {
     breakpoints: {
@@ -198,16 +225,24 @@ export default function page({ params }: { params: { id: number } }) {
     }
   };
 
+
   return (
     <main className='flex flex-col justify-center items-center gap-20 container'>
       <title>{movie.title}</title>
+      <meta name="description" content={movie.overview} />
+      <meta property="og:title" content={movie.title} />
+      <meta property="og:description" content={movie.overview} />
+      <meta property="og:image" content={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`} />
+      <meta property="og:url" content={`https://flix.kareemadel.com/${locale}/browse/movies/title/${params.id}`} />
+      <meta property="og:type" content="movie" />
+      <meta property="og:locale" content={locale} />
 
       {
         showPlayer &&
         <div
           id='player-container'
           onClick={handleContainerClick}
-          className="fixed top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center
+          className="fixed top-0 left-0 right-0 bottom-0 z-[101] flex items-center justify-center
       bg-black-6 bg-opacity-70 w-full h-full">
           <div className="rounded-lg w-[900px] ">
             <VideoPlayer />
@@ -219,10 +254,10 @@ export default function page({ params }: { params: { id: number } }) {
       <section className='w-full h-[835px] mt-5 rounded-t-lg overflow-hidden felx justify-center items-center relative'>
         <div className='
         flex flex-col justify-end items-center text-white text-center pb-10
-        inset-0 bg-gradient-to-t from-black-8  to-transparent w-full h-full absolute z-10'>
+        inset-0 bg-gradient-to-t dark:from-black-8 from-white  to-transparent w-full h-full absolute z-10'>
           <div className='flex flex-col gap-2'>
-            <h1 className='text-4xl font-bold'>{movie.title}</h1>
-            <p className='text-lg text-gray-60'>{movie.tagline ? movie.tagline : movie.overview}</p>
+            <h1 className='text-4xl font-bold dark:text-white text-black-6'>{movie.title}</h1>
+            <p className='text-lg dark:text-gray-60 text-black-30'>{movie.tagline ? movie.tagline : movie.overview}</p>
           </div>
           {/* Movie controles */}
           <div className='flex justify-center items-center gap-2 w-full h-16 bg-transparent flex-wrap'>
@@ -259,7 +294,7 @@ export default function page({ params }: { params: { id: number } }) {
 
           {/* Movie Description */}
           <OpenTitleInfoCard title={t('description')}>
-            {movie.overview && <p className='text-white'>{movie.overview}</p>}
+            {movie.overview && <p className='dark:text-gray-60 text-black-30'>{movie.overview}</p>}
           </OpenTitleInfoCard>
 
 
@@ -284,39 +319,65 @@ export default function page({ params }: { params: { id: number } }) {
           </OpenTitleInfoCard>
 
           {/* Reviews */}
-          {
-            reviews.length > 0 &&
-            <OpenTitleInfoCard className='mb-8' title={t('reviews')}>
-              <Button className={`text-lg dark:bg-black-8 bg-gray-50 borders dark:text-white text-black-12 font-medium flex justify-center items-center hover:bg-gray-90 transition-colors duration-300
-            absolute top-[40px] ${locale === 'ar' ? 'left-[4rem]' : 'right-[4rem]'}`}>
+          <OpenTitleInfoCard className='mb-8' title={t('reviews')}>
+            {
+              !ourReviews.some(review => review.userId === currentUserId) &&
+              <Button
+                onClick={() => setAddReviewCardStatus(true)}
+                className={`text-lg dark:bg-black-8 bg-gray-50 borders dark:text-white text-black-12 font-medium flex justify-center 
+                  items-center hover:bg-gray-90 transition-colors duration-300 absolute top-[40px] 
+                  ${locale === 'ar' ? 'left-[4rem]' : 'right-[4rem]'}`}>
                 <FaPlus /> {t('addreview')}
               </Button>
+            }
+            <AddReviewCard
+              titleType={'movie'}
+              titleId={movie.id ? movie.id.toString() : ''}
+              locale={locale}
+              isOpen={addReviewCardStatus}
+              onClose={() => setAddReviewCardStatus(false)}
+            />
+            {(combinedReviews && combinedReviews.length > 0) ?
               <div>
-                <HorizontalCarousel
-                  navStyle='style2'
-                  data={reviews}
-                  settings={reviewSliderSettings}
-                  ItemComponent={({ item }) => (
-                    <ReviewCard
-                      locale={locale}
-                      id={item.id}
-                      name={item.author_details.name}
-                      avatar_path={item.author_details.avatar_path}
-                      username={item.author_details.username}
-                      content={item.content}
-                      rating={item.author_details.rating}
-                      created_at={item.created_at}
-                    />
-                  )}
-                />
+                {
+                  combinedReviews && combinedReviews.length > 0 &&
+                  <HorizontalCarousel
+                    navStyle='style2'
+                    data={combinedReviews}
+                    settings={reviewSliderSettings}
+                    ItemComponent={({ item }) =>
+                      item.type === 'flix' ? (
+                        <FlixReviewCard
+                          {...item}
+                          locale={locale}
+                          titleId={movie.id.toString()}
+                          titleType="movie"
+                        />
+                      ) : (
+                        <ReviewCard
+                          name={item.author_details.name}
+                          username={item.author_details.username}
+                          avatar_path={item.author_details.avatar_path}
+                          rating={item.author_details.rating}
+                          content={item.content}
+                          created_at={item.created_at}
+                          id={item.id}
+                          locale={locale}
+                        />
+                      )
+                    }
+                  />
+                }
               </div>
-            </OpenTitleInfoCard>
-          }
+              : <p className='dark:text-gray-60 text-black-30 text-center md:px-[15%] px-[5%]'>{t('noreviews')}</p>
+            }
+          </OpenTitleInfoCard>
+
         </div>
 
         {/* Rightside Info */}
         <div className='w-full lg:w-[34%]'>
-          <div className='dark:bg-black-10 bg-gray-90 rounded-lg p-12 font-semibold text-lg border-[1px] dark:border-black-15 border-gray-75 flex flex-col gap-8'>
+          <div className='dark:bg-black-10 bg-gray-95 rounded-lg p-12 font-semibold text-lg border-[1px] dark:border-black-15 border-gray-75 flex flex-col gap-8'>
             {
               images.logos && images.logos.length > 0
               &&
@@ -421,3 +482,4 @@ export default function page({ params }: { params: { id: number } }) {
     </main >
   )
 }
+

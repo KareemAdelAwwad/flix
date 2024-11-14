@@ -20,7 +20,8 @@ import {
   SeriesCast,
   Review,
   ImageProps,
-  SliderSettings
+  SliderSettings,
+  FlixUsersReviews
 } from '@/types/title';
 
 // Import Icons
@@ -62,6 +63,12 @@ import WatchlistButton from '@/components/ui/AddToWatchlistButton';
 import Trailer from '@/components/TitlePage/Trailer';
 import WatchingServer from '@/components/TitlePage/WatchingServer';
 import CompletedButton from '@/components/ui/AddToCompletedButton';
+import { generateMetadata } from '@/lib/metadata';
+import { Metadata } from 'next';
+import { useUser } from '@clerk/nextjs';
+import { fetchReviews } from '@/lib/FetchReviews';
+import FlixReviewCard from '@/components/FlixReviewCard';
+import AddReviewCard from '@/components/AddReviewCard';
 
 // Font configuration
 const manropes = Manrope({
@@ -102,9 +109,11 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
   const [images, setImages] = useState<SeriesImages>({} as SeriesImages);
   const [cast, setCast] = useState<SeriesCast>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [ourReviews, setOurReviews] = useState([] as FlixUsersReviews[]);
   const [providers, setProviders] = useState<any>({});
   const [showPlayer, setShowPlayer] = useState(false);
   const [musicList, setMusicList] = useState<YoutubeVideo[]>([]);
+  const [addReviewCardStatus, setAddReviewCardStatus] = useState(false);
   const [showTrailer, setShowTrailer] = useState(false);
   const [imageLoading, setImageLoading] = useState(true);
   const [imdpId, setImdpId] = useState('');
@@ -224,6 +233,30 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
     return hours > 0 ? `${hours}${t('hour')} ${minutes}${t('minute')}` : `${minutes}${t('minute')}`;
   }, []);
 
+  // Fetch Reviews
+  useEffect(() => {
+    const fetchReviewsData = async () => {
+      const reviewsData = await fetchReviews(series.id.toString());
+      setOurReviews(reviewsData);
+    }
+
+    fetchReviewsData();
+  }, [series.id]);
+
+  const user = useUser();
+  const currentUserId = user.user?.id
+
+  const combinedReviews = useMemo(() => [
+    ...ourReviews.map(review => ({ ...review, type: 'flix' as const })),
+    ...reviews.map(review => ({ ...review, type: 'review' as const }))
+  ].sort((a, b) => {
+    if (a.type === 'flix' && a.userId === currentUserId) return -1;
+    if (b.type === 'flix' && b.userId === currentUserId) return 1;
+    if (a.type === 'flix' && b.type === 'review') return -1;
+    if (a.type === 'review' && b.type === 'flix') return 1;
+    return 0;
+  }), [ourReviews, reviews, currentUserId]);
+
   // Slider settings
   const sliderSettings = useMemo(() => ({
     cast: {
@@ -245,22 +278,7 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
     } as SliderSettings
   }), []);
 
-  // // Loading state
-  // if (loading) {
-  //   return (
-  //     <div className="w-full h-screen container">
-  //       <div className="animate-pulse bg-black-20 h-[835px] w-full rounded-lg mb-8" />
-  //     </div>
-  //   );
-  // }
 
-  // // Error state
-  // if (error) {
-  //   return <ErrorFallback error={error} resetErrorBoundary={() => window.location.reload()} />;
-  // }
-
-
-  // Player Events and Handlers
   useEffect(() => {
     if (showPlayer) {
       document.body.style.overflow = 'hidden';
@@ -293,20 +311,27 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
     }
   };
 
+
   return (
     <main className={`flex flex-col justify-center items-center gap-20 container ${manropes.className}`}>
       {/* Meta */}
       <title>{series.name}</title>
-
+      <meta name="description" content={series.overview} />
+      <meta property="og:title" content={series.name} />
+      <meta property="og:description" content={series.overview} />
+      <meta property="og:image" content={`https://image.tmdb.org/t/p/original${series.backdrop_path}`} />
+      <meta property="og:url" content={`https://flix.kareemadel.com/${locale}/browse/tv/title/${params.id}`} />
+      <meta property="og:type" content="TV-Show" />
+      <meta property="og:locale" content={locale} />
       {
         showPlayer &&
         <div
           id='player-container'
           onClick={handleContainerClick}
-          className="fixed top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center
+          className="fixed top-0 left-0 right-0 bottom-0 z-[101] flex items-center justify-center
       bg-black-6 bg-opacity-70 w-full h-full">
           <div className="rounded-lg w-[900px] ">
-            <VideoPlayer url='https://b.top4top.io/m_3235cyxtw1.mp4' />
+            <VideoPlayer />
           </div>
         </div>
       }
@@ -326,7 +351,7 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
     inset-0 bg-gradient-to-t dark:from-black-8 from-white via-transparent to-transparent w-full h-full absolute z-10'>
           <div>
             <h1 className='text-4xl font-bold dark:text-white text-black-6'>{series.name}</h1>
-            <p className='text-lg dark:text-gray-60 text-black-12'>{series.tagline ? series.tagline : series.overview}</p>
+            <p className='text-lg dark:text-gray-60 text-black-30'>{series.tagline ? series.tagline : series.overview}</p>
           </div>
           {/* Series controles */}
           <div className='flex justify-center items-center gap-2 w-full h-16 bg-transparent flex-wrap'>
@@ -366,10 +391,10 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
               {
                 series.seasons && series.seasons.sort((a, b) => a.season_number - b.season_number).map(season => (
                   <AccordionItem value={`item-${season.season_number}`}
-                    className={`dark:bg-black-6 bg-gray-90 px-[50px] py-2.5 rounded-lg borders ${season.season_number !== 0 && "mt-5"}`}>
+                    className={`dark:bg-black-6 bg-gray-90 md:px-[50px] px-6 py-2.5 rounded-lg borders ${season.season_number !== 0 && "mt-5"}`}>
                     <AccordionTrigger onClick={() => LoadSeasonData(season.season_number)}>
-                      <h4 className='text-xl font-semibold'>{`${t('season')} ${season.season_number.toString().padStart(2, '0')}`}</h4>
-                      <p className='text-lg font-medium text-gray-60'>
+                      <h4 className='sm:text-xl text-base font-semibold'>{`${t('season')} ${season.season_number.toString().padStart(2, '0')}`}</h4>
+                      <p className='sm:text-lg text-sm font-medium text-gray-60'>
                         {`${season.episode_count} ${season.episode_count === 1 ? t('episode') : t('episodes')}`}
                       </p>
                     </AccordionTrigger>
@@ -380,7 +405,7 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
                       ) : (
                         cachedSeasonData[season.season_number]?.episodes?.map(episode => (
                           <div key={episode.episode_number}
-                            className='dark:bg-black-6 bg-gray-90 flex gap-5 justify-center items-center py-10 border-t-[1px] px-6'>
+                            className='dark:bg-black-6 bg-gray-90 flex md:flex-row flex-col gap-5 justify-center items-center py-10 border-t-[1px] px-6'>
                             <span className='text-[30px] font-semibold text-gray-60'>
                               {episode.episode_number.toString().padStart(2, '0')}
                             </span>
@@ -393,20 +418,21 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
                                 <IoPlayCircleOutline size={30}
                                   className='w-14 h-14 p-2 dark:bg-black-6 bg-gray-90 bg-opacity-60 rounded-full text-white group-hover:animate-pulse transition-all duration-300
                                 absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]' />
-                                <Image src={episode.still_path ? `https://image.tmdb.org/t/p/original${episode.still_path}` : `https://placehold.co/300x200.png?text=${episode.name}`}
+                                <Image src={episode.still_path ? `https://image.tmdb.org/t/p/original${episode.still_path}`
+                                  : `https://placehold.co/300x200.png?text=${episode.name}`}
                                   height={300} width={200} alt={episode.name} className='w-full h-full object-cover pointer-events-none' />
                               </div>
                             </Suspense>
 
                             <div className='w-5/6'>
-                              <div className='flex justify-between items-center w-full'>
+                              <div className='flex md:flex-row flex-col justify-between items-center w-full'>
                                 <h3 className='text-xl font-semibold'>{episode.name}</h3>
                                 <span className='py-2 px-2.5 dark:bg-black-8 bg-gray-50 borders text-[16px] font-medium flex gap-2 rounded text-nowrap'>
                                   <LuClock4 size={20} />
                                   {formatRuntime(episode.runtime)}
                                 </span>
                               </div>
-                              <p className='text-gray-60 pr-10'>{episode.overview}</p>
+                              <p className='text-gray-60 md:pr-10'>{episode.overview}</p>
                             </div>
                           </div>
                         ))
@@ -449,42 +475,77 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
           </OpenTitleInfoCard>
 
           {/* Reviews */}
-          {
-            reviews.length > 0 &&
-            <OpenTitleInfoCard className='mb-8' title={t('reviews')}>
-              <Button className={`text-lg dark:bg-black-8 bg-gray-50 borders dark:text-white text-black-12 font-medium flex justify-center items-center hover:bg-gray-90 transition-colors duration-300
-              absolute top-[40px] ${locale === 'ar' ? 'left-[4rem]' : 'right-[4rem]'}`}>
+          <OpenTitleInfoCard className='mb-8' title={t('reviews')}>
+            {
+              !ourReviews.some(review => review.userId === currentUserId) &&
+              <Button
+                onClick={() => setAddReviewCardStatus(true)}
+                className={`text-lg dark:bg-black-8 bg-gray-50 borders dark:text-white text-black-12 font-medium flex justify-center 
+                  items-center hover:bg-gray-90 transition-colors duration-300 absolute top-[40px] 
+                  ${locale === 'ar' ? 'left-[4rem]' : 'right-[4rem]'}`}>
                 <FaPlus /> {t('addreview')}
               </Button>
+            }
+            <AddReviewCard
+              titleType={'tv'}
+              titleId={series.id ? series.id.toString() : ''}
+              locale={locale}
+              isOpen={addReviewCardStatus}
+              onClose={() => setAddReviewCardStatus(false)}
+            />
+            {(combinedReviews && combinedReviews.length > 0) ?
               <div>
-                <HorizontalCarousel
-                  navStyle='style2'
-                  data={reviews}
-                  settings={sliderSettings.reviews}
-                  ItemComponent={({ item }: { item: any }) => (
-                    <ReviewCard
-                      locale={locale}
-                      id={item.id}
-                      name={item.author_details.name}
-                      avatar_path={item.author_details.avatar_path}
-                      username={item.author_details.username}
-                      content={item.content}
-                      rating={item.author_details.rating}
-                      created_at={item.created_at}
-                    />
-                  )}
-                />
+                {
+                  combinedReviews && combinedReviews.length > 0 &&
+                  <HorizontalCarousel
+                    navStyle='style2'
+                    data={combinedReviews}
+                    settings={sliderSettings.reviews}
+                    ItemComponent={({ item }: { item: any }) =>
+                      item.type === 'flix' ? (
+                        <FlixReviewCard
+                          userId={item.userId}
+                          firstName={item.firstName}
+                          avatarUrl={item.avatarUrl}
+                          lastEditDate={item.lastEditDate}
+                          rating={item.rating}
+                          content={item.content}
+                          locale={locale}
+                          titleId={series.id.toString()}
+                          titleType="tv"
+                        />
+                      ) : (
+                        <ReviewCard
+                          name={item.author_details.name}
+                          username={item.author_details.username}
+                          avatar_path={item.author_details.avatar_path}
+                          rating={item.author_details.rating}
+                          content={item.content}
+                          created_at={item.created_at}
+                          id={item.id}
+                          locale={locale}
+                        />
+                      )
+                    }
+                  />
+                }
               </div>
-            </OpenTitleInfoCard>
-          }
+              : <p className='dark:text-gray-60 text-black-30 text-center md:px-[15%] px-[5%]'>{t('noreviews')}</p>
+            }
+          </OpenTitleInfoCard>
         </div>
 
         {/* Rightside Info */}
         <div className='w-full lg:w-[34%]'>
           <div className='dark:bg-black-10 bg-gray-95 rounded-lg p-12 font-semibold text-lg borders flex flex-col gap-8'>
-            <div className='flex justify-center items-center'>
-              <Image loading='lazy' src={`https://image.tmdb.org/t/p/original${images.logos && images.logos[0].file_path}`} alt="Series Logo" width={240} height={160} />
-            </div>
+            {
+              images.logos && images.logos[0] &&
+              <div className='flex justify-center items-center'>
+                <Image loading='lazy'
+                  src={`https://image.tmdb.org/t/p/original${images.logos[0].file_path}`}
+                  alt="Series Logo" width={240} height={160} />
+              </div>
+            }
             <Info title={t('first_air_date')}
               content={<p className='dark:text-white text-[16px] font-semibold'>{series.first_air_date}</p>}
               icon={<CiCalendar size={24} />} />

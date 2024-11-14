@@ -1,19 +1,15 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
-import { Button } from './ui/button';
+import React, { useState } from 'react';
+import { Button } from "@/components/ui/button";
 import { useTranslations } from 'next-intl';
 import { FaPlay, FaMobile, FaTablet } from "react-icons/fa";
 import { MdOutlineLaptopChromebook } from "react-icons/md";
 import { BsHeadsetVr } from "react-icons/bs";
 import { GiConsoleController } from "react-icons/gi";
 import { IoTvSharp } from "react-icons/io5";
-// import { Dice1 } from 'lucide-react';
-import PMSECTION from "@/components/PopularMoviesSection"
+import PopularMoviesSection from "@/components/PopularMoviesSection"
 import BgHome from "@/components/BgHome"
 import { Link } from '@/i18n/routing';
-import { useUser } from '@clerk/nextjs';
 import { useSubscriptionStore } from '@/store';
 import { useSubscriptionCheck } from '@/hooks/useSubscriptionCheck';
 
@@ -28,7 +24,17 @@ interface PlanCardProps {
   mostPopular?: boolean;
   paymentLink: string;
 }
-function PlanCard({ style, name, price, resolution, devices, downloads, spatialAudio, mostPopular, paymentLink }: PlanCardProps) {
+function PlanCard({
+  style,
+  name,
+  price,
+  resolution,
+  devices,
+  downloads,
+  spatialAudio,
+  mostPopular,
+  paymentLink
+}: PlanCardProps) {
   const t = useTranslations('HomePage');
   const listStyle = `border-t border-black-6 pt-4 dark:border-black-30`
   const h1Style = `text-lg font-medium text-black-20 dark:text-gray-70`
@@ -38,7 +44,7 @@ function PlanCard({ style, name, price, resolution, devices, downloads, spatialA
     p-4 pb-10 ${mostPopular && "rounded-t-none"} dark:bg-black-10 rounded-2xl shadow-md flex flex-col justify-between gap-10`}>
       {
         mostPopular && (
-          <div className='bg-red-45 rounded-t-2xl absolute top-0 -translate-y-[100%] right-[50%] -translate-x-[-50%] w-[calc(100%+2.5px)] text-center text-base font-medium capitalize'>
+          <div className='bg-red-45 text-white rounded-t-2xl absolute top-0 -translate-y-[100%] right-[50%] -translate-x-[-50%] w-[calc(100%+2.5px)] text-center text-base font-medium capitalize'>
             {t('most_popular')}
           </div>
         )
@@ -91,9 +97,8 @@ function PlanCard({ style, name, price, resolution, devices, downloads, spatialA
 
 
 const Home = () => {
-  const { user } = useUser();
   useSubscriptionCheck();
-  const { isActive, isLoading, expirationDate, price } = useSubscriptionStore();
+  const { isActive } = useSubscriptionStore();
   const t = useTranslations('HomePage');
 
   //for device section 
@@ -164,28 +169,23 @@ const Home = () => {
 
         <div className='flex flex-col items-center justify-center'>
           <h1 className='text-2xl md:text-5xl font-bold'>{t('SECTION-ONE-H1')}</h1>
-          <p className='text-sm md:text-base text-gray-500 dark:text-gray-65 p-4 max-w-4xl text-center'>{t('DES-ONE')}</p>
+          <p className='text-sm md:text-base dark:text-gray-60 text-black-30 p-4 max-w-4xl text-center'>{t('DES-ONE')}</p>
           <Button className='bg-red-50 text-white hover:bg-red-50'>
             <FaPlay /> {t("SECTION-ONE-BTN")}
           </Button>
         </div>
       </div>
 
-
       <section id='Home' className='container'>
-
-
-
-
         {/* for the popular movies */}
         <section id='Categories'>
-          <PMSECTION  />
+          <PopularMoviesSection />
         </section>
 
         <section id='Devices' className=' flex flex-col mt-20 gap-10'>
           <div className='flex flex-col'>
             <h1 className='text-2xl md:text-4xl font-bold'>{t('SECTION-TWO-H1')}</h1>
-            <p className='text-sm md:text-base text-gray-500 dark:text-gray-65 max-w-6xl'>{t('DES-TWO')}</p>
+            <p className='text-sm md:text-base dark:text-gray-60 text-black-30 max-w-6xl'>{t('DES-TWO')}</p>
           </div>
 
           {/* apps  */}
@@ -197,9 +197,9 @@ const Home = () => {
                   <div className='text-red-45 p-2 dark:bg-black-8 bg-gray-90 rounded-lg' style={{ fontSize: '30px' }}>
                     {device.icon}
                   </div>
-                  <h1 className='text-base'>{t(device.title)}</h1>
+                  <h1 className='text-base font-semibold'>{t(device.title)}</h1>
                 </div>
-                <p className='mt-2 text-sm text-gray-65'>{t(device.descriptionKey)}</p>
+                <p className='mt-2 text-sm dark:text-gray-60 text-black-30'>{t(device.descriptionKey)}</p>
               </div>
             ))}
           </div>
@@ -210,11 +210,13 @@ const Home = () => {
           <div className='flex justify-between'>
             <div>
               <h2 className="text-3xl font-semibold mb-4"> {t("Q-H1")}</h2>
-              <p className="text-gray-60  mb-6">{t("Q-P")}</p>
+              <p className="dark:text-gray-60 text-black-30 mb-6">{t("Q-P")}</p>
             </div>
-            <Button className="mt-6 bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700">
-              {t("Q-BTN")}
-            </Button>
+            <Link href='/support'>
+              <Button className="bg-red-600 text-white hover:bg-red-700" size={'lg'}>
+                {t("Q-BTN")}
+              </Button>
+            </Link>
           </div>
           <div className=" flex flex-wrap w-full ">
             {faqs.map((faq, index) => (
@@ -236,7 +238,7 @@ const Home = () => {
                   </span>
                 </button>
                 {activeIndex === index && (
-                  <p className="text-gray-60 mt-2">{faq.answer}</p>
+                  <p className="dark:text-gray-60 text-black-30 mt-2">{faq.answer}</p>
                 )}
               </div>
             ))}
@@ -246,16 +248,16 @@ const Home = () => {
 
         {/* plans  */}
         <section id='Plans'>
-        {!isActive &&
-          <div className="py-8" id='subscriptions'>
-            <h2 className=" text-3xl font-bold mb-6">{t('PLANS-TITLE')}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-2xl">
-              {plans.map((plan) => (
-                <PlanCard {...plan} />
-              ))}
-            </div>
-          </div>}
-          </section>
+          {!isActive &&
+            <div className="py-8" id='subscriptions'>
+              <h2 className=" text-3xl font-bold mb-6">{t('PLANS-TITLE')}</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-2xl">
+                {plans.map((plan) => (
+                  <PlanCard {...plan} />
+                ))}
+              </div>
+            </div>}
+        </section>
 
       </section>
     </>
