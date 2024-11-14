@@ -31,11 +31,19 @@ const TVShows = () => {
         const trendingData = await trendingRes.json();
         const actionData = await actionRes.json();
 
-        setPopularShows(popularData.results);
-        setTop10Shows(top10Data.results.slice(0, 14));
-        setTrendingShows(trendingData.results);
-        setActionShows(actionData.results);
+
+        setPopularShows(await addRuntimes(popularData.results));
+        setTop10Shows(await addRuntimes(top10Data.results.slice(0, 14))); // تأكد من أنك تريد فقط 14 فيلم
+        setTrendingShows(await addRuntimes(trendingData.results));
+        setActionShows(await addRuntimes(actionData.results));
         setLoading(false);
+
+        // setPopularShows(popularData.results);
+        // setTop10Shows(top10Data.results.slice(0, 14));
+        // setTrendingShows(trendingData.results);
+        // setActionShows(actionData.results);
+        // setLoading(false);
+
       } catch (error) {
         console.error('Error fetching TV shows:', error);
         setLoading(false);
@@ -44,6 +52,26 @@ const TVShows = () => {
 
     fetchShows();
   }, []);
+
+  const addRuntimes = async (Shows: any[]) => {
+    return await Promise.all(
+      Shows.map(async (Shows: { id: any; }) => {
+        const runtimeRes = await fetch(`https://api.themoviedb.org/3/movie/${Shows.id}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=${locale}`);
+        const ShowsDetails = await runtimeRes.json();
+        const runtime = ShowsDetails.runtime;
+
+        if (typeof runtime !== 'number' || runtime < 0) {
+          console.warn(`Invalid runtime for Shows ID ${Shows.id}:`, runtime);
+        }
+       
+        if (isNaN(runtime)) {
+          console.warn(`Runtime is NaN for Shows ID ${Shows.id}`);
+        }
+        return { ...ShowsDetails, runtime };
+      })
+    );
+  };
+
 
   const formatRuntime = (runtime: number | null) => {
     if (runtime === null || isNaN(runtime)) return t('noRuntime');
@@ -132,12 +160,12 @@ const TVShows = () => {
           <div className="relative w-full h-[500px] mb-8">
             <Image
               src={`https://image.tmdb.org/t/p/original${featuredShow.backdrop_path}`}
-              alt={featuredShow.name}
+              alt={featuredShow.title}
               layout="fill"
               className="object-cover rounded-lg"
             />
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4 bg-black bg-opacity-50 rounded-lg bg-gradient-to-t from-black-6 to-transparent">
-              <h3 className="text-3xl text-white font-bold">{featuredShow.name}</h3>
+              <h3 className="text-3xl text-white font-bold">{featuredShow.title}</h3>
               <p className="text-white mt-2 w-[80vw] md:w-[60vw]">{featuredShow.tagline || featuredShow.overview}</p>
               <Link href={showURLFormat(featuredShow)}>
                 <Button className="mt-4 bg-red-50 text-white hover:bg-red-60">
@@ -147,7 +175,7 @@ const TVShows = () => {
             </div>
             <div className='absolute bottom-4 w-full flex items-center justify-between px-4'>
               <span className=" text-white text-lg">
-                {formatRuntime(featuredShow.episode_run_time ? featuredShow.episode_run_time[0] : null)}
+              {featuredShow.runtime ? formatRuntime(featuredShow.runtime) : t('noRuntime')}
               </span>
               <WatchlistButton titleId={featuredShow.id.toString()} titleType='tv' style='text' />
             </div>
