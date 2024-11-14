@@ -34,7 +34,7 @@ const ActorCard = ({ actorName, credit_id, profile_path, character, gender, role
           <Image src={imageUrl}
             alt={actorName} className='object-cover rounded-md pointer-events-none' width={100} height={100} loading='lazy' />
         </div>
-        <p className='text-gray-50 text-center text-sm truncate'>
+        <p className='dark:text-gray-50 text-center text-sm truncate'>
           {
             character
           }

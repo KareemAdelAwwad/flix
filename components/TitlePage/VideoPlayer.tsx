@@ -219,7 +219,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url = 'https://a.top4top.io/m
   };
 
   return (
-    <div ref={playerContainerRef} className={`rounded-lg overflow-hidden relative ${isFullScreen ? 'fullscreen' : ''} ${showControls ? '' : 'hide-cursor'}`} onDoubleClick={handleDoubleClick}>
+    <div ref={playerContainerRef} className={`mx-7 rounded-lg overflow-hidden relative ${isFullScreen ? 'fullscreen' : ''} ${showControls ? '' : 'hide-cursor'}`} onDoubleClick={handleDoubleClick}>
       <div onClick={handleVideoClick}>
         <ReactPlayer
           ref={playerRef}
@@ -238,45 +238,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url = 'https://a.top4top.io/m
       {showControls && (
         <div className="z-10 absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent px-4 py-2">
           {/* Controls row */}
-          <div className="flex items-center justify-between mb-2
-          py-1 px-4 rounded-lg bg-black-30 bg-opacity-50 backdrop-blur-md">
-            <div className="flex items-center space-x-4">
-              {/* Play/Pause */}
-              <button onClick={handlePlayPause} className='p-2 hover:bg-white/10 rounded'>
-                {isPlaying ? <Pause size={18} /> : <Play size={18} />}
-              </button>
-
-              {/* Volume */}
-              <div className="relative group flex">
-                <button
-                  onClick={handleVolumeClick}
-                  className="p-2 hover:bg-white/10 rounded"
-                >
-                  {getVolumeIcon()}
-                </button>
-                <div className="absolute -translate-y-4 -rotate-90 items-center justify-center
-                translate-x-[-50%] left-[50%] bottom-full hidden hover:flex group-hover:flex">
-                  <input
-                    type="range"
-                    min={0}
-                    max={1}
-                    step={0.01}
-                    value={volume}
-                    className="h-24 w-fit bg-gray-600 rounded-full cursor-pointer accent-red-45"
-                    onChange={handleVolumeChange}
-                  />
-                </div>
-              </div>
-
-              {/* Time */}
-              <span className="text-sm text-white">
-                {formatTime(playedSeconds)}
-              </span>
-            </div>
-
-
-            {/* Timeline scrubber */}
-            <div className="relative group w-full mx-4">
+          <div className="flex flex-col items-center justify-between mb-2
+          sm:py-1 pt-4 px-4 rounded-lg bg-black-30 bg-opacity-50 backdrop-blur-md">
+            {/* Timeline scrubber for large devices */}
+            <div className="relative group w-full mx-4 block sm:hidden">
               <input
                 type="range"
                 min={0}
@@ -298,59 +263,119 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url = 'https://a.top4top.io/m
                 }}
               />
             </div>
-
-
-            <div className="flex items-center space-x-2">
-              {/* Duration Time */}
-              <span className="text-sm text-white">
-                {formatTime(duration)}
-              </span>
-
-              {/* Settings */}
-              <div className="relative" ref={menuRef}>
-                <button
-                  onClick={() => setShowSpeedMenu(!showSpeedMenu)}
-                  className="group p-2 hover:bg-white/10 rounded transform transition-transform duration-200"
-                >
-                  <Settings size={20}
-                    className='group-hover:rotate-90 transform transition-transform duration-200'
-                  />
+            <div className='flex items-center justify-between w-full sm:mt-auto mt-2'>
+              <div className="flex items-center md:space-x-4 space-x-1">
+                {/* Play/Pause */}
+                <button onClick={handlePlayPause} className='p-2 hover:bg-white/10 rounded text-white'>
+                  {isPlaying ? <Pause size={18} /> : <Play size={18} />}
                 </button>
-                {showSpeedMenu && (
-                  <div className="absolute bottom-full right-0 mb-2 bg-black/90 rounded-lg
-                    p-2 min-w-[120px] bg-black-30 bg-opacity-50 backdrop-blur-md">
-                    {playbackSpeeds.map(speed => (
-                      <button
-                        key={speed}
-                        className={`block w-full text-left px-3 py-1 hover:bg-white/10 rounded
-                                  ${playbackRate === speed ? 'text-red-500' : 'text-white'}`}
-                        onClick={() => {
-                          setPlaybackRate(speed);
-                          setShowSpeedMenu(false);
-                        }}
-                      >
-                        {speed}x
-                      </button>
-                    ))}
+
+                {/* Volume */}
+                <div className="relative group flex">
+                  <button
+                    onClick={handleVolumeClick}
+                    className="p-2 hover:bg-white/10 rounded text-white"
+                  >
+                    {getVolumeIcon()}
+                  </button>
+                  <div className="absolute -translate-y-4 -rotate-90 items-center justify-center
+                translate-x-[-50%] left-[50%] bottom-full hidden hover:flex group-hover:flex">
+                    <input
+                      type="range"
+                      min={0}
+                      max={1}
+                      step={0.01}
+                      value={volume}
+                      className="h-24 w-fit bg-gray-600 rounded-full cursor-pointer accent-red-45"
+                      onChange={handleVolumeChange}
+                    />
                   </div>
-                )}
+                </div>
+
+                {/* Time */}
+                <span className="text-sm text-white">
+                  {formatTime(playedSeconds)}
+                </span>
               </div>
 
-              {/* PiP button */}
-              <button
-                onClick={togglePictureInPicture}
-                className="p-2 hover:bg-white/10 rounded"
-              >
-                <PictureInPicture2 size={20} />
-              </button>
 
-              {/* Fullscreen */}
-              <button
-                onClick={toggleFullscreen}
-                className="p-2 hover:bg-white/10 rounded"
-              >
-                {isFullScreen ? <Minimize size={20} /> : <Maximize size={20} />}
-              </button>
+              {/* Timeline scrubber for large devices */}
+              <div className="relative group w-full mx-4 hidden sm:block">
+                <input
+                  type="range"
+                  min={0}
+                  max={duration || 0}
+                  value={seeking ? progress : playedSeconds}
+                  step="any"
+                  className="absolute w-full h-1 bg-gray-600 rounded-full cursor-pointer
+                        group-hover:h-1.5 transition-all duration-150 accent-red-45"
+                  onChange={handleTimelineChange}
+                  onMouseDown={handleSeekMouseDown}
+                  onMouseUp={handleSeekMouseUp}
+                />
+                <div
+                  className="absolute h-1 group-hover:h-1.5 transition-all duration-75 bg-red-45 pointer-events-none
+              rounded-full"
+                  style={{
+                    width: `${(playedSeconds / duration) * 100}%`,
+                    transition: 'width 0.1s linear'
+                  }}
+                />
+              </div>
+
+
+              <div className="flex items-center md:space-x-4 space-x-1">
+                {/* Duration Time */}
+                <span className="text-sm text-white">
+                  {formatTime(duration)}
+                </span>
+
+                {/* Settings */}
+                <div className="relative" ref={menuRef}>
+                  <button
+                    onClick={() => setShowSpeedMenu(!showSpeedMenu)}
+                    className="group p-2 hover:bg-white/10 rounded text-white transform transition-transform duration-200"
+                  >
+                    <Settings size={20}
+                      className='group-hover:rotate-90 transform transition-transform duration-200'
+                    />
+                  </button>
+                  {showSpeedMenu && (
+                    <div className="absolute bottom-full right-0 mb-2 bg-black/90 rounded-lg
+                    p-2 min-w-[120px] bg-black-30 bg-opacity-50 backdrop-blur-md">
+                      {playbackSpeeds.map(speed => (
+                        <button
+                          key={speed}
+                          className={`block w-full text-left px-3 py-1 hover:bg-white/10 rounded
+                                  ${playbackRate === speed ? 'text-red-500' : 'text-white'}`}
+                          onClick={() => {
+                            setPlaybackRate(speed);
+                            setShowSpeedMenu(false);
+                          }}
+                        >
+                          {speed}x
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* PiP button */}
+                <button
+                  onClick={togglePictureInPicture}
+                  className="p-2 hover:bg-white/10 rounded text-white sm:block hidden"
+                >
+                  <PictureInPicture2 size={20} />
+                </button>
+
+                {/* Fullscreen */}
+                <button
+                  onClick={toggleFullscreen}
+                  className="p-2 hover:bg-white/10 rounded text-white"
+                >
+                  {isFullScreen ? <Minimize size={20} /> : <Maximize size={20} />}
+                </button>
+              </div>
             </div>
           </div>
         </div>

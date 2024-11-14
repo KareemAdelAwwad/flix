@@ -60,7 +60,6 @@ const Header = () => {
   }, [currentPath]);
 
 
-
   return (
     <header className='flex items-center justify-between container py-4 text-black' >
 

@@ -67,11 +67,12 @@ const WatchingServer = ({ string, status, titleType, titleID, seanonNumber, epis
         className={`fixed top-0 left-0 right-0 bottom-0 z-[20] bg-black-6 
         bg-opacity-75 backdrop-blur-md justify-center items-center ${showsEmbed ? 'flex' : 'hidden'}`}>
         {titleID ? (
+          showsEmbed &&
           <iframe
             ref={iframeRef}
             className='rounded-xl'
             src={titleType === 'tv' ? `https://vidsrc.to/embed/tv/${titleID}`
-              : `https://vidsrc.to/embed/movie/${titleID}`}
+              : `https://vidsrc.icu/embed/movie/${titleID}`}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             width={800}
             height={450}

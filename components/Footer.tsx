@@ -3,9 +3,7 @@ import React from 'react'
 import links from '@/data/links.json';
 import { useTheme } from 'next-themes';
 import { Link } from '@/i18n/routing';
-import { usePathname } from 'next/navigation';
-import { useLocale } from 'next-intl';
- 
+
 // img
 import { FaFacebook } from "react-icons/fa";
 import { FaLinkedin } from "react-icons/fa";
@@ -15,10 +13,8 @@ import { FaXTwitter } from "react-icons/fa6";
 import { useTranslations } from 'next-intl';
 
 const Footer = () => {
-
-  const locale = useLocale();
-  const currentPath = usePathname(); 
-   const navItemsClassName = '  text-gray-60';
+  const Year = new Date().getFullYear();
+  const navItemsClassName = '  text-gray-60';
 
 
   //for translate 
@@ -35,100 +31,84 @@ const Footer = () => {
 
 
 
-{/* home  */}
-<div className='flex flex-col text-lg'>
-  <h2 className='dark:text-white text-black-6'>{t('Home')} </h2>
-          {links.footer.find(section => section.key === "Home").links.map((link, index) => (
-      <Link
-        key={index}
-        href={link.path}
-        className={`${navItemsClassName} ${
-          (currentPath === `/${locale}${link.path === '/' ? "" : link.path}` || 
-          currentPath.includes(link.path !== '/' ? link.path : 'no'))  
-        }`}
-      >
-        {t(link.key)}
-      </Link>
-    ))}
-</div>
+        {/* home  */}
+        <div className='flex flex-col text-lg'>
+          <h2 className='dark:text-white text-black-6'>{t('Home')} </h2>
+          {links.footer.find(section => section.key === "Home")?.links.map((link, index) => (
+            <Link
+              key={index}
+              href={link.path}
+              className={navItemsClassName}
+            >
+              {t(link.key)}
+            </Link>
+          ))}
+        </div>
 
 
 
 
-       {/* Movies */}
-<div className='flex flex-col text-lg'>
-  <h2 className='dark:text-white text-black-6'>{t('Movies')} </h2>
-          {links.footer.find(section => section.key === "Movies").links.map((link, index) => (
-      <Link
-        key={index}
-        href={link.path}
-        className={`${navItemsClassName} ${
-          (currentPath === `/${locale}${link.path === '/' ? "" : link.path}` || 
-          currentPath.includes(link.path !== '/' ? link.path : 'no'))  
-        }`}
-      >
-        {t(link.key)}
-      </Link>
-    ))}
-</div>
+        {/* Movies */}
+        <div className='flex flex-col text-lg'>
+          <h2 className='dark:text-white text-black-6'>{t('Movies')} </h2>
+          {links.footer.find(section => section.key === "Movies")?.links.map((link, index) => (
+            <Link
+              key={index}
+              href={link.path}
+              className={navItemsClassName}
+            >
+              {t(link.key)}
+            </Link>
+          ))}
+        </div>
 
-               {/* Shows */}
-<div className='flex flex-col text-lg'>
-  <h2 className='dark:text-white text-black-6'>{t('Shows')} </h2>
-          {links.footer.find(section => section.key === "Shows").links.map((link, index) => (
-      <Link
-        key={index}
-        href={link.path}
-        className={`${navItemsClassName} ${
-          (currentPath === `/${locale}${link.path === '/' ? "" : link.path}` || 
-          currentPath.includes(link.path !== '/' ? link.path : 'no'))  
-        }`}
-      >
-        {t(link.key)}
-      </Link>
-    ))}
-</div>
-
-        
+        {/* Shows */}
+        <div className='flex flex-col text-lg'>
+          <h2 className='dark:text-white text-black-6'>{t('Shows')} </h2>
+          {links.footer.find(section => section.key === "Shows")?.links.map((link, index) => (
+            <Link
+              key={index}
+              href={link.path}
+              className={navItemsClassName}
+            >
+              {t(link.key)}
+            </Link>
+          ))}
+        </div>
 
 
 
 
-       {/* support */}
-       <div className='flex flex-col text-lg'>
-  <h2 className='dark:text-white text-black-6'>{t('Support')} </h2>
-          {links.footer.find(section => section.key === "Support").links.map((link, index) => (
-      <Link
-        key={index}
-        href={link.path}
-        className={`${navItemsClassName} ${
-          (currentPath === `/${locale}${link.path === '/' ? "" : link.path}` || 
-          currentPath.includes(link.path !== '/' ? link.path : 'no'))  
-        }`}
-      >
-        {t(link.key)}
-      </Link>
-    ))}
-</div>
 
-        
 
-    {/* Subscription */}
-    <div className='flex flex-col text-lg'>
-  <h2 className='dark:text-white text-black-6'>{t('Subscription')} </h2>
-          {links.footer.find(section => section.key === "Subscription").links.map((link, index) => (
-      <Link
-        key={index}
-        href={link.path}
-        className={`${navItemsClassName} ${
-          (currentPath === `/${locale}${link.path === '/' ? "" : link.path}` || 
-          currentPath.includes(link.path !== '/' ? link.path : 'no'))  
-        }`}
-      >
-        {t(link.key)}
-      </Link>
-    ))}
-</div>
+        {/* support */}
+        <div className='flex flex-col text-lg'>
+          <h2 className='dark:text-white text-black-6'>{t('Support')} </h2>
+          {links.footer.find(section => section.key === "Support")?.links.map((link, index) => (
+            <Link
+              key={index}
+              href={link.path}
+              className={navItemsClassName}
+            >
+              {t(link.key)}
+            </Link>
+          ))}
+        </div>
+
+
+        {/* Subscription */}
+        <div className='flex flex-col text-lg'>
+          <h2 className='dark:text-white text-black-6'>{t('Subscription')} </h2>
+          {links.footer.find(section => section.key === "Subscription")?.links.map((link, index) => (
+            <Link
+              key={index}
+              href={link.path}
+              className={navItemsClassName}
+            >
+              {t(link.key)}
+            </Link>
+          ))}
+        </div>
 
 
         <div className='flex flex-col text-lg'>
@@ -146,7 +126,7 @@ const Footer = () => {
       {/* the end of Footer */}
       <hr className='w-full border-gray-70' />
       <div className='w-full m-auto flex flex-col justify-between items-center lg:flex-row'>
-        <p className='text-gray-65 p-4'> ©2023 StreamVib, All Rights Reserved</p>
+        <p className='text-gray-65 p-4'> ©{Year} StreamVib, All Rights Reserved</p>
 
         <div className='flex items-center justify-center'>
           <Link className='text-gray-65 p-4' href=''>Terms Of Use</Link>

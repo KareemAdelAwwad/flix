@@ -11,6 +11,7 @@ import {
   IconBrandGoogle,
   IconBrandOnlyfans,
 } from "@tabler/icons-react";
+import { Link } from '@/i18n/routing';
 
 const page = () => {
   const t = useTranslations('HomePage');
@@ -140,7 +141,8 @@ const page = () => {
         </div>
 
         {/* -------------form---------------- */}
-        <div className=" h-fit  w-full md:w-2/4 lg:w-3/4 mx-auto rounded-none md:rounded-2xl 
+        <div id='contact-form'
+          className=" h-fit  w-full md:w-2/4 lg:w-3/4 mx-auto rounded-none md:rounded-2xl 
         p-4 md:p-8 shadow-input bg-white dark:bg-black-12 border-2 border-black-6">
 
           <form className="my-8" onSubmit={handleSubmit}>
@@ -193,15 +195,17 @@ const page = () => {
 
 
       {/* questions */}
-      <div className="mb-8">
-        <div className='flex justify-between'>
+      <div className="mb-8" id='Questions'>
+        <div className='flex justify-between items-center'>
           <div>
             <h2 className="text-3xl font-semibold mb-4"> {t("Q-H1")}</h2>
-            <p className="text-gray-60  mb-6">{t("Q-P")}</p>
+            <p className="dark:text-gray-60 text-black-30  mb-6">{t("Q-P")}</p>
           </div>
-          <Button className="mt-6 bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700" size={'lg'}>
-            {t("Q-BTN")}
-          </Button>
+          <a href='#contact-form'>
+            <Button className="bg-red-600 text-white hover:bg-red-700" size={'lg'}>
+              {t("Q-BTN")}
+            </Button>
+          </a>
         </div>
         <div className=" flex flex-wrap w-full ">
           {faqs.map((faq, index) => (

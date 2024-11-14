@@ -80,7 +80,7 @@ const WatchlistButton: React.FC<WatchlistButtonProps> = ({ titleId, titleType, s
       <Button onClick={handleAddToWatchlist} size={"lgIcon"}
         className={`-top-1 left-2 absolute w-8 rounded-none rounded-b z-10 ${className}`} >
         {
-          isInWatchlist ? <IoBookmark size={32} /> : <IoBookmarkOutline size={32} />
+          isInWatchlist ? <IoBookmark className='dark:text-white text-black-12' size={32} /> : <IoBookmarkOutline className='dark:text-white text-black-12' size={32} />
         }
       </Button>
     ) : null
