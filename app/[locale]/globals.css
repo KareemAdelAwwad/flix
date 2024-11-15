@@ -1,13 +1,7 @@
-@import url("https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800;900&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-* {
-  font-family: "Tajawal", sans-serif;
-  font-weight: 400;
-  scroll-behavior: smooth;
-}
 .cl-userButtonPopoverFooter {
   display: none;
 }

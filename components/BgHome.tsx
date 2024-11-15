@@ -79,6 +79,7 @@ const BackgroundCollage = () => {
               alt={movie.title}
               width={200}
               height={300}
+              loading='eager'
               className="object-cover w-full h-full rounded-xl opacity-70"
             />
           </div>

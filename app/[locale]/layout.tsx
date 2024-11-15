@@ -1,3 +1,4 @@
+import { Tajawal } from 'next/font/google';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { ThemeProvider } from "@/app/[locale]/theme-provider";
 import { NextIntlClientProvider } from 'next-intl';
@@ -13,6 +14,12 @@ import { arSA, enUS } from '@clerk/localizations'
 import { dark } from '@clerk/themes'
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+
+const tajawal = Tajawal({
+  weight: ['400', '500', '700'],
+  subsets: ['arabic', 'latin'],
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   icons: {
@@ -49,14 +56,7 @@ export const metadata: Metadata = {
     ],
     locale: "en_US",
     type: "website",
-  },
-  // robots: {
-  //   index: true,
-  //   follow: true,
-  //   "max-snippet": -1,
-  //   "max-image-preview": "large",
-  //   "max-video-preview": -1
-  // },
+  }
 };
 
 export default async function RootLayout({
@@ -77,7 +77,7 @@ export default async function RootLayout({
         <head>
           <script defer data-domain="flix.kareemadel.com" src="https://plausible-plausible.7s4elo.easypanel.host/js/script.js"></script>
         </head>
-        <body>
+        <body className={tajawal.className}>
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
