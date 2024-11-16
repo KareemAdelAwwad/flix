@@ -111,7 +111,7 @@ export default function page({ params }: { params: { id: number } }) {
   const containerClasses = 'relative flex flex-row justify-center flex-wrap gap-4 w-full borders rounded-lg p-4 pt-12 my-20';
   return (
     <main className="container mx-auto px-4 py-8">
-      <title>{details.name}</title>`
+      <title>{details.name}</title>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
         <div className="md:col-span-1 borders h-fit rounded-lg overflow-hidden">
           {details.profile_path && (
