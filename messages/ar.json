@@ -161,29 +161,45 @@
     "trendingMovies": "الأفلام الرائجة",
     "actionMovies": "أفلام الأكشن"
   },
-
-
-"TVShows": {
-  "movies": "العروض",
-  "shows": "العروض التلفزيونية",
-  "popular": "العروض الشعبية",
-  "top10": "أفضل 10 عروض",
-  "trending": "العروض الرائجة",
-  "airing_today": "يعرض اليوم",
-  "featuredShow": "العروض المميزة",
-  "watchShow": "مشاهدة العرض",
-  "watchSeries": "مشاهدة السلسلة",
-  "noRuntime": "لا يوجد وقت عرض",
-  "noDescription": "لا يوجد وصف",
-  "allShows": "جميع العروض",
-  "top10Shows": "أفضل 10 عروض",
-  "trendingShows": "العروض الرائجة",
-  "airing_todayShows": "يعرض اليوم",
-  "loading": "جاري التحميل..."
-},
-
+  "TVShows": {
+    "movies": "العروض",
+    "shows": "العروض التلفزيونية",
+    "popular": "العروض الشعبية",
+    "top10": "أفضل 10 عروض",
+    "trending": "العروض الرائجة",
+    "airing_today": "يعرض اليوم",
+    "featuredShow": "العروض المميزة",
+    "watchShow": "مشاهدة العرض",
+    "watchSeries": "مشاهدة السلسلة",
+    "noRuntime": "لا يوجد وقت عرض",
+    "noDescription": "لا يوجد وصف",
+    "allShows": "جميع العروض",
+    "top10Shows": "أفضل 10 عروض",
+    "trendingShows": "العروض الرائجة",
+    "airing_todayShows": "يعرض اليوم",
+    "loading": "جاري التحميل..."
+  },
   "Lists": {
     "watchlist": "قائمة المشاهدة خاصتك",
     "watched": "العناوين التي شاهدتها"
+  },
+  "Support": {
+    "title": "الدعم",
+    "contact": "مرحباً بك في قسم الدعم.",
+    "contactP": "نحن هنا لمساعدتك في حال وجود أي استفسارات أو مشاكل.",
+    "contactForm": {
+      "fName": "الاسم الأول",
+      "lName": "الاسم الأخير",
+      "email": "البريد الإلكتروني",
+      "message": "الرسالة",
+      "send": "إرسال"
+    },
+    "contactFormPlacholder": {
+      "fName": "أدخل اسمك الأول",
+      "lName": "أدخل اسمك الأخير",
+      "email": "أدخل بريدك الإلكتروني",
+      "message": "أدخل رسالتك"
+    },
+    "contactSuccess": "تم إرسال رسالتك بنجاح"
   }
 }

@@ -171,7 +171,7 @@ const Page = () => {
               <div className='bg-black-20 animate-pulse h-96 w-full rounded-lg' />
             ) :
               series.map(item => (
-                <div className="relative movie-card group mb-100" key={item.id}>
+                <div className="relative movie-card group max-w-8 mb-100" key={item.id}>
                   <div className="aspect-w-2 aspect-h-3">
                     <CompletedButton
                       titleId={item.id.toString()}
