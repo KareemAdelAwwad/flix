@@ -174,7 +174,7 @@ const page = () => {
               emailSent &&
               <div className="mt-4 text-center text-green-600">
                 <p>
-                  Email sent successfully
+                  {sTranslation('contactSuccess')}
                 </p>
               </div>
             }
