@@ -170,7 +170,6 @@
     "actionMovies": "Action Movies",
     "loading": "Loading..."
   },
-
   "TVShows": {
     "movies": "Shows",
     "shows": "TV Shows",
@@ -192,5 +191,24 @@
   "Lists": {
     "watchlist": "Your Watchlist",
     "watched": "Titles You Have Watched"
+  },
+  "Support": {
+    "title": "Support",
+    "contact": "Welcome to our support page!",
+    "contactP": "We're here to help you with any problems you may be having with our product.",
+    "contactForm": {
+      "fName": "First Name",
+      "lName": "Last Name",
+      "email": "Email Address",
+      "message": "Message",
+      "send": "Send"
+    },
+    "contactFormPlacholder": {
+      "fName": "Enter your first name",
+      "lName": "Enter your last name",
+      "email": "Enter your email address",
+      "message": "Enter your message"
+    },
+    "contactSuccess": "Your message has been sent successfully."
   }
 }

@@ -111,7 +111,7 @@ const page = () => {
       <title>Support</title>
       <div className='h-fit md:h-screen w-full flex flex-col md:flex-row justify-center items-center gap-10 max-w-screen-2xl'>
         {/* the img  */}
-        <div className='h-96 md:h-full w-full md:w-2/4 flex flex-col justify-center gap-4' >
+        <div className='h-full w-full md:w-2/4 flex flex-col justify-center gap-4' >
 
           <h1 className='text-2xl md:text-5xl font-bold md:w-[80%]'>Welcome to our support page! </h1>
           <p className='text-sm md:text-base text-gray-500 dark:text-gray-65 max-w-4xl '>
@@ -119,7 +119,7 @@ const page = () => {
           </p>
 
 
-          <div className="relative md:h-2/5 w-full overflow-hidden 
+          <div className="relative md:h-2/5 w-full overflow-hidden md:block hidden
           dark:bg-black-6 bg-gray-50 dark:border-black-12 border-gray-60 border-4 rounded-xl ">
             {/* Movie Posters Background */}
             <div className="absolute grid grid-cols-4 grid-rows-4 flex-wrap gap-4 p-2">
@@ -142,7 +142,7 @@ const page = () => {
 
         {/* -------------form---------------- */}
         <div id='contact-form'
-          className=" h-fit  w-full md:w-2/4 lg:w-3/4 mx-auto rounded-none md:rounded-2xl 
+          className=" h-fit w-full md:w-2/4 lg:w-3/4 mx-auto rounded-2xl 
         p-4 md:p-8 shadow-input bg-white dark:bg-black-12 border-2 border-black-6">
 
           <form className="my-8" onSubmit={handleSubmit}>
@@ -195,8 +195,8 @@ const page = () => {
 
 
       {/* questions */}
-      <div className="mb-8" id='Questions'>
-        <div className='flex justify-between items-center'>
+      <div className="my-8" id='Questions'>
+        <div className='flex md:flex-row flex-col justify-between items-center'>
           <div>
             <h2 className="text-3xl font-semibold mb-4"> {t("Q-H1")}</h2>
             <p className="dark:text-gray-60 text-black-30  mb-6">{t("Q-P")}</p>
