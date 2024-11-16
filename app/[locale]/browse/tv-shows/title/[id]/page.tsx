@@ -462,6 +462,7 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
                 settings={sliderSettings.cast}
                 ItemComponent={({ item }: { item: any }) => (
                   <ActorCard
+                    actorId={item.id}
                     actorName={item.name}
                     credit_id={item.credit_id}
                     profile_path={item.profile_path}

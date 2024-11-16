@@ -112,7 +112,7 @@ const Page = () => {
       </SignedOut>
 
       <SignedIn>
-        <h1 className='text-4xl font-bold my-6 text-center'>{pTranslation('watched')}</h1>
+        <h1 className='md:text-6xl text-4xl font-bold my-8 text-center header'>{pTranslation('watched')}</h1>
 
         <section className='flex flex-col gap-16'>
           <div className={containerClasses}>

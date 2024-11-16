@@ -1,8 +1,10 @@
 import { useMemo } from 'react';
 import ReadyTooltip from './ui/ready-tooltip'
 import Image from 'next/image'
+import { Link } from '@/i18n/routing';
 
 interface ActorCardProps {
+  actorId: number;
   actorName: string;
   credit_id: string;
   profile_path: string;
@@ -14,7 +16,7 @@ interface ActorCardProps {
   }[];
 }
 
-const ActorCard = ({ actorName, credit_id, profile_path, character, gender, roles }: ActorCardProps) => {
+const ActorCard = ({ actorId, actorName, credit_id, profile_path, character, gender, roles }: ActorCardProps) => {
   const placeholderIndex = useMemo(() => {
     return Math.floor(Math.random() * 50) + 1;
   }, []);
@@ -28,7 +30,7 @@ const ActorCard = ({ actorName, credit_id, profile_path, character, gender, role
 
   return (
     <ReadyTooltip title={actorName} key={credit_id}>
-      <div className='w-[100px] h-fit flex flex-col'>
+      <Link className='w-[100px] h-fit flex flex-col' href={`/browse/person/${actorId}`}>
         <div className='w-[100px] h-[120px] flex'>
 
           <Image src={imageUrl}
@@ -39,7 +41,7 @@ const ActorCard = ({ actorName, credit_id, profile_path, character, gender, role
             character
           }
         </p>
-      </div>
+      </Link>
     </ReadyTooltip>
   )
 }
