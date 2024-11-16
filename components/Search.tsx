@@ -105,7 +105,7 @@ const Search = ({ isMobile }: { isMobile: boolean }) => {
         if (firstResult.media_type === 'movie' || firstResult.media_type === 'tv') {
           window.location.href = `/${locale}/browse/${firstResult.media_type === 'movie' ? 'movies' : 'tv-shows'}/title/${firstResult.id}`;
         } else if (firstResult.media_type === 'person') {
-          window.location.href = `/${locale}/browse/people/person/${firstResult.id}`;
+          window.location.href = `/${locale}/browse/person/${firstResult.id}`;
         }
       }
     };
@@ -165,7 +165,7 @@ const Search = ({ isMobile }: { isMobile: boolean }) => {
 
   const PersonCard = ({ name, profile_path, id, gender, known_for_department }: PersonProps) => {
     return (
-      <Link href={`/browse/people/person/${id}`} onClick={() => clickHandler()}
+      <Link href={`/browse/person/${id}`} onClick={() => clickHandler()}
         className='w-full'>
         <div className='flex items-center gap-2 borders p-4 rounded-lg
       hover:scale-105 dark:bg-black-15 bg-gray-95 dark:hover:bg-black-10 transition-all cursor-pointer'>
