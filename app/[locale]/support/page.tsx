@@ -6,19 +6,11 @@ import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { cn } from "@/lib/utils";
 import Image from 'next/image';
-import {
-  IconBrandGithub,
-  IconBrandGoogle,
-  IconBrandOnlyfans,
-} from "@tabler/icons-react";
-import { Link } from '@/i18n/routing';
+
 
 const page = () => {
   const t = useTranslations('HomePage');
   const sTranslation = useTranslations('Support');
-  const conatctT = useTranslations('Support.contactForm');
-
-
 
   //for question section
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -35,8 +27,6 @@ const page = () => {
     { question: t("Q-SEVEN"), answer: t("A-SEVEN") },
     { question: t("Q-EIGHT"), answer: t("A-EIGHT") },
   ];
-
-
 
 
   // for the webs3 forms 
@@ -110,7 +100,7 @@ const page = () => {
 
   return (
     <section className="container">
-      <title>Support</title>
+      <title>{sTranslation('title')}</title>
       <div className='h-fit md:h-screen w-full flex flex-col md:flex-row justify-center items-center gap-10 max-w-screen-2xl'>
         {/* the img  */}
         <div className='h-full w-full md:w-2/4 flex flex-col justify-center gap-4' >
