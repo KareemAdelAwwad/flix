@@ -1,5 +1,4 @@
 import { Tajawal } from 'next/font/google';
-import { SpeedInsights } from '@vercel/speed-insights/next';
 import { ThemeProvider } from "@/app/[locale]/theme-provider";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
@@ -90,7 +89,6 @@ export default async function RootLayout({
               <Footer />
             </NextIntlClientProvider>
           </ThemeProvider>
-          <SpeedInsights />
         </body>
       </html>
     </ClerkProvider>

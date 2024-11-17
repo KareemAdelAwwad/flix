@@ -114,9 +114,9 @@ const Footer = () => {
         <div className='flex flex-col text-lg'>
           <h2 className='dark:text-white text-black-6'>{t('ContactWithUs')} </h2>
           <div className='flex justify-evenly gap-2'>
-            <Link className={socialMediaIcon} href=""> <FaFacebook className={themeTriger} size={22} /> </Link>
-            <Link className={socialMediaIcon} href=""> <FaLinkedin className={themeTriger} size={22} /> </Link>
-            <Link className={socialMediaIcon} href=""> <FaXTwitter className={themeTriger} size={22} /> </Link>
+            <Link className={socialMediaIcon} href="#" aria-label={"Facebook"}> <FaFacebook className={themeTriger} size={22} /> </Link>
+            <Link className={socialMediaIcon} href="#" aria-label={"LinkedIn"}> <FaLinkedin className={themeTriger} size={22} /> </Link>
+            <Link className={socialMediaIcon} href="#" aria-label={"Twitter"}> <FaXTwitter className={themeTriger} size={22} /> </Link>
           </div>
         </div>
 
