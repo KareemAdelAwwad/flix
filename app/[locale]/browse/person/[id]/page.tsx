@@ -31,7 +31,7 @@ const LoadingSkeleton = () => {
         <div className="h-8 w-1/4 bg-gray-200 rounded my-4" />
         <div className="flex flex-row justify-start flex-wrap gap-4 w-full">
           {[...Array(8)].map((_, i) => (
-            <div key={i} className="relative w-[100px] h-[150px] bg-gray-200 rounded-lg" />
+            <div key={`image-${i}`} className="relative w-[100px] h-[150px] bg-gray-200 rounded-lg" />
           ))}
         </div>
       </div>
@@ -40,7 +40,7 @@ const LoadingSkeleton = () => {
         <div className="h-8 w-1/4 bg-gray-200 rounded mb-4" />
         <div className="flex md:flex-row justify-center flex-wrap gap-4 w-full">
           {[...Array(7)].map((_, i) => (
-            <div key={i} className="relative w-[200px] h-[300px] bg-gray-200 rounded-lg" />
+            <div key={`skeleton-${i}`} className="relative w-[200px] h-[300px] bg-gray-200 rounded-lg" />
           ))}
         </div>
       </div>
@@ -58,12 +58,13 @@ export default function page({ params }: { params: { id: number } }) {
   const [error, setError] = useState("");
 
   const locale = useLocale();
-  const t = useTranslations('MoviesShows');
+  const titleTranslation = useTranslations('MoviesShows');
+  const t = useTranslations('Person');
 
-  const DetailsUrl = `https://api.themoviedb.org/3/person/${params.id}?language=${locale}`;
+  const DetailsUrl = `https://api.themoviedb.org/3/person/${params.id}`;
   const ImagesUrl = `https://api.themoviedb.org/3/person/${params.id}/images`;
-  const MovieCreditsUrl = `https://api.themoviedb.org/3/person/${params.id}/movie_credits?language=${locale}`;
-  const TVCreditsUrl = `https://api.themoviedb.org/3/person/${params.id}/tv_credits?language=${locale}`;
+  const MovieCreditsUrl = `https://api.themoviedb.org/3/person/${params.id}/movie_credits`;
+  const TVCreditsUrl = `https://api.themoviedb.org/3/person/${params.id}/tv_credits`;
 
   const options = {
     method: 'GET',
@@ -128,18 +129,27 @@ export default function page({ params }: { params: { id: number } }) {
           <h1 className="text-6xl mb-4 header">{details.name}</h1>
           <div>
             {details.birthday && (
-              <p className="mb-2">Born: {new Date(details.birthday).toLocaleDateString()}</p>
+              <p className="mb-2">{t('born')}: {new Date(details.birthday).toLocaleDateString()}</p>
             )}
+            {
+              details.deathday && (
+                <p className="mb-2">{t('death')}: {new Date(details.deathday).toLocaleDateString()}</p>
+              )
+            }
             {details.place_of_birth && (
-              <p className="mb-4">Place of Birth: {details.place_of_birth}</p>
+              <p className="mb-4">{t('place_of_birth')}: {details.place_of_birth}</p>
             )}
           </div>
-          <h2 className="text-2xl font-semibold mb-2">Biography</h2>
-          <p className="mb-8">{details.biography}</p>
+          {details.biography &&
+            <>
+              <h2 className="text-2xl font-semibold mb-2">{t('biography')}</h2>
+              <p className="mb-8">{details.biography}</p>
+            </>
+          }
           <div>
-            <h2 className="text-2xl font-semibold mb-4">Images</h2>
+            <h2 className="text-2xl font-semibold mb-4">{t('images')}</h2>
             <div className="flex flex-row justify-start flex-wrap gap-4 w-full">
-              {images?.profiles.slice(0, 7).map((image) => (
+              {images?.profiles.slice(0, 6).map((image) => (
                 <div key={image.file_path} className="relative image-card group">
                   <div className="aspect-w-2 aspect-h-3">
                     <Image
@@ -163,11 +173,11 @@ export default function page({ params }: { params: { id: number } }) {
           <span className={`text-lg font-semibold px-6 py-2 bg-red-45 rounded-lg text-white
             absolute top-0 translate-y-[-50%] 
             ${locale === 'ar' ? 'right-0 -translate-x-[50%]' : 'left-0 translate-x-[50%]'}`}>
-            Movies
+            {titleTranslation('movies')}
           </span>
           <div className="flex flex-row justify-center flex-wrap gap-4 w-full">
-            {movieCredits?.map((movie) => (
-              <div className="relative movie-card group max-w-8 mb-100" key={movie.id}>
+            {movieCredits?.map((movie, i) => (
+              <div className="relative movie-card group max-w-8 mb-100" key={`movie(${i})-${movie.id}`}>
                 <div className="aspect-w-2 aspect-h-3">
                   <CompletedButton
                     titleId={movie.id.toString()}
@@ -193,7 +203,7 @@ export default function page({ params }: { params: { id: number } }) {
                   <h2 className="text-xl font-bold text-white">{movie.title}</h2>
                   <Link href={`/browse/movies/title/${movie.id}`}>
                     <Button className="mt-4 bg-red-50 text-white hover:bg-red-60">
-                      {t('watchMovie')}
+                      {titleTranslation('watchMovie')}
                     </Button>
                   </Link>
                 </div>
@@ -207,11 +217,11 @@ export default function page({ params }: { params: { id: number } }) {
           <span className={`text-lg font-semibold px-6 py-2 bg-red-45 rounded-lg text-white
             absolute top-0 translate-y-[-50%] 
             ${locale === 'ar' ? 'right-0 -translate-x-[50%]' : 'left-0 translate-x-[50%]'}`}>
-            TV Shows
+            {titleTranslation('shows')}
           </span>
           <div className="flex flex-row justify-center flex-wrap gap-4 w-full">
-            {tvCredits?.map((show) => (
-              <div className="relative movie-card group max-w-8 mb-100" key={show.id}>
+            {tvCredits?.map((show, i) => (
+              <div className="relative movie-card group max-w-8 mb-100" key={`show(${i})-${show.id}`}>
                 <div className="aspect-w-2 aspect-h-3">
                   <CompletedButton
                     titleId={show.id.toString()}
@@ -237,7 +247,7 @@ export default function page({ params }: { params: { id: number } }) {
                   <h2 className="text-xl font-bold text-white">{show.name}</h2>
                   <Link href={`/browse/tv-shows/title/${show.id}`}>
                     <Button className="mt-4 bg-red-50 text-white hover:bg-red-60">
-                      {t('watchMovie')}
+                      {titleTranslation('watchSeries')}
                     </Button>
                   </Link>
                 </div>

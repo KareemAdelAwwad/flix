@@ -65,7 +65,7 @@ const Header = () => {
 
       {/* title */}
       <Link className='cursor-pointer text-3xl font-semibold flex items-center gap-2 md:gap-4' href='/'>
-        <img src="/icon.svg" alt="Logo" className='w-[40px] md:w-fit pointer-events-none' />
+        <img src="/icon.svg" alt="Logo" className='w-[40px] md:w-fit pointer-events-none' width={40} height={40} />
         {t('title')}
       </Link>
 
@@ -130,7 +130,7 @@ const Header = () => {
       {/* sideBar for mobile and tablet  its disappear at lg*/}
       <div className={`z-[50] py-10 px-8 flex flex-col justify-between fixed top-0  h-full sm:w-96 w-full
         bg-gray-100 dark:bg-black-10 transform
-        ${isSidebarVisible ? 'right-0' : 'right-0 -translate-x-[-100%]'}  ${t('sideBar')} 
+        ${isSidebarVisible ? 'right-0' : 'right-0 -translate-x-[-100%]'}
         text-xl transition-all duration-300`}>
         <div className='flex flex-col gap-4'>
           <div className='flex flex-row w-full items-center justify-between'>
@@ -151,9 +151,9 @@ const Header = () => {
                 </UserButton.MenuItems>
               </UserButton>
             </SignedIn>
-            <Button onClick={toggleSidebar} className='p-2 aspect-square dark:bg-black-6 borders'>
+            <span onClick={toggleSidebar} className='p-2 aspect-square dark:bg-black-6 borders rounded-md'>
               <CgClose className={themeTriger} />
-            </Button>
+            </span>
           </div>
           <div className='relative w-full flex flex-row h-fit justify-center items-center'>
             <Search isMobile={true} />
@@ -165,8 +165,8 @@ const Header = () => {
           {
             links.nav.map((link, index) => (
               <Link key={index} href={link.path}>
-                <li key={index} onClick={toggleSidebar}
-                  className={`text-xl p-2 dark:hover:bg-black-30 hover:bg-gray-70 dark:hover:text-white rounded-md cursor-pointer transition-all
+                <li onClick={toggleSidebar}
+                  className={`text-xl py-3 px-4 dark:hover:bg-black-30 hover:bg-gray-70 dark:hover:text-white rounded-md cursor-pointer transition-all
                 ${(currentPath == `/${locale}` + (link.path === '/' ? "" : link.path) || currentPath.includes((link.path === '/' ? 'no' : link.path))) && "!bg-red-45 text-white"}`}>
                   {t(link.key)}
                 </li>

@@ -170,9 +170,11 @@ const Home = () => {
         <div className='flex flex-col items-center justify-center'>
           <h1 className='text-2xl md:text-5xl font-bold'>{t('SECTION-ONE-H1')}</h1>
           <p className='text-sm md:text-base dark:text-gray-60 text-black-30 p-4 max-w-4xl text-center'>{t('DES-ONE')}</p>
-          <Button className='bg-red-50 text-white hover:bg-red-50'>
-            <FaPlay /> {t("SECTION-ONE-BTN")}
-          </Button>
+          <Link href={"/browse/movies"}>
+            <Button className='bg-red-50 text-white hover:bg-red-50'>
+              <FaPlay /> {t("SECTION-ONE-BTN")}
+            </Button>
+            </Link>
         </div>
       </div>
 
@@ -197,7 +199,7 @@ const Home = () => {
                   <div className='text-red-45 p-2 dark:bg-black-8 bg-gray-90 rounded-lg' style={{ fontSize: '30px' }}>
                     {device.icon}
                   </div>
-                  <h1 className='text-base font-semibold'>{t(device.title)}</h1>
+                  <h4 className='text-base font-semibold'>{t(device.title)}</h4>
                 </div>
                 <p className='mt-2 text-sm dark:text-gray-60 text-black-30'>{t(device.descriptionKey)}</p>
               </div>
@@ -231,7 +233,7 @@ const Home = () => {
                         {`${index + 1}`.toString().padStart(2, '0')}
                       </p>
                     </span>
-                    <h6 className='font-medium text-[22px]'>{faq.question}</h6>
+                    <h4 className='font-medium text-[22px]'>{faq.question}</h4>
                   </div>
                   <span className={`ml-2 transform ${activeIndex === index ? 'rotate-180' : ''}`}>
                     {activeIndex === index ? '−' : '+'}

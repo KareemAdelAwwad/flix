@@ -6,6 +6,7 @@ import HorizontalCarousel from '@/components/carousel';
 import { Button } from './ui/button';
 import WatchlistButton from './ui/AddToWatchlistButton';
 import { FaStar } from 'react-icons/fa6';
+import { getCache, setCache } from '@/utils/cache';
 
 interface Movie {
   id: number;
@@ -18,6 +19,8 @@ interface Movie {
 }
 
 const MoviesShows = () => {
+  const MOVIES_LIMIT = 21;
+  const CACHE_KEY = 'popularMovies';
   const t = useTranslations('MoviesShows');
   const [popularMovies, setPopularMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
@@ -25,12 +28,23 @@ const MoviesShows = () => {
   useEffect(() => {
     const fetchPopularMovies = async () => {
       try {
+        const cachedMovies = getCache<Movie[]>(CACHE_KEY);
+        if (cachedMovies) {
+          setPopularMovies(cachedMovies.slice(0, MOVIES_LIMIT));
+          setLoading(false);
+          return;
+        }
+
         const popularRes = await fetch(
           `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`
         );
 
         const popularData = await popularRes.json();
-        setPopularMovies(await addRuntimes(popularData.results));
+        const limitedMovies = popularData.results.slice(0, MOVIES_LIMIT);
+        const moviesWithRuntime = await addRuntimes(limitedMovies);
+
+        setCache(CACHE_KEY, moviesWithRuntime);
+        setPopularMovies(moviesWithRuntime);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching popular movies:', error);

@@ -210,5 +210,12 @@
       "message": "Enter your message"
     },
     "contactSuccess": "Your message has been sent successfully."
+  },
+  "Person": {
+    "born": "Born",
+    "death": "Death",
+    "place_of_birth": "Place of Birth",
+    "biography": "Biography",
+    "images": "Images"
   }
 }

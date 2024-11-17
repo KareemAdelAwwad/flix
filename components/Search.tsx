@@ -215,7 +215,7 @@ const Search = ({ isMobile }: { isMobile: boolean }) => {
           id='search' type='text' placeholder={t('search')} value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
           className={`absolute text-black-6 dark:text-white ${locale === 'en' ? 'left-1' : 'right-1'}
-          ${isMobile ? (locale === 'en' ? "top-0 left-0" : 'top-0 right-0') : 'top-[50%] translate-y-[-50%]'} 
+          ${isMobile ? (locale === 'en' ? "top-[1px] left-0" : 'top-[1px] right-0') : 'top-[50%] translate-y-[-50%]'} 
           ${isMobile ? 'rounded-xl' : 'rounded-full'}
           opacity-0 ${(activateSearch === true) && "opacity-100"}`} />
       </span>
