@@ -182,7 +182,7 @@ const Page = () => {
         )
         }
 
-        <div className="button-container mt-6 flex flex-wrap">
+        {/* <div className="button-container mt-6 flex flex-wrap">
           <Button onClick={() => setSelectedSection(null)} className={`bg-gray-700 text-white ${selectedSection === null ? 'active' : ''}`}>
             {t('allMovies')}
           </Button>
@@ -198,7 +198,7 @@ const Page = () => {
           <Button onClick={() => setSelectedSection('action')} className={`bg-gray-700 text-white ${selectedSection === 'action' ? 'active' : ''}`}>
             {t('actionMovies')}
           </Button>
-        </div>
+        </div> */}
 
         {/* عرض الأقسام بناءً على الاختيار */}
         {selectedSection === 'popular' && renderMoviesSection('popular', popularMovies)}
