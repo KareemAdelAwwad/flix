@@ -176,7 +176,7 @@ const page = () => {
         ) : (
           <div className="h-[500px] bg-black-30 animate-pulse rounded-lg" />
         )}
-        <div className="button-container mt-6 flex flex-wrap">
+        {/* <div className="button-container mt-6 flex flex-wrap">
           <Button onClick={() => setSelectedSection(null)} className={`bg-gray-700 text-white ${selectedSection === null ? 'active' : ''}`}>
             {t('allShows')}
           </Button>
@@ -192,7 +192,7 @@ const page = () => {
           <Button onClick={() => setSelectedSection('airing_today')} className={`bg-gray-700 text-white ${selectedSection === 'airing_today' ? 'active' : ''}`}>
             {t('airing_today')}
           </Button>
-        </div>
+        </div> */}
         {selectedSection === 'popular' && renderShowsSection('popular', popularShows)}
         {selectedSection === 'top10' && renderShowsSection('top10', top10Shows)}
         {selectedSection === 'trending' && renderShowsSection('trending', trendingShows)}
