@@ -94,7 +94,7 @@ const BackgroundCollage = () => {
         {popularMovies.map((movie) => (
           <div id='movie-card' key={movie.id} >
             <Image
-              src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
+              src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
               alt={movie.title}
               width={160}
               height={240}

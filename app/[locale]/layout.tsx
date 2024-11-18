@@ -1,4 +1,4 @@
-import { Tajawal } from 'next/font/google';
+import { Tajawal, Manrope } from 'next/font/google';
 import { ThemeProvider } from "@/app/[locale]/theme-provider";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
@@ -14,11 +14,20 @@ import { dark } from '@clerk/themes'
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
+// Arabic font
 const tajawal = Tajawal({
   weight: ['400', '500', '700'],
   subsets: ['arabic', 'latin'],
   display: 'swap',
 })
+// English font
+const manrope = Manrope({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  style: ['normal'],
+  display: 'swap',
+});
+
 
 export const metadata: Metadata = {
   icons: {
@@ -76,7 +85,7 @@ export default async function RootLayout({
         <head>
           <script defer data-domain="flix.kareemadel.com" src="https://plausible-plausible.7s4elo.easypanel.host/js/script.js"></script>
         </head>
-        <body className={tajawal.className}>
+        <body className={locale==='ar' ? tajawal.className : manrope.className}>
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"

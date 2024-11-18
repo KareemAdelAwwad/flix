@@ -1,6 +1,5 @@
 'use client'
 
-import { Manrope } from 'next/font/google'
 import React, { Suspense, useMemo } from 'react'
 import { useLocale, useTranslations } from 'next-intl';
 import VideoPlayer from '@/components/TitlePage/VideoPlayer';
@@ -69,14 +68,6 @@ import { useUser } from '@clerk/nextjs';
 import { fetchReviews } from '@/lib/FetchReviews';
 import FlixReviewCard from '@/components/FlixReviewCard';
 import AddReviewCard from '@/components/AddReviewCard';
-
-// Font configuration
-const manropes = Manrope({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  style: ['normal'],
-  display: 'swap',
-});
 
 // API configuration
 const API_CONFIG = {
@@ -313,7 +304,7 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
 
 
   return (
-    <main className={`flex flex-col justify-center items-center gap-20 container ${manropes.className}`}>
+    <main className={`flex flex-col justify-center items-center gap-20 container`}>
       {/* Meta */}
       <title>{series.name}</title>
       <meta name="description" content={series.overview} />

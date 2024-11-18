@@ -8,18 +8,13 @@ import React, { useEffect, useState } from 'react';
 import { Link } from '@/i18n/routing';
 import { usePathname } from 'next/navigation';
 import { useLocale } from 'next-intl';
-import { SignInButton, SignOutButton, SignedIn, SignedOut, UserButton, useUser } from '@clerk/nextjs';
+import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 
 //icons
 import { RiMenuFill } from "react-icons/ri";
 import { CgClose } from "react-icons/cg";
 import { IoBookmark } from 'react-icons/io5';
 import { GoCheckCircleFill } from "react-icons/go";
-import { GoHomeFill } from 'react-icons/go';
-import { BiSolidCameraMovie } from 'react-icons/bi';
-import { IoTv } from 'react-icons/io5';
-import { MdSupportAgent } from 'react-icons/md';
-import { BsFillCreditCard2FrontFill } from 'react-icons/bs';
 
 // components import
 import { ModeToggle } from '@/components/ModeToggle';
@@ -31,8 +26,6 @@ import { ThemeSwitcher } from '@/components/ThemeSwitcher';
 import { useTranslations } from 'next-intl';
 import { useTheme } from 'next-themes';
 import Search from './Search';
-
-
 
 const Header = () => {
   useSubscriptionCheck();

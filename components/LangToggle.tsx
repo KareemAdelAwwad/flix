@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { Tajawal } from 'next/font/google';
 import { ChangeEvent, useTransition } from 'react';
 import { useLocale } from 'next-intl';
 import { useRouter, usePathname } from 'next/navigation';
@@ -14,6 +15,12 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+
+const tajawal = Tajawal({
+  weight: ['400', '500', '700'],
+  subsets: ['arabic', 'latin'],
+  display: 'swap',
+})
 
 export function LangToggle({ isMobile }: { isMobile: boolean }) {
   const [isPending, startTransition] = useTransition();
@@ -40,7 +47,7 @@ export function LangToggle({ isMobile }: { isMobile: boolean }) {
   };
 
   if (isMobile) return (
-    <div className="flex gap-2 items-center">
+    <div className={`flex gap-2 items-center ${tajawal.className}`}>
       <Button
         size={'lg'}
         className="h-full"
@@ -61,7 +68,7 @@ export function LangToggle({ isMobile }: { isMobile: boolean }) {
           onValueChange={(value) => {
             onSelectChange({ target: { value } } as ChangeEvent<HTMLSelectElement>);
           }}>
-          <DropdownMenuRadioItem value="ar">العربية</DropdownMenuRadioItem>
+          <DropdownMenuRadioItem className={tajawal.className} value="ar">العربية</DropdownMenuRadioItem>
           <DropdownMenuRadioItem value="en">English</DropdownMenuRadioItem>
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>
