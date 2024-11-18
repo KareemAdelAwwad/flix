@@ -46,7 +46,7 @@ const Header = () => {
   const currentPath = usePathname();
   const themeTriger = useTheme().resolvedTheme === 'dark' ? 'text-white' : 'text-black';
 
-  const navItemsClassName = 'p-2 px-4 rounded-3xl hover:bg-neutral-700 hover:text-white text-black-6 dark:text-white bg-transparent transition-all duration-300';
+  const navItemsClassName = 'text-nowrap p-2 px-4 rounded-3xl hover:bg-neutral-700 hover:text-white text-black-6 dark:text-white bg-transparent transition-all duration-300';
 
   useEffect(() => {
     setIsSidebarVisible(false);
