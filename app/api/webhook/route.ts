@@ -3,7 +3,13 @@ import { collection, query, where, getDocs, addDoc, updateDoc } from 'firebase/f
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
+if (!stripeSecretKey || !webhookSecret) {
+  throw new Error('Missing required environment variables');
+}
+const stripe = new Stripe(stripeSecretKey);
 
 export async function POST(req: NextRequest) {
   const payload = await req.text();
