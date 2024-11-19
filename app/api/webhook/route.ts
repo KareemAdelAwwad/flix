@@ -9,7 +9,7 @@ const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 if (!stripeSecretKey || !webhookSecret) {
   throw new Error('Missing required environment variables');
 }
-const stripe = new Stripe(stripeSecretKey);
+const stripe = new Stripe(stripeSecretKey!);
 
 export async function POST(req: NextRequest) {
   const payload = await req.text();
@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
     const event = stripe.webhooks.constructEvent(
       payload,
       sig,
-      process.env.STRIPE_WEBHOOK_SECRET!
+      webhookSecret!
     );
 
     console.log('Received event type:', event.type);
