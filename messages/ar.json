@@ -9,7 +9,9 @@
     "signin": "تسجيل دخول",
     "search": "بحث",
     "watched": "مُشاهد",
-    "watchlist": "قائمة المشاهدة"
+    "watchlist": "قائمة المشاهدة",
+    "sidebarHidden":"left-0",
+    "sidebarOpen":"left-0 translate-x-[-100%]"
   },
   "ThemeToggle": {
     "title": "تبديل المظهر",

@@ -123,8 +123,11 @@ const Header = () => {
       {/* sideBar for mobile and tablet  its disappear at lg*/}
       <div className={`z-[50] py-10 px-8 flex flex-col justify-between fixed top-0  h-full sm:w-96 w-full
         bg-gray-100 dark:bg-black-10 transform
-        ${isSidebarVisible ? 'right-0' : 'right-0 -translate-x-[-100%]'}
+        ${isSidebarVisible ?  t("sidebarHidden") : t("sidebarOpen")}
+        lg:hidden
         text-xl transition-all duration-300`}>
+
+    <div className='flex flex-col gap-9'>
         <div className='flex flex-col gap-4'>
           <div className='flex flex-row w-full items-center justify-between'>
             <SignedIn>
@@ -167,6 +170,8 @@ const Header = () => {
             ))
           }
         </ul>
+
+    </div>
         <div className='flex flex-col gap-4'>
           <div className='flex w-full justify-between'>
             <LangToggle isMobile />

@@ -224,7 +224,7 @@ const Home = () => {
             {faqs.map((faq, index) => (
               <div key={index} className=" text-lg rounded-lg p-4 w-full  md:w-2/4 ">
                 <button
-                  className={`${index > 1 && 'border-t'} border-red-45 pt-2 w-full flex justify-between items-center text-left font-medium`}
+                  className={` ${index == 1 && 'md:border-none border-t'} ${index > 1 && 'border-t'} border-red-45 pt-2 w-full flex justify-between items-center text-left font-medium`}
                   onClick={() => toggleFAQ(index)}
                 >
                   <div className='mt-2 flex items-center'>

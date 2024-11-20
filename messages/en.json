@@ -9,7 +9,9 @@
     "signin": "Sign-in",
     "search": "Search",
     "watched": "Watched",
-    "watchlist": "Watchlist"
+    "watchlist": "Watchlist",
+    "sidebarHidden":"right-0",
+    "sidebarOpen":"right-0 -translate-x-[-100%]"
   },
   "ThemeToggle": {
     "title": "Toggle theme",
