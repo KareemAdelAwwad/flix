@@ -9,18 +9,18 @@ _A sophisticated streaming platform built with Next.js 14 and TypeScript, powere
 ![Flix App Preview](public/meta_bg.png)
 
 ## 📋 Table of Contents
-- [🌟 Overview](#overview)
-- [🚀 Features](#features)
-  - [🔐 Authentication & Security](#authentication--security)
-  - [🎬 Core Features](#core-features)
-  - [💳 Premium Features](#premium-features)
-  - [🎨 Technical Features](#technical-features)
-- [💻 Tech Stack](#tech-stack)
+- [🌟 Overview](#-overview)
+- [🚀 Features](#-features)
+  - [🔐 Authentication & Security](#-authentication--security)
+  - [🎬 Core Features](#-core-features)
+  - [💳 Premium Features](#-premium-features)
+  - [🎨 Technical Features](#-technical-features)
+- [💻 Tech Stack](#-tech-stack)
   - [Frontend](#frontend)
   - [Backend & Services](#backend--services)
   - [DevOps & Monitoring](#devops--monitoring)
-- [👥 Contributors](#contributors)
-- [📜 License](#license)
+- [👥 Contributors](#-contributors)
+- [📜 License](#-license)
 
 ## 🌟 Overview
 
