@@ -99,6 +99,10 @@ Flix App is a modern streaming platform inspired by Netflix and [StreamVib](http
 <td align="center"> <a href="https://github.com/HassanMo1390"> <img src="https://github.com/HassanMo1390.png" width="100px;" alt="Hasan"/> <br /> <sub><b>Hasan</b></sub> </a> </td> 
 </tr> </table>
 
+## ⭐ Support the Project
+
+### If you find this project helpful, show love and giving it a ⭐!
+
 ---
 
 ## 📜 License
