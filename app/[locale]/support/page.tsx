@@ -3,31 +3,14 @@ import React, { useState, useEffect } from 'react';
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/inputUA";
 import { useTranslations } from 'next-intl';
-import { Button } from '@/components/ui/button';
 import { cn } from "@/lib/utils";
 import Image from 'next/image';
+import FQA from '@/components/FQA';
 
 
 const page = () => {
   const t = useTranslations('HomePage');
   const sTranslation = useTranslations('Support');
-
-  //for question section
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const toggleFAQ = (index: number) => {
-    setActiveIndex(activeIndex === index ? null : index);
-  };
-  const faqs = [
-    { question: t("Q-ONE"), answer: t("A-ONE") },
-    { question: t("Q-TWO"), answer: t("A-TWO") },
-    { question: t("Q-THREE"), answer: t("A-THREE") },
-    { question: t("Q-FOUR"), answer: t("A-FOUR") },
-    { question: t("Q-FIVE"), answer: t("A-FIVE") },
-    { question: t("Q-SIX"), answer: t("A-SIX") },
-    { question: t("Q-SEVEN"), answer: t("A-SEVEN") },
-    { question: t("Q-EIGHT"), answer: t("A-EIGHT") },
-  ];
-
 
   // for the webs3 forms 
   interface FormDataObject {
@@ -186,44 +169,7 @@ const page = () => {
 
 
       {/* questions */}
-      <div className="my-8" id='Questions'>
-        <div className='flex md:flex-row flex-col justify-between items-center'>
-          <div>
-            <h2 className="text-3xl font-semibold mb-4"> {t("Q-H1")}</h2>
-            <p className="dark:text-gray-60 text-black-30  mb-6">{t("Q-P")}</p>
-          </div>
-          <a href='#contact-form'>
-            <Button className="bg-red-600 text-white hover:bg-red-700" size={'lg'}>
-              {t("Q-BTN")}
-            </Button>
-          </a>
-        </div>
-        <div className=" flex flex-wrap w-full ">
-          {faqs.map((faq, index) => (
-            <div key={index} className=" text-lg rounded-lg p-4 w-full  md:w-2/4 ">
-              <button
-                className={`${index > 1 && 'border-t'} border-red-45 pt-2 w-full flex justify-between items-center text-left font-medium`}
-                onClick={() => toggleFAQ(index)}
-              >
-                <div className='mt-2 flex items-center'>
-                  <span className='dark:bg-black-12 bg-gray-60 text-white p-3 px-4 rounded-lg mx-4 flex justify-center items-center font-semibold text-xl borders'>
-                    <p>
-                      {`${index + 1}`.toString().padStart(2, '0')}
-                    </p>
-                  </span>
-                  <h6 className='font-medium text-[22px]'>{faq.question}</h6>
-                </div>
-                <span className={`ml-2 transform ${activeIndex === index ? 'rotate-180' : ''}`}>
-                  {activeIndex === index ? '−' : '+'}
-                </span>
-              </button>
-              {activeIndex === index && (
-                <p className="text-gray-60 mt-2">{faq.answer}</p>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
+       <FQA id='Questions'/>
 
 
     </section>
