@@ -9,6 +9,7 @@ _A sophisticated streaming platform built with Next.js 14 and TypeScript, powere
 ![Flix App Preview](public/meta_bg.png)
 
 ## 📋 Table of Contents
+
 - [🌟 Overview](#-overview)
 - [🚀 Features](#-features)
   - [🔐 Authentication & Security](#-authentication--security)
@@ -35,12 +36,14 @@ Flix App is a modern streaming platform inspired by Netflix and [StreamVib](http
 ## 🚀 Features
 
 ### 🔐 Authentication & Security
+
 - Secure authentication via Clerk
 - OAuth support (Google, Discord, Fackbook)
 - Role-based access control
 - Protected routes and API endpoints
 
 ### 🎬 Core Features
+
 - Advanced content discovery
 - Real-time search with filters
 - HD video streaming
@@ -50,11 +53,13 @@ Flix App is a modern streaming platform inspired by Netflix and [StreamVib](http
 - Custome Player (It's only support a static video)
 
 ### 💳 Premium Features
+
 - Stripe subscription integration
 - Multiple pricing tiers
 - Exclusive content access
 
 ### 🎨 Technical Features
+
 - Server-side rendering
 - Progressive web app support
 - Responsive design
@@ -65,12 +70,14 @@ Flix App is a modern streaming platform inspired by Netflix and [StreamVib](http
 ## 💻 Tech Stack
 
 ### Frontend
+
 - Next.js 14
 - TypeScript
 - Tailwind CSS
 - GSAP
 
 ### Backend & Services
+
 - Firebase
 - Clerk Authentication
 - Stripe Payments
@@ -78,6 +85,7 @@ Flix App is a modern streaming platform inspired by Netflix and [StreamVib](http
 - Custom Node.js Background Music API
 
 ### DevOps & Monitoring
+
 - VPS deployment
 - Plausible Analytics
 - Sentry error tracking
@@ -88,10 +96,11 @@ Flix App is a modern streaming platform inspired by Netflix and [StreamVib](http
 
 <table> <tr> <td align="center"> <a href="https://github.com/KareemAdelAwwad"> <img src="https://github.com/KareemAdelAwwad.png" width="100px;" alt="Kareem Adel"/> <br /> <sub><b>Kareem Adel</b></sub> </a> </td> 
 <td align="center"> <a href="https://github.com/ibrahimwael951"> <img src="https://github.com/ibrahimwael951.png" width="100px;" alt="Ibrahim Wael"/> <br /> <sub><b>Ibrahim Wael</b></sub> </a> </td> 
-<td align="center"> <a href="https://github.com/https://github.com/HassanMo1390"> <img src="https://github.com/HassanMo1390.png" width="100px;" alt="Hasan"/> <br /> <sub><b>Hasan</b></sub> </a> </td> 
+<td align="center"> <a href="https://github.com/HassanMo1390"> <img src="https://github.com/HassanMo1390.png" width="100px;" alt="Hasan"/> <br /> <sub><b>Hasan</b></sub> </a> </td> 
 </tr> </table>
 
 ---
 
 ## 📜 License
+
 This project is licensed for **personal use only**. Redistribution, modification, or commercial use is not permitted.
