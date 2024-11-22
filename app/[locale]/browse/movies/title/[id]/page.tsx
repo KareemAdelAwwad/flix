@@ -1,5 +1,6 @@
 
 'use client'
+import { useSubscriptionStore } from '@/store';
 import { fetchReviews } from '@/lib/FetchReviews';
 import React, { useMemo } from 'react'
 import { useLocale, useTranslations } from 'next-intl';
@@ -64,6 +65,7 @@ interface MovieImages {
 
 
 export default function page({ params }: { params: { id: number } }) {
+  const isSubiscrptionActive = useSubscriptionStore(state => state.isActive);
   const [movie, setMovie] = useState({} as Movie);
   const [images, setImages] = useState({} as MovieImages);
   const [cast, setCast] = useState([] as Cast[]);
@@ -82,7 +84,7 @@ export default function page({ params }: { params: { id: number } }) {
   const imagesUrl = `https://api.themoviedb.org/3/movie/${params.id}/images?language=${locale}&include_image_language=ar,en`;
   const castUrl = `https://api.themoviedb.org/3/movie/${params.id}/credits?language=${locale}`;
   const reviewsUrl = `https://api.themoviedb.org/3/movie/${params.id}/reviews?language=en-US`;
-  const youtubeUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&key=${process.env.NEXT_PUBLIC_YOUTUBE_API_KEY}&type=video&q=${movie.title}+Song&maxResults=2`;
+  const youtubeUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&key=${process.env.NEXT_PUBLIC_YOUTUBE_API_KEY}&type=video&q=${movie.title}+Song&maxResults=1`;
   // API request Headers
   const options = {
     method: 'GET',
@@ -137,14 +139,13 @@ export default function page({ params }: { params: { id: number } }) {
       fetch(youtubeUrl)
         .then(response => response.json())
         .then(data => {
-          console.log('YouTube API response:', data); // Log the API response
           if (data.items && data.items.length > 0) {
             setMusicList(data.items);
           } else {
-            console.error('No video found for the given title.');
+            console.warn('No video found for the given title.');
           }
         })
-        .catch(error => console.error('Error fetching YouTube API:', error));
+        .catch(error => console.error('Error fetching YouTube API'));
     }
   }, [movie.title]);
 
@@ -268,7 +269,10 @@ export default function page({ params }: { params: { id: number } }) {
                 <FaPlay /> {t('title')}
               </Button>} title={t('play')} />
             <div className='flex justify-center items-center gap-2'>
-              <WatchingServer titleID={movie.id} titleType='movie' status={false} string='Watching Server' />
+              {
+                isSubiscrptionActive &&
+                <WatchingServer titleID={movie.id} titleType='movie' status={false} string='Watching Server' />
+              }
               {movie.id && <WatchlistButton titleId={movie.id.toString()} titleType='movie' style='icon' />}
               <Trailer titleName={movie.title} status={showTrailer} string={t('trailer')} />
 
@@ -325,9 +329,9 @@ export default function page({ params }: { params: { id: number } }) {
               !ourReviews.some(review => review.userId === currentUserId) &&
               <Button
                 onClick={() => setAddReviewCardStatus(true)}
-                className={`text-lg dark:bg-black-8 bg-gray-50 borders dark:text-white text-black-12 font-medium flex justify-center 
-                  items-center hover:bg-gray-90 transition-colors duration-300 absolute top-[40px] 
-                  ${locale === 'ar' ? 'left-[4rem]' : 'right-[4rem]'}`}>
+                className={`md:text-lg dark:bg-black-8 bg-gray-50 borders dark:text-white text-black-12 font-medium flex justify-center 
+                  items-center hover:bg-gray-90 transition-colors duration-300 absolute md:top-[40px] top-[30px]
+                  ${locale === 'ar' ? 'left-[2rem] md:left-[3rem]' : 'right-[2rem] md:right-[3rem]'}`}>
                 <FaPlus /> {t('addreview')}
               </Button>
             }
@@ -454,8 +458,8 @@ export default function page({ params }: { params: { id: number } }) {
             <Info title={t('music')} content={
               <div className='flex flex-col gap-2.5 flex-wrap'>
                 {
-                  musicList && musicList.map((song, i) => (
-                    <div className='dark:text-white font-medium p-2.5 py-2 dark:bg-black-8 bg-gray-50 border-[1px] 
+                  musicList ? musicList.map((song, i) => (
+                    <div key={i} className='dark:text-white font-medium p-2.5 py-2 dark:bg-black-8 bg-gray-50 border-[1px] 
                     dark:border-black-15 rounded-lg flex gap-2 items-center w-full overflow-hidden'>
                       <div className='w-[80px] h-fit overflow-hidden rounded-lg flex justify-center items-center'>
                         <Image src={song.snippet.thumbnails.medium.url}
@@ -465,7 +469,7 @@ export default function page({ params }: { params: { id: number } }) {
                         <h4 className='text-[14px] w-[80%] truncate'>{song.snippet.title}</h4>
                       </div>
                     </div>
-                  ))
+                  )) : <p className='dark:text-gray-60 text-black-30 text-center md:px-[15%] px-[5%]'>{t('nomusic')}</p>
                 }
               </div>
             } icon={<CgMusicNote size={24} />} />

@@ -81,69 +81,72 @@ const Page = () => {
 
   const renderMoviesSection = (title: string, movies: Movie[]) => {
     return (
-      <section id={title} className='my-20 pt-0'>
-        <h2 className="text-3xl font-bold  mb-12 ">
-          {t(title)}
+      <main>
+        <title>{t('movies')}</title>
+        <section id={title} className='my-20 pt-0'>
+          <h2 className="text-3xl font-bold  mb-12 ">
+            {t(title)}
 
-        </h2>
-        <HorizontalCarousel
-          data={movies}
-          navStyle="style3"
-          ItemComponent={({ item }: { item: Movie }) => {
-            return (
-              <div className="relative movie-card group max-w-8 mb-100">
-                <WatchlistButton
-                  titleId={item.id.toString()}
-                  titleType="movie"
-                  style="badge"
-                  className="text-white opacity-0 group-hover:opacity-100 transition-all duration-300"
-                />
-                <div className="aspect-w-2 aspect-h-3">
-                  {loading ? (
-                    <div className="bg-gray-300 animate-pulse h-full w-full rounded-lg" />
-                  ) : (
-                    <Image
-                      src={`https://image.tmdb.org/t/p/w780${item.poster_path}`}
-                      alt={item.title}
-                      width={200}
-                      height={300}
-                      className="w-full h-[300px] object-cover transition-transform duration-300 group-hover:scale-105"
-                    />
-                  )}
-                </div>
-                <div className="movie-card-overlay text-center">
-                  <h3 className='movie-title dark:text-white text-blac</section>k mx-2'>{item.title}</h3>
-                  <Link href={movieURLFormat(item)}>
-                    <Button className="mt-4 bg-red-50 text-white hover:bg-red-60">
-                      {t('watchMovie')}
-                    </Button>
-                  </Link>
-                  <div className="flex justify-between items-center absolute bottom-2.5 w-full px-4">
-                    <span className="text-white bg-black-60 rounded-md px-2 py-1 bg-black-6 flex items-center justify-center gap-1">
-                      {item.runtime ? formatRuntime(item.runtime) : t('noRuntime')}
-                    </span>
-                    <span className="text-white bg-black-60 rounded-md px-2 py-1 bg-black-6 flex items-center justify-center gap-1">
-                      <FaStar className="inline-block text-yellow-50" />
-                      {((item.vote_average ?? 0) / 2).toFixed(1)}
-                    </span>
+          </h2>
+          <HorizontalCarousel
+            data={movies}
+            navStyle="style3"
+            ItemComponent={({ item }: { item: Movie }) => {
+              return (
+                <div className="relative movie-card group max-w-8 mb-100">
+                  <WatchlistButton
+                    titleId={item.id.toString()}
+                    titleType="movie"
+                    style="badge"
+                    className="text-white opacity-0 group-hover:opacity-100 transition-all duration-300"
+                  />
+                  <div className="aspect-w-2 aspect-h-3">
+                    {loading ? (
+                      <div className="bg-gray-300 animate-pulse h-full w-full rounded-lg" />
+                    ) : (
+                      <Image
+                        src={`https://image.tmdb.org/t/p/w780${item.poster_path}`}
+                        alt={item.title}
+                        width={200}
+                        height={300}
+                        className="w-full h-[300px] object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                    )}
+                  </div>
+                  <div className="movie-card-overlay text-center">
+                    <h3 className='movie-title dark:text-white text-blac</section>k mx-2'>{item.title}</h3>
+                    <Link href={movieURLFormat(item)}>
+                      <Button className="mt-4 bg-red-50 text-white hover:bg-red-60">
+                        {t('watchMovie')}
+                      </Button>
+                    </Link>
+                    <div className="flex justify-between items-center absolute bottom-2.5 w-full px-4">
+                      <span className="text-white bg-black-60 rounded-md px-2 py-1 bg-black-6 flex items-center justify-center gap-1">
+                        {item.runtime ? formatRuntime(item.runtime) : t('noRuntime')}
+                      </span>
+                      <span className="text-white bg-black-60 rounded-md px-2 py-1 bg-black-6 flex items-center justify-center gap-1">
+                        <FaStar className="inline-block text-yellow-50" />
+                        {((item.vote_average ?? 0) / 2).toFixed(1)}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          }}
-          settings={{
-            breakpoints: {
-              480: 1,
-              700: 2,
-              920: 3,
-              1130: 4,
-              1280: 5,
-              1536: 6,
-            },
-            defaultImagesPerPage: 7,
-          }}
-        />
-      </section>
+              );
+            }}
+            settings={{
+              breakpoints: {
+                480: 1,
+                700: 2,
+                920: 3,
+                1130: 4,
+                1280: 5,
+                1536: 6,
+              },
+              defaultImagesPerPage: 7,
+            }}
+          />
+        </section>
+      </main>
     );
   };
 
