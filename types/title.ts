@@ -50,7 +50,7 @@ export interface Movie {
 export interface Series {
   id: number;
   name: string;
-  episode_run_time: number[];
+  episode_run_time: number;
   first_air_date: string;
   in_production: boolean;
   languages: string[];
