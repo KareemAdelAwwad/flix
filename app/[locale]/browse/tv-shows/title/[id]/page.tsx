@@ -62,6 +62,8 @@ import WatchlistButton from '@/components/ui/AddToWatchlistButton';
 import Trailer from '@/components/TitlePage/Trailer';
 import WatchingServer from '@/components/TitlePage/WatchingServer';
 import CompletedButton from '@/components/ui/AddToCompletedButton';
+import { generateMetadata } from '@/lib/metadata';
+import { Metadata } from 'next';
 import { useUser } from '@clerk/nextjs';
 import { fetchReviews } from '@/lib/FetchReviews';
 import FlixReviewCard from '@/components/FlixReviewCard';
@@ -355,7 +357,7 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
               {series.id && <WatchlistButton titleId={series.id.toString()} titleType='tv' style='icon' />}
               <Trailer titleName={`${series.original_name} (${new Date(series.first_air_date).getFullYear()})`} status={showTrailer} string={t('trailer')} />
               {
-                locale === 'en' && <AudioPlayer songName={`${series.name} Song`} tooltipTitle={t('themeSong')} />
+                locale === 'en' && <AudioPlayer songName={`${series.name} - opening`} tooltipTitle={t('themeSong')} />
               }
               {series.id && <CompletedButton titleId={series.id.toString()} titleType='tv' style='icon' />}
             </div>
