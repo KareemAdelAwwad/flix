@@ -205,8 +205,8 @@ const Home = () => {
             <div className="py-8" id='subscriptions'>
               <h2 className=" text-3xl font-bold mb-6">{t('PLANS-TITLE')}</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-2xl">
-                {plans.map((plan) => (
-                  <PlanCard {...plan} />
+                {plans.map((plan, i) => (
+                  <PlanCard {...plan} key={i} />
                 ))}
               </div>
             </div>}

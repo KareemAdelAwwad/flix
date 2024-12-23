@@ -381,7 +381,7 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
             <Accordion type="single" collapsible>
               {
                 series.seasons && series.seasons.sort((a, b) => a.season_number - b.season_number).map(season => (
-                  <AccordionItem value={`item-${season.season_number}`}
+                  <AccordionItem value={`item-${season.season_number}`} key={season.season_number}
                     className={`dark:bg-black-6 bg-gray-90 md:px-[50px] px-6 py-2.5 rounded-lg borders ${season.season_number !== 0 && "mt-5"}`}>
                     <AccordionTrigger onClick={() => LoadSeasonData(season.season_number)}>
                       <h4 className='sm:text-xl text-base font-semibold'>{`${t('season')} ${season.season_number.toString().padStart(2, '0')}`}</h4>
@@ -613,8 +613,8 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
 
             <Info title={t('music')} content={
 
-              musicList && musicList.map((song) => (
-                <div className='dark:text-white font-medium p-2.5 py-2 dark:bg-black-8 bg-gray-50 border-[1px] 
+              musicList && musicList.map((song, i) => (
+                <div key={i} className='dark:text-white font-medium p-2.5 py-2 dark:bg-black-8 bg-gray-50 border-[1px] 
                   dark:border-black-15 rounded-lg flex gap-2 items-center w-full overflow-hidden'>
                   <div className='w-[80px] h-fit overflow-hidden rounded-lg flex justify-center items-center'>
                     <Image src={song.snippet.thumbnails.medium.url}
