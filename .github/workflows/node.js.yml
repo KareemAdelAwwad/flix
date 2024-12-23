@@ -38,12 +38,10 @@ jobs:
           cache: 'pnpm'
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
+        run: npm install -g pnpm@8
 
-      - run: pnpm install --frozen-lockfile
-      - run: npm run build --if-present
+      - run: pnpm install --no-frozen-lockfile
+      - run: pnpm run build --if-present
       - name: Change directory
         run: cd /home/kareemadel-flix/actions-runner/_work/flix/flix
       - run: pm2 restart 0
