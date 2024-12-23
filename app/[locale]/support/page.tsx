@@ -99,7 +99,7 @@ const page = () => {
             {/* Movie Posters Background */}
             <div className="absolute grid grid-cols-4 grid-rows-4 flex-wrap gap-4 p-2">
               {popularMovies.map((movie) => (
-                <div className='g-2 rounded-lg overflow-hidden' >
+                <div className='g-2 rounded-lg overflow-hidden' key={movie.id} >
                   <Image
                     key={movie.id}
                     src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
@@ -169,7 +169,7 @@ const page = () => {
 
 
       {/* questions */}
-       <FQA id='Questions'/>
+      <FQA />
 
 
     </section>
