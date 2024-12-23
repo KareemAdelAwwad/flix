@@ -41,7 +41,7 @@ jobs:
         run: npm install -g pnpm@8
 
       - run: pnpm install --no-frozen-lockfile
-      - run: pnpm run build --if-present
+      - run: npm run build --if-present
       - name: Change directory
         run: cd /home/kareemadel-flix/actions-runner/_work/flix/flix
       - run: pm2 restart 0
