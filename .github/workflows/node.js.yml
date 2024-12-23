@@ -38,7 +38,9 @@ jobs:
           cache: 'pnpm'
 
       - name: Install pnpm
-        run: npm install -g pnpm@8
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
 
       - run: pnpm install --no-frozen-lockfile
       - run: npm run build --if-present
