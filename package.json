@@ -9,22 +9,22 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@clerk/localizations": "^3.9.5",
-    "@clerk/nextjs": "^6.9.6",
-    "@clerk/themes": "^2.2.3",
-    "@gsap/react": "^2.1.1",
+    "@clerk/localizations": "^3.10.2",
+    "@clerk/nextjs": "^6.10.4",
+    "@clerk/themes": "^2.2.14",
+    "@gsap/react": "^2.1.2",
     "@radix-ui/react-accordion": "^1.2.2",
-    "@radix-ui/react-dropdown-menu": "^2.1.4",
+    "@radix-ui/react-dropdown-menu": "^2.1.5",
     "@radix-ui/react-label": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.1",
-    "@radix-ui/react-tooltip": "^1.1.6",
-    "@tabler/icons-react": "^3.26.0",
+    "@radix-ui/react-tooltip": "^1.1.7",
+    "@tabler/icons-react": "^3.29.0",
     "@types/firebase": "^2.4.32",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "firebase": "^11.1.0",
-    "framer-motion": "^11.15.0",
-    "gsap": "^3.12.5",
+    "firebase": "^11.2.0",
+    "framer-motion": "^11.18.2",
+    "gsap": "^3.12.7",
     "lucide-react": "^0.453.0",
     "next": "14.2.16",
     "next-intl": "^3.26.3",
@@ -35,20 +35,20 @@
     "react-player": "^2.16.0",
     "react-slick": "^0.30.3",
     "sharp": "^0.33.5",
-    "stripe": "^17.5.0",
+    "stripe": "^17.6.0",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
-    "zustand": "^5.0.2"
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
-    "@types/node": "^20.17.10",
+    "@types/node": "^20.17.16",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "@types/react-slick": "^0.23.13",
     "eslint": "^8.57.1",
     "eslint-config-next": "15.0.0",
-    "postcss": "^8.4.49",
+    "postcss": "^8.5.1",
     "tailwindcss": "^3.4.17",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.3"
   }
 }
