@@ -98,7 +98,12 @@
     "Plans": "Plans",
     "Features": "Features",
 
-    "ContactWithUs": "Contact With Us"
+    "ContactWithUs": "Contact With Us",
+
+    "Rights": "All Rights Reserved",
+    "Privacy": "Privacy Policy",
+    "Terms": "Terms of Service",
+    "Cookie": "Cookie Policy"
   },
   "TitlePage": {
     "title": "Play",

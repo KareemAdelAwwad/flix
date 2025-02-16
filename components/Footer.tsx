@@ -126,12 +126,12 @@ const Footer = () => {
       {/* the end of Footer */}
       <hr className='w-full border-gray-70' />
       <div className='w-full m-auto flex flex-col justify-between items-center lg:flex-row'>
-        <p className='text-gray-65 p-4'> ©{Year} StreamVib, All Rights Reserved</p>
+        <p className='text-gray-65 py-4'> © {t('Rights')} {Year}</p>
 
-        <div className='flex items-center justify-center'>
-          <Link className='text-gray-65 p-4' href=''>Terms Of Use</Link>
-          <Link className='text-gray-65 p-4' href=''>Privacy Policy</Link>
-          <Link className='text-gray-65 p-4' href=''>Cookie Policy</Link>
+        <div className='flex items-center justify-center text-gray-65 gap-8'>
+          <Link href=''>{t('Terms')}</Link>
+          <Link href=''>{t('Privacy')}</Link>
+          <Link href=''>{t('Cookie')}</Link>
         </div>
       </div>
     </footer>
