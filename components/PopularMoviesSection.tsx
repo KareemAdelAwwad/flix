@@ -6,7 +6,6 @@ import HorizontalCarousel from '@/components/carousel';
 import { Button } from './ui/button';
 import WatchlistButton from './ui/AddToWatchlistButton';
 import { FaStar } from 'react-icons/fa6';
-import { getCache, setCache } from '@/utils/cache';
 
 interface Movie {
   id: number;
@@ -28,13 +27,6 @@ const MoviesShows = () => {
   useEffect(() => {
     const fetchPopularMovies = async () => {
       try {
-        const cachedMovies = getCache<Movie[]>(CACHE_KEY);
-        if (cachedMovies) {
-          setPopularMovies(cachedMovies.slice(0, MOVIES_LIMIT));
-          setLoading(false);
-          return;
-        }
-
         const popularRes = await fetch(
           `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`
         );
@@ -43,7 +35,6 @@ const MoviesShows = () => {
         const limitedMovies = popularData.results.slice(0, MOVIES_LIMIT);
         const moviesWithRuntime = await addRuntimes(limitedMovies);
 
-        setCache(CACHE_KEY, moviesWithRuntime);
         setPopularMovies(moviesWithRuntime);
         setLoading(false);
       } catch (error) {

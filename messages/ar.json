@@ -10,8 +10,8 @@
     "search": "بحث",
     "watched": "مُشاهد",
     "watchlist": "قائمة المشاهدة",
-    "sidebarHidden":"left-0",
-    "sidebarOpen":"left-0 translate-x-[-100%]"
+    "sidebarHidden": "left-0",
+    "sidebarOpen": "left-0 translate-x-[-100%]"
   },
   "ThemeToggle": {
     "title": "تبديل المظهر",
@@ -92,7 +92,11 @@
     "Subscription": "الاشتراكات",
     "Plans": "الخطط",
     "Features": "الميزات",
-    "ContactWithUs": "تواصل معنا"
+    "ContactWithUs": "تواصل معنا",
+    "Rights": "جميع الحقوق محفوظة",
+    "Privacy": "سياسة الخصوصية",
+    "Terms": "الشروط والأحكام",
+    "Cookie": "ملفات تعريف الارتباط"
   },
   "TitlePage": {
     "title": "تشغيل",
