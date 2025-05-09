@@ -95,7 +95,7 @@ const Page = () => {
               return (
                 <div className="relative movie-card group max-w-8 mb-100">
                   <WatchlistButton
-                    titleId={item.id.toString()}
+                    titleId={item?.id?.toString()}
                     titleType="movie"
                     style="badge"
                     className="text-white opacity-0 group-hover:opacity-100 transition-all duration-300"
@@ -177,7 +177,7 @@ const Page = () => {
               <span className=" text-white text-lg">
                 {featuredMovie.runtime ? formatRuntime(featuredMovie.runtime) : t('noRuntime')}
               </span>
-              <WatchlistButton titleId={featuredMovie.id.toString()} titleType='movie' style='text' />
+              <WatchlistButton titleId={featuredMovie?.id?.toString()} titleType='movie' style='text' />
             </div>
           </div>
         ) : (

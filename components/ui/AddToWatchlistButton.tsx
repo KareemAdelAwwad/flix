@@ -8,7 +8,7 @@ import { IoBookmarkOutline, IoBookmark } from "react-icons/io5";
 import { useLocale } from 'next-intl';
 
 interface WatchlistButtonProps {
-  titleId: string;
+  titleId: string | undefined;
   titleType: "movie" | "tv";
   style: "icon" | "text" | "badge";
   className?: string;
@@ -48,7 +48,7 @@ const WatchlistButton: React.FC<WatchlistButtonProps> = ({ titleId, titleType, s
 
   const handleAddToWatchlist = async () => {
     try {
-      if (userId) {
+      if (userId && titleId) {
         await addToWatchlist(userId, titleId, titleType);
         setIsInWatchlist(prev => !prev);
       }
@@ -61,13 +61,14 @@ const WatchlistButton: React.FC<WatchlistButtonProps> = ({ titleId, titleType, s
   return (
     style === 'icon' ? (
       <ReadyTooltip
-        children={<Button onClick={handleAddToWatchlist} size={'lgIcon'} className={className}>
+        title={isInWatchlist ? (locale === 'ar' ? strings.ar.remove : strings.en.remove)
+          : (locale === 'ar' ? strings.ar.add : strings.en.add)}>
+        <Button onClick={handleAddToWatchlist} size={'lgIcon'} className={className}>
           {
             isInWatchlist ? <IoBookmark size={24} /> : <IoBookmarkOutline size={24} />
           }
-        </Button>}
-        title={isInWatchlist ? (locale === 'ar' ? strings.ar.remove : strings.en.remove)
-          : (locale === 'ar' ? strings.ar.add : strings.en.add)} />
+        </Button>
+      </ReadyTooltip>
     ) : style === 'text' ? (
       <Button onClick={handleAddToWatchlist} size={"default"} className={className}>
         {
