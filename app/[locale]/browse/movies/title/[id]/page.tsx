@@ -16,7 +16,7 @@ import { CiCalendar } from "react-icons/ci";
 import { CiStar } from "react-icons/ci";
 import { PiTranslate, PiFilmReel } from "react-icons/pi";
 import { BiCategoryAlt } from "react-icons/bi";
-import { CgMusicNote } from "react-icons/cg";
+// import { CgMusicNote } from "react-icons/cg";
 
 // Import Components
 import HorizontalCarousel from '@/components/carousel'
@@ -31,7 +31,7 @@ import VideoPlayer from '@/components/TitlePage/VideoPlayer';
 import WatchlistButton from '@/components/ui/AddToWatchlistButton';
 import Trailer from '@/components/TitlePage/Trailer';
 import { Movie, MovieCastMember as Cast, Review, FlixUsersReviews } from '@/types/title';
-import YoutubeVideo from '@/types/youtube';
+// import YoutubeVideo from '@/types/youtube';
 import WatchingServer from '@/components/TitlePage/WatchingServer';
 import CompletedButton from '@/components/ui/AddToCompletedButton';
 import FlixReviewCard from '@/components/FlixReviewCard';
@@ -72,7 +72,7 @@ export default function page({ params }: { params: { id: number } }) {
   const [reviews, setReviews] = useState([] as Review[]);
   const [ourReviews, setOurReviews] = useState([] as FlixUsersReviews[]);
   const [director, setDirector] = useState({} as Cast);
-  const [musicList, setMusicList] = useState([] as YoutubeVideo[]);
+  // const [musicList, setMusicList] = useState([] as YoutubeVideo[]);
   const [addReviewCardStatus, setAddReviewCardStatus] = useState(false);
   const [showTrailer, setShowTrailer] = useState(false);
   const [showPlayer, setShowPlayer] = useState(false);
@@ -84,7 +84,7 @@ export default function page({ params }: { params: { id: number } }) {
   const imagesUrl = `https://api.themoviedb.org/3/movie/${params.id}/images?language=${locale}&include_image_language=ar,en`;
   const castUrl = `https://api.themoviedb.org/3/movie/${params.id}/credits?language=${locale}`;
   const reviewsUrl = `https://api.themoviedb.org/3/movie/${params.id}/reviews?language=en-US`;
-  const youtubeUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&key=${process.env.NEXT_PUBLIC_YOUTUBE_API_KEY}&type=video&q=${movie.title}+Song&maxResults=1`;
+  // const youtubeUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&key=${process.env.NEXT_PUBLIC_YOUTUBE_API_KEY}&type=video&q=${movie.title}+Song&maxResults=1`;
   // API request Headers
   const options = {
     method: 'GET',
@@ -134,23 +134,11 @@ export default function page({ params }: { params: { id: number } }) {
         setLoading(false);
       })
       .catch(err => console.error(err));
-
-    if (movie.title !== undefined) {
-      fetch(youtubeUrl)
-        .then(response => response.json())
-        .then(data => {
-          if (data.items && data.items.length > 0) {
-            setMusicList(data.items);
-          } else {
-            console.warn('No video found for the given title.');
-          }
-        })
-        .catch(error => console.error('Error fetching YouTube API'));
-    }
   }, [movie.title]);
 
   // Fetch Reviews
   useEffect(() => {
+    if (!movie.id) return;
     const fetchReviewsData = async () => {
       const reviewsData = await fetchReviews(movie.id.toString());
       setOurReviews(reviewsData);
@@ -226,8 +214,8 @@ export default function page({ params }: { params: { id: number } }) {
     }
   };
 
-
   return (
+
     <main className='flex flex-col justify-center items-center gap-20 container'>
       <title>{movie.title}</title>
       <meta name="description" content={movie.overview} />
@@ -274,9 +262,10 @@ export default function page({ params }: { params: { id: number } }) {
                 <WatchingServer titleID={movie.id} titleType='movie' status={false} string='Watching Server' />
               }
               {movie.id && <WatchlistButton titleId={movie.id.toString()} titleType='movie' style='icon' />}
-              <Trailer titleName={movie.title} status={showTrailer} string={t('trailer')} />
+              {movie.title && <Trailer titleName={movie.title} status={showTrailer} string={t('trailer')} />}
 
               {
+                movie.title && movie.title !== '' && movie.title !== 'undefined' &&
                 locale === 'en' && <AudioPlayer songName={`${movie.title} - Movie - Song`} tooltipTitle={t('themeSong')} />
               }
               {movie.id && <CompletedButton titleId={movie.id.toString()} titleType='movie' style='icon' />}
@@ -399,7 +388,7 @@ export default function page({ params }: { params: { id: number } }) {
                   {
                     movie.spoken_languages && movie.spoken_languages.map((lang, i) => (
                       <span key={i} className='pointer-events-none dark:text-white text-sm font-medium py-[6px] px-3 dark:bg-black-8 bg-gray-50 border-[1px] dark:border-black-15 rounded-md'>
-                        {lang.name}
+                        {lang.name && lang.name !== '' && lang.name}
                       </span>
                     ))
                   }
@@ -455,7 +444,7 @@ export default function page({ params }: { params: { id: number } }) {
                 }
                 icon={<PiFilmReel size={24} />} />
             }
-            <Info title={t('music')} content={
+            {/* <Info title={t('music')} content={
               <div className='flex flex-col gap-2.5 flex-wrap'>
                 {
                   musicList ? musicList.map((song, i) => (
@@ -472,7 +461,7 @@ export default function page({ params }: { params: { id: number } }) {
                   )) : <p className='dark:text-gray-60 text-black-30 text-center md:px-[15%] px-[5%]'>{t('nomusic')}</p>
                 }
               </div>
-            } icon={<CgMusicNote size={24} />} />
+            } icon={<CgMusicNote size={24} />} /> */}
           </div>
         </div>
 

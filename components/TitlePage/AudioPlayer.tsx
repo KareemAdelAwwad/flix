@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { SlVolume2, SlVolumeOff } from 'react-icons/sl';
+import Lottie from "lottie-react";
+import { SlVolume2 } from 'react-icons/sl';
+import soundDark from '../../public/images/sound-dark.json';
+import soundLight from '../../public/images/sound-light.json';
 import { Button } from '@/components/ui/button';
 import ReadyTooltip from '@/components/ui/ready-tooltip';
+import { useTheme } from 'next-themes';
 
 interface AudioPlayerProps {
   songName: string;
@@ -41,22 +45,25 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ songName, tooltipTitle }) => 
     }
   };
 
+  const theme = useTheme().resolvedTheme;
+
+
   return (
     <div>
       <audio
         ref={audioRef}
-        src={`https://musicapi.kareemadel.com/convert?name=${encodeURIComponent(songName)}`}
+        src={`https://musicapi.kareemadel.com/convert?query=${encodeURIComponent(songName)}`}
         onEnded={() => setIsPlaying(false)}
       />
-      <ReadyTooltip children={
+      <ReadyTooltip title={tooltipTitle}>
         <Button size='lgIcon' onClick={handlePlayPause}>
           {
             !isPlaying
               ? <SlVolume2 />
-              : <SlVolumeOff />
+              : <Lottie animationData={theme === 'light' ? soundDark : soundLight} color='white' loop={true} style={{ width: '24px', height: '24px' }} />
           }
         </Button>
-      } title={tooltipTitle} />
+      </ReadyTooltip>
     </div>
   );
 };

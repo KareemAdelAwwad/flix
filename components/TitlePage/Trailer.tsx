@@ -17,8 +17,7 @@ const Trailer = ({ titleName, string, status }: TrailerProps) => {
   const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&key=${process.env.NEXT_PUBLIC_YOUTUBE_API_KEY}&type=video&q=${titleName}+trailer&maxResults=1`;
 
   useEffect(() => {
-    if (!titleName) {
-      console.error('Title name is undefined.');
+    if (!titleName || titleName === '' || titleName === 'undefined') {
       return;
     }
 

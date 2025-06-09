@@ -18,18 +18,16 @@ import {
   SeriesImages,
   SeriesCast,
   Review,
-  ImageProps,
   SliderSettings,
   FlixUsersReviews
 } from '@/types/title';
 
 // Import Icons
 import { FaPlay, FaPlus } from "react-icons/fa6";
-import { GoCheckCircle } from "react-icons/go";
 import { CiCalendar, CiStar } from "react-icons/ci";
-import { PiTranslate, PiFilmSlateDuotone } from "react-icons/pi";
+import { PiTranslate } from "react-icons/pi";
 import { BiCategoryAlt, BiNetworkChart } from "react-icons/bi";
-import { CgMusicNote } from "react-icons/cg";
+// import { CgMusicNote } from "react-icons/cg";
 import { LuClock4 } from "react-icons/lu";
 import { IoPlayCircleOutline } from "react-icons/io5";
 
@@ -62,8 +60,6 @@ import WatchlistButton from '@/components/ui/AddToWatchlistButton';
 import Trailer from '@/components/TitlePage/Trailer';
 import WatchingServer from '@/components/TitlePage/WatchingServer';
 import CompletedButton from '@/components/ui/AddToCompletedButton';
-import { generateMetadata } from '@/lib/metadata';
-import { Metadata } from 'next';
 import { useUser } from '@clerk/nextjs';
 import { fetchReviews } from '@/lib/FetchReviews';
 import FlixReviewCard from '@/components/FlixReviewCard';
@@ -103,7 +99,7 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
   const [ourReviews, setOurReviews] = useState([] as FlixUsersReviews[]);
   const [providers, setProviders] = useState<any>({});
   const [showPlayer, setShowPlayer] = useState(false);
-  const [musicList, setMusicList] = useState<YoutubeVideo[]>([]);
+  // const [musicList, setMusicList] = useState<YoutubeVideo[]>([]);
   const [addReviewCardStatus, setAddReviewCardStatus] = useState(false);
   const [showTrailer, setShowTrailer] = useState(false);
   const [imageLoading, setImageLoading] = useState(true);
@@ -355,8 +351,12 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
             <div className='flex justify-center items-center gap-2'>
               <WatchingServer titleID={imdpId} titleType='tv' status={false} string='Watching Server' />
               {series.id && <WatchlistButton titleId={series.id.toString()} titleType='tv' style='icon' />}
-              <Trailer titleName={`${series.original_name} (${new Date(series.first_air_date).getFullYear()})`} status={showTrailer} string={t('trailer')} />
               {
+                series.original_name &&
+                <Trailer titleName={`${series.original_name} (${new Date(series.first_air_date).getFullYear()})`} status={showTrailer} string={t('trailer')} />
+              }
+              {
+                series.name && series.name !== '' && series.name !== 'undefined' &&
                 locale === 'en' && <AudioPlayer songName={`${series.name} - opening`} tooltipTitle={t('themeSong')} />
               }
               {series.id && <CompletedButton titleId={series.id.toString()} titleType='tv' style='icon' />}
@@ -611,7 +611,7 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
               }
               icon={<BiNetworkChart size={24} />} />
 
-            <Info title={t('music')} content={
+            {/* <Info title={t('music')} content={
 
               musicList && musicList.map((song, i) => (
                 <div key={i} className='dark:text-white font-medium p-2.5 py-2 dark:bg-black-8 bg-gray-50 border-[1px] 
@@ -626,7 +626,7 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
                 </div>
               ))
 
-            } icon={<CgMusicNote size={24} />} />
+            } icon={<CgMusicNote size={24} />} /> */}
           </div>
         </div>
 

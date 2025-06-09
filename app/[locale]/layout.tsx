@@ -81,11 +81,11 @@ export default async function RootLayout({
   const messages = await getMessages();
   return (
     <ClerkProvider dynamic localization={locale === "ar" ? arSA : enUS} appearance={{ baseTheme: dark }}>
-      <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
+      <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"} suppressHydrationWarning>
         <head>
           <script defer data-domain="flix.kareemadel.com" src="https://plausible-plausible.7s4elo.easypanel.host/js/script.js"></script>
         </head>
-        <body className={locale==='ar' ? tajawal.className : manrope.className}>
+        <body className={locale === 'ar' ? tajawal.className : manrope.className}>
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
