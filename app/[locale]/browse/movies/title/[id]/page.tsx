@@ -266,7 +266,7 @@ export default function page({ params }: { params: { id: number } }) {
 
               {
                 movie.title && movie.title !== '' && movie.title !== 'undefined' &&
-                locale === 'en' && <AudioPlayer songName={`${movie.title} - Movie - Song`} tooltipTitle={t('themeSong')} />
+                locale === 'en' && <AudioPlayer songName={`${movie.title} ${movie.release_date ? new Date(movie.release_date).getFullYear() : ''} - Movie - Song`} tooltipTitle={t('themeSong')} />
               }
               {movie.id && <CompletedButton titleId={movie.id.toString()} titleType='movie' style='icon' />}
             </div>

@@ -6,7 +6,7 @@
     "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start -p 4000",
-    "lint": "next lint"
+    "lint": "next lint --fix"
   },
   "dependencies": {
     "@clerk/localizations": "^3.15.1",

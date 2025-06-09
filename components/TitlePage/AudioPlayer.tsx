@@ -24,6 +24,9 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ songName, tooltipTitle }) => 
       // Set volume to 0.15
       audioRef.current.volume = 0.15;
 
+      // begain from the second 30
+      audioRef.current.currentTime = 30;
+
       // If the song was playing before, start it again
       if (savedIsPlaying) {
         audioRef.current.play().catch((err) => console.error('Error auto-playing:', err));
