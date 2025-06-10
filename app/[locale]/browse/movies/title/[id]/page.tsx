@@ -2,13 +2,14 @@
 'use client'
 import { useSubscriptionStore } from '@/store';
 import { fetchReviews } from '@/lib/FetchReviews';
-import React, { useMemo } from 'react'
+import React, { useMemo, use } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import OpenTitleInfoCard from '@/components/OpenTitleInfoCard';
 import ReadyTooltip from '@/components/ui/ready-tooltip';
+import { isBlocked } from '@/utils/filter';
 
 // Import Icons
 import { FaPlay, FaPlus } from "react-icons/fa6";
@@ -64,7 +65,8 @@ interface MovieImages {
 
 
 
-export default function page({ params }: { params: { id: number } }) {
+export default function page(props: { params: Promise<{ id: number }> }) {
+  const params = use(props.params);
   const isSubiscrptionActive = useSubscriptionStore(state => state.isActive);
   const [movie, setMovie] = useState({} as Movie);
   const [images, setImages] = useState({} as MovieImages);
@@ -93,6 +95,28 @@ export default function page({ params }: { params: { id: number } }) {
       Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_ACCESS_TOKEN}`
     }
   };
+
+  // Check if the movie is blocked based on its certification
+  useEffect(() => {
+    if (
+      movie.id &&
+      movie.title &&
+      movie.title !== '' &&
+      movie.title !== 'undefined'
+    ) {
+      const checkIfBlocked = async () => {
+        const isMovieBlocked = await isBlocked(params.id, movie.title, 'movie');
+        console.log(isMovieBlocked + " Movie ID: " + params.id);
+        if (isMovieBlocked) {
+          // Redirect to the home page if the movie is blocked
+          window.location.href = `/${locale}/browse/movies`;
+          alert(t('blockedTitle'));
+        }
+      };
+
+      checkIfBlocked();
+    }
+  }, [movie.title]);
 
   // Fetch movie Data
   useEffect(() => {
@@ -469,7 +493,7 @@ export default function page({ params }: { params: { id: number } }) {
       </section>
 
       <section className='w-full flex flex-col'>
-        <Recommendations titleType='movie' titleID={params.id} header={t('recommended')} />
+        <Recommendations titleType='movie' titleID={params.id} header={t('recommended')} loadingMessage={t('filtering')} />
       </section>
 
 

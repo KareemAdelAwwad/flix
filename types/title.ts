@@ -1,6 +1,14 @@
 /**
  * Series related type definitions
  */
+
+export interface Title {
+  id: number;
+  poster_path: string;
+  title?: string;
+  name?: string;
+}
+
 export interface Movie {
   "id": number,
   "imdb_id": string | null,

@@ -1,15 +1,15 @@
 'use client'
 
-import React, { Suspense, useMemo } from 'react'
+import React, { Suspense, useMemo, use } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import VideoPlayer from '@/components/TitlePage/VideoPlayer';
 import { useState, useEffect, useCallback } from 'react';
+import { isBlocked } from '@/utils/filter';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import OpenTitleInfoCard from '@/components/OpenTitleInfoCard';
 import ReadyTooltip from '@/components/ui/ready-tooltip';
 import dynamic from 'next/dynamic';
-import YoutubeVideo from '@/types/youtube';
 
 // Import types
 import {
@@ -89,7 +89,8 @@ const ErrorFallback = ({ error, resetErrorBoundary }: { error: Error; resetError
   );
 };
 
-export default function SeriesPage({ params }: { params: { id: number } }) {
+export default function SeriesPage(props: { params: Promise<{ id: number }> }) {
+  const params = use(props.params);
   // State management
   const [series, setSeries] = useState<Series>({} as Series);
   const [cachedSeasonData, setCachedSeasonData] = useState<CachedSeasonData>({});
@@ -121,6 +122,22 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
     imdpId: `${API_CONFIG.baseUrl}/tv/${params.id}/external_ids`,
     youtubeUrl: `https://www.googleapis.com/youtube/v3/search?part=snippet&key=${process.env.NEXT_PUBLIC_YOUTUBE_API_KEY}&type=video&q=${series.name}+Song&maxResults=1`,
   }), [params.id, locale]);
+
+
+  // Check if the series is blocked
+  useEffect(() => {
+    const checkIfBlocked = async () => {
+      const isMovieBlocked = await isBlocked(params.id, series.name, 'series');
+      console.log(isMovieBlocked + " Series ID: " + params.id);
+      if (isMovieBlocked) {
+        // Redirect to the home page if the movie is blocked
+        window.location.href = `/${locale}/browse/tv-shows`;
+        alert(t('blockedTitle'));
+      }
+    };
+
+    checkIfBlocked();
+  }, [params.id]);
 
   // Fetch data using Promise.all for parallel requests
   useEffect(() => {
@@ -634,7 +651,7 @@ export default function SeriesPage({ params }: { params: { id: number } }) {
 
       <section className='w-full flex flex-col'>
 
-        <Recommendations titleType='tv' titleID={params.id} header={t('recommended')} />
+        <Recommendations titleType='tv' titleID={params.id} header={t('recommended')} loadingMessage={t('filtering')} />
       </section>
 
     </main >

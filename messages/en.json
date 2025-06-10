@@ -106,6 +106,8 @@
     "Cookie": "Cookie Policy"
   },
   "TitlePage": {
+    "blockedTitle": "This title is blocked because of +18, we don't allow this content in our app. We will redirect you to the homepage.",
+
     "title": "Play",
     "play": "Play Movie",
     "playEpisode": "Play Episode",
@@ -157,7 +159,8 @@
     "loading": "Loading...",
     "minute": "m",
     "hour": "h",
-    "recommended": "Recommended"
+    "recommended": "Recommended",
+    "filtering": "We are filtering you recommendations of unsafe content 💖, please wait..."
   },
   "MoviesShows": {
     "movies": "Movies",

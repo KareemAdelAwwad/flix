@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from "react";
+import { useEffect, useState, use } from "react";
 import { useLocale } from "next-intl";
 import { useTranslations } from "next-intl";
 import { Details, Images, MovieCredits, TVCredits } from "@/types/person";
@@ -49,7 +49,8 @@ const LoadingSkeleton = () => {
   );
 };
 
-export default function page({ params }: { params: { id: number } }) {
+export default function page(props: { params: Promise<{ id: number }> }) {
+  const params = use(props.params);
   const [details, setDetails] = useState<Details>();
   const [images, setImages] = useState<Images>();
   const [movieCredits, setMovieCredits] = useState<MovieCredits[]>();
@@ -258,5 +259,4 @@ export default function page({ params }: { params: { id: number } }) {
       </section>
     </main>
   );
-
 }
