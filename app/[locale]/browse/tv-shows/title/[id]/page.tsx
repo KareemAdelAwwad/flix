@@ -126,18 +126,25 @@ export default function SeriesPage(props: { params: Promise<{ id: number }> }) {
 
   // Check if the series is blocked
   useEffect(() => {
-    const checkIfBlocked = async () => {
-      const isMovieBlocked = await isBlocked(params.id, series.name, 'series');
-      console.log(isMovieBlocked + " Series ID: " + params.id);
-      if (isMovieBlocked) {
-        // Redirect to the home page if the movie is blocked
-        window.location.href = `/${locale}/browse/tv-shows`;
-        alert(t('blockedTitle'));
-      }
-    };
+    if (
+      series.id &&
+      series.name &&
+      series.name !== '' &&
+      series.name !== 'undefined'
+    ) {
+      const checkIfBlocked = async () => {
+        const isMovieBlocked = await isBlocked(params.id, series.name, 'series');
+        console.log(isMovieBlocked + " Series ID: " + params.id);
+        if (isMovieBlocked) {
+          // Redirect to the home page if the movie is blocked
+          window.location.href = `/${locale}/browse/tv-shows`;
+          alert(t('blockedTitle'));
+        }
+      };
 
-    checkIfBlocked();
-  }, [params.id]);
+      checkIfBlocked();
+    }
+  }, [series.name]);
 
   // Fetch data using Promise.all for parallel requests
   useEffect(() => {

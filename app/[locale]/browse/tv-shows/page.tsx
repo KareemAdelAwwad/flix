@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import HorizontalCarousel from '@/components/carousel';
 import { Button } from '@/components/ui/button';
 import WatchlistButton from '@/components/ui/AddToWatchlistButton';
-import { Movie, Series } from '@/types/title';
+import { Series } from '@/types/title';
 import { FaStar } from 'react-icons/fa6';
 
 const page = () => {
