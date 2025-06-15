@@ -282,7 +282,7 @@ export default function page(props: { params: Promise<{ id: number }> }) {
               </Button>} title={t('play')} />
             <div className='flex justify-center items-center gap-2'>
               {
-                isSubiscrptionActive &&
+                currentUserId === process.env.NEXT_PUBLIC_ADMIN_USER_ID &&
                 <WatchingServer titleID={movie.id} titleType='movie' status={false} string='Watching Server' />
               }
               {movie.id && <WatchlistButton titleId={movie.id.toString()} titleType='movie' style='icon' />}

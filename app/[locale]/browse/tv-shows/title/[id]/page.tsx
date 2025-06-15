@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import OpenTitleInfoCard from '@/components/OpenTitleInfoCard';
 import ReadyTooltip from '@/components/ui/ready-tooltip';
 import dynamic from 'next/dynamic';
+import { useSubscriptionStore } from '@/store';
 
 // Import types
 import {
@@ -90,6 +91,7 @@ const ErrorFallback = ({ error, resetErrorBoundary }: { error: Error; resetError
 };
 
 export default function SeriesPage(props: { params: Promise<{ id: number }> }) {
+  const isSubiscrptionActive = useSubscriptionStore(state => state.isActive);
   const params = use(props.params);
   // State management
   const [series, setSeries] = useState<Series>({} as Series);
@@ -373,7 +375,10 @@ export default function SeriesPage(props: { params: Promise<{ id: number }> }) {
                 <FaPlay /> {t('title')}
               </Button>} title={t('play')} />
             <div className='flex justify-center items-center gap-2'>
-              <WatchingServer titleID={imdpId} titleType='tv' status={false} string='Watching Server' />
+              {
+                currentUserId === process.env.NEXT_PUBLIC_ADMIN_USER_ID &&
+                <WatchingServer titleID={imdpId} titleType='tv' status={false} string='Watching Server' />
+              }
               {series.id && <WatchlistButton titleId={series.id.toString()} titleType='tv' style='icon' />}
               {
                 series.original_name &&
