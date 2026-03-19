@@ -9,13 +9,13 @@ import WatchlistButton from '@/components/ui/AddToWatchlistButton';
 import { Series } from '@/types/title';
 import { FaStar } from 'react-icons/fa6';
 
-const page = () => {
+const Page = () => {
   const t = useTranslations('TVShows');
   const [popularShows, setPopularShows] = useState<Series[]>([]);
   const [top10Shows, setTop10Shows] = useState<Series[]>([]);
   const [trendingShows, setTrendingShows] = useState<Series[]>([]);
   const [airingToday, setAiringToday] = useState<Series[]>([]);
-  const [selectedSection, setSelectedSection] = useState<string | null>(null);
+  const [selectedSection, ] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -46,19 +46,19 @@ const page = () => {
     fetchShows();
   }, []);
 
-  const addRuntimes = async (Shows: any[]) => {
+  const addRuntimes = async (Shows: Series[]) => {
     return await Promise.all(
-      Shows.map(async (Shows: { id: any; }) => {
-        const runtimeRes = await fetch(`https://api.themoviedb.org/3/tv/${Shows.id}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=${locale}`);
+      Shows.map(async (show: Series) => {
+        const runtimeRes = await fetch(`https://api.themoviedb.org/3/tv/${show.id}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=${locale}`);
         const ShowsDetails = await runtimeRes.json();
         const runtime = ShowsDetails.runtime;
 
         if (typeof runtime !== 'number' || runtime < 0) {
-          console.warn(`Invalid runtime for Shows ID ${Shows.id}:`, runtime);
+          console.warn(`Invalid runtime for Shows ID ${show.id}:`, runtime);
         }
 
         if (isNaN(runtime)) {
-          console.warn(`Runtime is NaN for Shows ID ${Shows.id}`);
+          console.warn(`Runtime is NaN for Shows ID ${show.id}`);
         }
         return { ...ShowsDetails, runtime };
       })
@@ -90,11 +90,11 @@ const page = () => {
                 <div className="relative movie-card group max-w-8 mb-100">
 
                   <WatchlistButton
-                  titleId={item.id.toString()}
-                  titleType="tv"
-                  style="badge"
-                  className="text-white opacity-0 group-hover:opacity-100 transition-all duration-300"
-                />
+                    titleId={item.id.toString()}
+                    titleType="tv"
+                    style="badge"
+                    className="text-white opacity-0 group-hover:opacity-100 transition-all duration-300"
+                  />
                   <div className="aspect-w-2 aspect-h-3">
                     {loading ? (
                       <div className="bg-gray-300 animate-pulse h-full w-full rounded-lg" />
@@ -119,13 +119,13 @@ const page = () => {
                     </Link>
                     <div className="flex justify-between items-center absolute bottom-2.5 w-full px-4">
 
-                      
-                       <span className="text-white bg-black-60 rounded-md px-2 py-1 bg-black-6 flex items-center justify-center gap-1">
-                      {item.episode_run_time ? formatRuntime(item.episode_run_time) : t('noRuntime')}
+
+                      <span className="text-white bg-black-60 rounded-md px-2 py-1 bg-black-6 flex items-center justify-center gap-1">
+                        {item.episode_run_time ? formatRuntime(item.episode_run_time) : t('noRuntime')}
                       </span>
                       <span className="text-white bg-black-60 rounded-md px-2 py-1 bg-black-6 flex items-center justify-center gap-1">
-                          <FaStar className="inline-block text-yellow-50" />
-                          {((item.vote_average ?? 0) / 2).toFixed(1)}
+                        <FaStar className="inline-block text-yellow-50" />
+                        {((item.vote_average ?? 0) / 2).toFixed(1)}
                       </span>
                     </div>
                   </div>
@@ -217,4 +217,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

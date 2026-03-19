@@ -23,11 +23,10 @@ const tajawal = Tajawal({
 })
 
 export function LangToggle({ isMobile }: { isMobile: boolean }) {
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
   const router = useRouter();
   const pathname = usePathname();
   const localActive = useLocale();
-  const locale = useLocale();
 
   const onSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const nextLocale = e.target.value;

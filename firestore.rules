@@ -1,0 +1,21 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Watchlists collection
+    match /Watchlists/{document=**} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // Completed collection
+    match /Completed/{document=**} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // Reviews collection (if needed)
+    match /Reviews/{document=**} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+  }
+}

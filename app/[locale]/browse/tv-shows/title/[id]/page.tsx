@@ -79,20 +79,13 @@ const API_CONFIG = {
   }
 } as const;
 
-// Error Fallback Component
-const ErrorFallback = ({ error, resetErrorBoundary }: { error: Error; resetErrorBoundary: () => void }) => {
-  return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <h2 className="text-2xl font-bold mb-4">Something went wrong:</h2>
-      <pre className="text-red-500 mb-4">{error.message}</pre>
-      <Button onClick={resetErrorBoundary}>Try again</Button>
-    </div>
-  );
-};
-
 export default function SeriesPage(props: { params: Promise<{ id: number }> }) {
-  const isSubiscrptionActive = useSubscriptionStore(state => state.isActive);
+  useSubscriptionStore(state => state.isActive);
   const params = use(props.params);
+  const user = useUser();
+  const currentUserId = user.user?.id;
+  const currentUserEmail = user.user?.primaryEmailAddress?.emailAddress;
+  const isUserLoaded = user.isLoaded;
   // State management
   const [series, setSeries] = useState<Series>({} as Series);
   const [cachedSeasonData, setCachedSeasonData] = useState<CachedSeasonData>({});
@@ -100,16 +93,17 @@ export default function SeriesPage(props: { params: Promise<{ id: number }> }) {
   const [cast, setCast] = useState<SeriesCast>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [ourReviews, setOurReviews] = useState([] as FlixUsersReviews[]);
-  const [providers, setProviders] = useState<any>({});
+  const [, setProviders] = useState<Record<string, unknown>>({});
   const [showPlayer, setShowPlayer] = useState(false);
   // const [musicList, setMusicList] = useState<YoutubeVideo[]>([]);
   const [addReviewCardStatus, setAddReviewCardStatus] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [showTrailer, setShowTrailer] = useState(false);
   const [imageLoading, setImageLoading] = useState(true);
   const [imdpId, setImdpId] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [, setLoading] = useState(true);
   const [episodeLoading, setEpisodeLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
+  const [, setError] = useState<Error | null>(null);
 
   const locale = useLocale();
   const t = useTranslations('TitlePage');
@@ -128,6 +122,9 @@ export default function SeriesPage(props: { params: Promise<{ id: number }> }) {
 
   // Check if the series is blocked
   useEffect(() => {
+    // Wait until Clerk has loaded to know the user's email
+    if (!isUserLoaded) return;
+    
     if (
       series.id &&
       series.name &&
@@ -135,10 +132,10 @@ export default function SeriesPage(props: { params: Promise<{ id: number }> }) {
       series.name !== 'undefined'
     ) {
       const checkIfBlocked = async () => {
-        const isMovieBlocked = await isBlocked(params.id, series.name, 'series');
-        console.log(isMovieBlocked + " Series ID: " + params.id);
-        if (isMovieBlocked) {
-          // Redirect to the home page if the movie is blocked
+        const isSeriesBlocked = await isBlocked(params.id, series.name, 'series', currentUserEmail);
+        console.log(isSeriesBlocked + " Series ID: " + params.id + " User Email: " + currentUserEmail);
+        if (isSeriesBlocked) {
+          // Redirect to the home page if the series is blocked
           window.location.href = `/${locale}/browse/tv-shows`;
           alert(t('blockedTitle'));
         }
@@ -146,7 +143,7 @@ export default function SeriesPage(props: { params: Promise<{ id: number }> }) {
 
       checkIfBlocked();
     }
-  }, [series.name]);
+  }, [series.name, currentUserEmail, isUserLoaded]);
 
   // Fetch data using Promise.all for parallel requests
   useEffect(() => {
@@ -248,6 +245,8 @@ export default function SeriesPage(props: { params: Promise<{ id: number }> }) {
 
   // Fetch Reviews
   useEffect(() => {
+    if (!series.id) return;
+
     const fetchReviewsData = async () => {
       const reviewsData = await fetchReviews(series.id.toString());
       setOurReviews(reviewsData);
@@ -255,9 +254,6 @@ export default function SeriesPage(props: { params: Promise<{ id: number }> }) {
 
     fetchReviewsData();
   }, [series.id]);
-
-  const user = useUser();
-  const currentUserId = user.user?.id
 
   const combinedReviews = useMemo(() => [
     ...ourReviews.map(review => ({ ...review, type: 'flix' as const })),
@@ -368,12 +364,13 @@ export default function SeriesPage(props: { params: Promise<{ id: number }> }) {
           </div>
           {/* Series controles */}
           <div className='flex justify-center items-center gap-2 w-full h-16 bg-transparent flex-wrap'>
-            <ReadyTooltip children={
+            <ReadyTooltip title={t('play')}>
               <Button
                 onClick={() => setShowPlayer(true)}
                 className='text-white text-2xl font-bold bg-red-45 hover:bg-red-50 transition-colors duration-400' size="lg">
                 <FaPlay /> {t('title')}
-              </Button>} title={t('play')} />
+              </Button>
+            </ReadyTooltip>
             <div className='flex justify-center items-center gap-2'>
               {
                 currentUserId === process.env.NEXT_PUBLIC_ADMIN_USER_ID &&
@@ -396,7 +393,7 @@ export default function SeriesPage(props: { params: Promise<{ id: number }> }) {
         {
           imageLoading ? null
             : <Image src={`https://image.tmdb.org/t/p/original${series.backdrop_path}`}
-              alt={series.original_title} className='w-full h-full object-cover' height={835} width={1800} />
+              alt={series.original_title || "Series"} className='w-full h-full object-cover' height={835} width={1800} />
         }
       </section>
 
@@ -480,6 +477,7 @@ export default function SeriesPage(props: { params: Promise<{ id: number }> }) {
                 navStyle='style1'
                 data={cast}
                 settings={sliderSettings.cast}
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 ItemComponent={({ item }: { item: any }) => (
                   <ActorCard
                     actorId={item.id}
@@ -522,6 +520,7 @@ export default function SeriesPage(props: { params: Promise<{ id: number }> }) {
                     navStyle='style2'
                     data={combinedReviews}
                     settings={sliderSettings.reviews}
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     ItemComponent={({ item }: { item: any }) =>
                       item.type === 'flix' ? (
                         <FlixReviewCard

@@ -1,15 +1,10 @@
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { useTranslations } from 'next-intl';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { setCache, getCache } from '@/utils/cache';
 
 const BackgroundCollage = () => {
-
-
-  //for translate 
-  const t = useTranslations('Header');
 
   interface Movie {
     id: number;

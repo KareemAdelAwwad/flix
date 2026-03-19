@@ -49,7 +49,7 @@ const LoadingSkeleton = () => {
   );
 };
 
-export default function page(props: { params: Promise<{ id: number }> }) {
+export default function Page(props: { params: Promise<{ id: number }> }) {
   const params = use(props.params);
   const [details, setDetails] = useState<Details>();
   const [images, setImages] = useState<Images>();
@@ -94,9 +94,9 @@ export default function page(props: { params: Promise<{ id: number }> }) {
 
         setDetails(detailsData);
         setImages(imagesData);
-        setMovieCredits(movieCreditsData.cast.sort((a: any, b: any) => new Date(b.release_date).getTime() - new Date(a.release_date).getTime()));
-        setTVCredits(tvCreditsData.cast.sort((a: any, b: any) => new Date(b.first_air_date).getTime() - new Date(a.first_air_date).getTime()));
-      } catch (err) {
+        setMovieCredits(movieCreditsData.cast.sort((a: MovieCredits, b: MovieCredits) => new Date(b.release_date).getTime() - new Date(a.release_date).getTime()));
+        setTVCredits(tvCreditsData.cast.sort((a: TVCredits, b: TVCredits) => new Date(b.first_air_date).getTime() - new Date(a.first_air_date).getTime()));
+      } catch {
         setError("Failed to fetch data");
       } finally {
         setLoading(false);
@@ -119,7 +119,7 @@ export default function page(props: { params: Promise<{ id: number }> }) {
           {details.profile_path && (
             <Image
               src={`https://image.tmdb.org/t/p/original${details.profile_path}`}
-              alt={details.name}
+              alt={details.name || "Person profile"}
               width={500}
               height={750}
             />
@@ -155,7 +155,7 @@ export default function page(props: { params: Promise<{ id: number }> }) {
                   <div className="aspect-w-2 aspect-h-3">
                     <Image
                       src={`https://image.tmdb.org/t/p/w200${image.file_path}`}
-                      alt={details.name}
+                      alt={details.name || "Person image"}
                       width={200}
                       height={300}
                       className="w-full h-[200px] object-cover transition-transform duration-300 group-hover:scale-105 rounded-lg borders"
@@ -177,7 +177,7 @@ export default function page(props: { params: Promise<{ id: number }> }) {
             {titleTranslation('movies')}
           </span>
           <div className="flex flex-row justify-center flex-wrap gap-4 w-full">
-            {movieCredits?.map((movie, i) => (
+            {movieCredits?.filter(movie => movie.poster_path).map((movie, i) => (
               <div className="relative movie-card group max-w-8 mb-100" key={`movie(${i})-${movie.id}`}>
                 <div className="aspect-w-2 aspect-h-3">
                   <CompletedButton
@@ -194,7 +194,7 @@ export default function page(props: { params: Promise<{ id: number }> }) {
                   />
                   <Image
                     src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                    alt={movie.title}
+                    alt={movie.title || "Movie poster"}
                     width={200}
                     height={300}
                     className="w-full h-[300px] object-cover transition-transform duration-300 group-hover:scale-105"
@@ -221,7 +221,7 @@ export default function page(props: { params: Promise<{ id: number }> }) {
             {titleTranslation('shows')}
           </span>
           <div className="flex flex-row justify-center flex-wrap gap-4 w-full">
-            {tvCredits?.map((show, i) => (
+            {tvCredits?.filter(show => show.poster_path).map((show, i) => (
               <div className="relative movie-card group max-w-8 mb-100" key={`show(${i})-${show.id}`}>
                 <div className="aspect-w-2 aspect-h-3">
                   <CompletedButton
@@ -238,7 +238,7 @@ export default function page(props: { params: Promise<{ id: number }> }) {
                   />
                   <Image
                     src={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
-                    alt={show.name}
+                    alt={show.name || "TV show poster"}
                     width={200}
                     height={300}
                     className="w-full h-[300px] object-cover transition-transform duration-300 group-hover:scale-105"

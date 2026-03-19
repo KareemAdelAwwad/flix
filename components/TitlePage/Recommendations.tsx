@@ -5,6 +5,7 @@ import { Link } from "@/i18n/routing";
 import WatchlistButton from "../ui/AddToWatchlistButton";
 import { Title } from "@/types/title";
 import { filterBlockedTitles } from "@/utils/filter";
+import { useUser } from "@clerk/nextjs";
 
 interface RecommendationsProps {
   header: string;
@@ -37,6 +38,8 @@ const Recommendations: React.FC<RecommendationsProps> = ({ titleType, titleID, h
   const [recommendations, setRecommendations] = useState([] as Title[]);
   const [filteredRecommendations, setFilteredRecommendations] = useState([] as Title[]);
   const [loading, setLoading] = useState(true);
+  const user = useUser();
+  const currentUserEmail = user.user?.primaryEmailAddress?.emailAddress;
   const url = `https://api.themoviedb.org/3/${titleType === 'movie' ? "movie" : "tv"}/${titleID}/recommendations?language=en-US&page=1`
   useEffect(() => {
     fetch(url, options)
@@ -47,7 +50,7 @@ const Recommendations: React.FC<RecommendationsProps> = ({ titleType, titleID, h
 
   useEffect(() => {
     const filterBlocked = async () => {
-      const filterd = await filterBlockedTitles(recommendations, titleType === 'movie' ? 'movie' : 'series');
+      const filterd = await filterBlockedTitles(recommendations, titleType === 'movie' ? 'movie' : 'series', currentUserEmail);
       setFilteredRecommendations(filterd);
       // Use the filtered array length directly instead of state
       setLoading(false);
@@ -56,7 +59,7 @@ const Recommendations: React.FC<RecommendationsProps> = ({ titleType, titleID, h
     if (recommendations.length > 0) {
       filterBlocked();
     }
-  }, [recommendations, titleType]);
+  }, [recommendations, titleType, currentUserEmail]);
 
   if (loading) {
     return (

@@ -1,5 +1,5 @@
 import React from 'react'
-const Info = ({ title, content, icon }: { title: string, content: any, icon: React.ReactNode }) => {
+const Info = ({ title, content, icon }: { title: string, content: React.ReactNode, icon: React.ReactNode }) => {
   return (
     <div>
       <div className='flex gap-1 dark:text-gray-60 text-black-30 mb-2'>

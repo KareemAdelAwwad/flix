@@ -29,6 +29,7 @@ jobs:
       STRIPE_SECRET_KEY: ${{secrets.STRIPE_SECRET_KEY}}
       STRIPE_WEBHOOK_SECRET: ${{secrets.STRIPE_WEBHOOK_SECRET}}
       NEXT_PUBLIC_ADMIN_USER_ID: ${{secrets.NEXT_PUBLIC_ADMIN_USER_ID}}
+      NEXT_PUBLIC_ADMIN_EMAIL: ${{secrets.NEXT_PUBLIC_ADMIN_EMAIL}}
 
     steps:
       - uses: actions/checkout@v4

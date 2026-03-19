@@ -19,7 +19,6 @@ interface Movie {
 
 const MoviesShows = () => {
   const MOVIES_LIMIT = 21;
-  const CACHE_KEY = 'popularMovies';
   const t = useTranslations('MoviesShows');
   const [popularMovies, setPopularMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
@@ -46,9 +45,9 @@ const MoviesShows = () => {
     fetchPopularMovies();
   }, []);
 
-  const addRuntimes = async (movies: any[]) => {
+  const addRuntimes = async (movies: Movie[]) => {
     return await Promise.all(
-      movies.map(async (movie: { id: any }) => {
+      movies.map(async (movie: Movie) => {
         const runtimeRes = await fetch(
           `https://api.themoviedb.org/3/movie/${movie.id}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`
         );
@@ -144,8 +143,6 @@ const MoviesShows = () => {
       </div>
     );
   };
-
-  const featuredMovie = popularMovies[0];
 
   return (
     <section className="my-10">

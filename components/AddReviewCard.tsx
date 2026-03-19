@@ -60,7 +60,7 @@ const AddReviewCard: React.FC<AddReviewCardProps> = ({
           <div className='flex items-center gap-2'>
             <Image
               src={user?.imageUrl || '/images/robot-image.jpg'}
-              alt={user?.firstName || ''}
+              alt={user?.firstName || "User avatar"}
               width={40}
               height={40}
               className='rounded-full object-cover'

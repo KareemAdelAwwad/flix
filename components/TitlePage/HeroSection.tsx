@@ -22,21 +22,23 @@ export const Hero = ({ series, t, imageLoading }: HeroProps) => {
           <p className='text-lg dark:text-gray-60 text-black-12'>{series.tagline ? series.tagline : series.overview}</p>
         </div>
         <div className='flex justify-center items-center gap-2 w-full h-16 bg-transparent flex-wrap'>
-          <ReadyTooltip children={<Button className='text-white text-2xl font-bold bg-red-45 hover:bg-red-50 transition-colors duration-400' size="lg">
-            <FaPlay /> {t('title')}
-          </Button>} title={t('play')} />
+          <ReadyTooltip title={t('play')}>
+            <Button className='text-white text-2xl font-bold bg-red-45 hover:bg-red-50 transition-colors duration-400' size="lg">
+              <FaPlay /> {t('title')}
+            </Button>
+          </ReadyTooltip>
           <div className='flex justify-center items-center gap-2'>
-            <ReadyTooltip children={<Button size='lgIcon'><FaPlus /></Button>} title={t('watchlist')} />
-            <ReadyTooltip children={<Button size='lgIcon'><PiFilmSlateDuotone /></Button>} title={t('trailer')} />
-            <ReadyTooltip children={<Button size='lgIcon'><SlVolume2 /></Button>} title={t('themeSong')} />
-            <ReadyTooltip children={<Button size='lgIcon'><GoCheckCircle /></Button>} title={t('watched')} />
+            <ReadyTooltip title={t('watchlist')}><Button size='lgIcon'><FaPlus /></Button></ReadyTooltip>
+            <ReadyTooltip title={t('trailer')}><Button size='lgIcon'><PiFilmSlateDuotone /></Button></ReadyTooltip>
+            <ReadyTooltip title={t('themeSong')}><Button size='lgIcon'><SlVolume2 /></Button></ReadyTooltip>
+            <ReadyTooltip title={t('watched')}><Button size='lgIcon'><GoCheckCircle /></Button></ReadyTooltip>
           </div>
         </div>
       </div>
       {!imageLoading && (
         <Image
           src={`https://image.tmdb.org/t/p/original${series.backdrop_path}`}
-          alt={series.original_title}
+          alt={series.original_title || series.name || "Series backdrop"}
           className='w-full h-full object-cover'
           height={835}
           width={1800}

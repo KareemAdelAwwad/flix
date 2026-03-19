@@ -178,7 +178,9 @@
     "top10Movies": "Top 10 Movies",
     "trendingMovies": "Trending Movies",
     "actionMovies": "Action Movies",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "browseMovies": "Browse Movies",
+    "browseShows": "Browse TV Shows"
   },
   "TVShows": {
     "movies": "Shows",
@@ -200,7 +202,10 @@
   },
   "Lists": {
     "watchlist": "Your Watchlist",
-    "watched": "Titles You Have Watched"
+    "watched": "Titles You Have Watched",
+    "loadMore": "Load More",
+    "emptyWatchlist": "Your watchlist is empty",
+    "emptyWatched": "You haven't watched anything yet"
   },
   "Support": {
     "title": "Support",

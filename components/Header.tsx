@@ -36,17 +36,23 @@ const Header = () => {
 
   // for side bar visible 
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const toggleSidebar = () => {
     setIsSidebarVisible(!isSidebarVisible);
   };
 
   //for icon theme
-  const theme = useTheme().resolvedTheme;
   const locale = useLocale();
   const currentPath = usePathname();
-  const themeTriger = useTheme().resolvedTheme === 'dark' ? 'text-white' : 'text-black';
+  const { resolvedTheme } = useTheme();
+  // Use consistent class on server and client initial render to avoid hydration mismatch
+  const themeTriger = mounted ? (resolvedTheme === 'dark' ? 'text-white' : 'text-black') : 'text-black dark:text-white';
 
   const navItemsClassName = 'text-nowrap p-2 px-4 rounded-3xl hover:bg-neutral-700 hover:text-white text-black-6 dark:text-white bg-transparent transition-all duration-300';
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     setIsSidebarVisible(false);

@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button"
  
 export function LangToggle() {
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
   const router = useRouter();
   const localActive = useLocale();
 

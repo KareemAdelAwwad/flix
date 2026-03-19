@@ -16,6 +16,7 @@ const Page = () => {
   const [top10Movies, setTop10Movies] = useState<Movie[]>([]);
   const [trendingMovies, setTrendingMovies] = useState<Movie[]>([]);
   const [actionMovies, setActionMovies] = useState<Movie[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -46,9 +47,9 @@ const Page = () => {
     fetchMovies();
   }, []);
 
-  const addRuntimes = async (movies: any[]) => {
+  const addRuntimes = async (movies: Movie[]) => {
     return await Promise.all(
-      movies.map(async (movie: { id: any; }) => {
+      movies.map(async (movie: Movie) => {
         const runtimeRes = await fetch(`https://api.themoviedb.org/3/movie/${movie.id}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=${locale}`);
         const movieDetails = await runtimeRes.json();
         const runtime = movieDetails.runtime;

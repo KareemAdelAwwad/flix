@@ -169,9 +169,9 @@ function HorizontalCarousel<T>({
       isLoading,
       ItemComponent
     }: {
-      item?: any,
+      item?: T,
       isLoading?: boolean,
-      ItemComponent: React.ComponentType<{ item: any }>
+      ItemComponent: React.ComponentType<{ item: T }>
     }) => (
       <div
         className={`h-full w-full flex items-center justify-center 

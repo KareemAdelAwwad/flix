@@ -97,11 +97,11 @@ const Trailer = ({ titleName, string, status }: TrailerProps) => {
           <p className="text-white">No trailer available</p>
         )}
       </div>
-      <ReadyTooltip children={
+      <ReadyTooltip title={string}>
         <Button size='lgIcon' onClick={() => (setShowsTrailer(!showsTrailer))}>
           <PiFilmSlateDuotone />
-        </Button>}
-        title={string} />
+        </Button>
+      </ReadyTooltip>
     </>
   );
 };

@@ -16,7 +16,7 @@ interface ActorCardProps {
   }[];
 }
 
-const ActorCard = ({ actorId, actorName, credit_id, profile_path, character, gender, roles }: ActorCardProps) => {
+const ActorCard = ({ actorId, actorName, credit_id, profile_path, character, gender }: ActorCardProps) => {
   const placeholderIndex = useMemo(() => {
     return Math.floor(Math.random() * 50) + 1;
   }, []);
@@ -25,7 +25,7 @@ const ActorCard = ({ actorId, actorName, credit_id, profile_path, character, gen
     if (profile_path && gender === 2) {
       return `https://image.tmdb.org/t/p/original${profile_path}`;
     }
-    return `https://mighty.tools/mockmind-api/content/abstract/${placeholderIndex}.jpg`;
+    return `https://mockmind-api.uifaces.co/content/abstract/${placeholderIndex}.jpg`;
   }, [profile_path, gender, placeholderIndex]);
 
   return (

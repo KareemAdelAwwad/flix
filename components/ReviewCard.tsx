@@ -50,7 +50,7 @@ class ReviewCard extends React.Component<ReviewProps, ReviewState> {
           <div className='flex items-center gap-2'>
             <Image
               src={avatar_path ? `https://image.tmdb.org/t/p/original${avatar_path}` : '/images/robot-image.jpg'}
-              alt={name}
+              alt={name || username || "Reviewer avatar"}
               width={40}
               height={40}
               className='rounded-full object-cover'

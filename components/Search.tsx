@@ -1,4 +1,4 @@
-import { useState, useEffect, use, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link } from '@/i18n/routing';
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -163,7 +163,7 @@ const Search = ({ isMobile }: { isMobile: boolean }) => {
     known_for_department: string;
   }
 
-  const PersonCard = ({ name, profile_path, id, gender, known_for_department }: PersonProps) => {
+  const PersonCard = ({ name, profile_path, id, known_for_department }: PersonProps) => {
     return (
       <Link href={`/browse/person/${id}`} onClick={() => clickHandler()}
         className='w-full'>
@@ -245,8 +245,8 @@ const Search = ({ isMobile }: { isMobile: boolean }) => {
                   id={result.id}
                   name={result.name ? result.name : "No Name"}
                   profile_path={result.profile_path ? ('https://image.tmdb.org/t/p/w500' + result.profile_path) :
-                    (result.gender === 0 ? 'https://mighty.tools/mockmind-api/content/abstract/10.jpg'
-                      : 'https://mighty.tools/mockmind-api/content/abstract/36.jpg'
+                    (result.gender === 0 ? 'https://mockmind-api.uifaces.co/content/abstract/10.jpg'
+                      : 'https://mockmind-api.uifaces.co/content/abstract/36.jpg'
                     )}
                   known_for_department={result.known_for_department ? result.known_for_department : "No Department"}
                   gender={result.gender ? result.gender : 1}

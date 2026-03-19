@@ -73,7 +73,7 @@ const FlixReviewCard: React.FC<FlixReviewCardProps> = ({
         <div className={`flex items-center gap-2 ${editingMode && 'hidden sm:flex'}`}>
           <Image
             src={avatarUrl || '/images/robot-image.jpg'}
-            alt={firstName}
+            alt={firstName || "User avatar"}
             width={40}
             height={40}
             className='rounded-full object-cover'

@@ -65,9 +65,9 @@ interface MovieImages {
 
 
 
-export default function page(props: { params: Promise<{ id: number }> }) {
+export default function Page(props: { params: Promise<{ id: number }> }) {
   const params = use(props.params);
-  const isSubiscrptionActive = useSubscriptionStore(state => state.isActive);
+  useSubscriptionStore(state => state.isActive);
   const [movie, setMovie] = useState({} as Movie);
   const [images, setImages] = useState({} as MovieImages);
   const [cast, setCast] = useState([] as Cast[]);
@@ -76,12 +76,17 @@ export default function page(props: { params: Promise<{ id: number }> }) {
   const [director, setDirector] = useState({} as Cast);
   // const [musicList, setMusicList] = useState([] as YoutubeVideo[]);
   const [addReviewCardStatus, setAddReviewCardStatus] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [showTrailer, setShowTrailer] = useState(false);
   const [showPlayer, setShowPlayer] = useState(false);
   const [imageLoaing, setImageLoading] = useState(true);
-  const [loading, setLoading] = useState(true);
+  const [, setLoading] = useState(true);
   const locale = useLocale();
   const t = useTranslations('TitlePage');
+  const user = useUser();
+  const currentUserId = user.user?.id
+  const currentUserEmail = user.user?.primaryEmailAddress?.emailAddress
+  const isUserLoaded = user.isLoaded
   const url = `https://api.themoviedb.org/3/movie/${params.id}?language=${locale}`;
   const imagesUrl = `https://api.themoviedb.org/3/movie/${params.id}/images?language=${locale}&include_image_language=ar,en`;
   const castUrl = `https://api.themoviedb.org/3/movie/${params.id}/credits?language=${locale}`;
@@ -98,6 +103,9 @@ export default function page(props: { params: Promise<{ id: number }> }) {
 
   // Check if the movie is blocked based on its certification
   useEffect(() => {
+    // Wait until Clerk has loaded to know the user's email
+    if (!isUserLoaded) return;
+    
     if (
       movie.id &&
       movie.title &&
@@ -105,8 +113,8 @@ export default function page(props: { params: Promise<{ id: number }> }) {
       movie.title !== 'undefined'
     ) {
       const checkIfBlocked = async () => {
-        const isMovieBlocked = await isBlocked(params.id, movie.title, 'movie');
-        console.log(isMovieBlocked + " Movie ID: " + params.id);
+        const isMovieBlocked = await isBlocked(params.id, movie.title, 'movie', currentUserEmail);
+        console.log(isMovieBlocked + " Movie ID: " + params.id + " User Email: " + currentUserEmail);
         if (isMovieBlocked) {
           // Redirect to the home page if the movie is blocked
           window.location.href = `/${locale}/browse/movies`;
@@ -116,7 +124,7 @@ export default function page(props: { params: Promise<{ id: number }> }) {
 
       checkIfBlocked();
     }
-  }, [movie.title]);
+  }, [movie.title, currentUserEmail, isUserLoaded]);
 
   // Fetch movie Data
   useEffect(() => {
@@ -170,9 +178,6 @@ export default function page(props: { params: Promise<{ id: number }> }) {
 
     fetchReviewsData();
   }, [movie.id]);
-
-  const user = useUser();
-  const currentUserId = user.user?.id
 
   const combinedReviews = useMemo(() => [
     ...ourReviews.map(review => ({ ...review, type: 'flix' as const })),
@@ -274,12 +279,13 @@ export default function page(props: { params: Promise<{ id: number }> }) {
           </div>
           {/* Movie controles */}
           <div className='flex justify-center items-center gap-2 w-full h-16 bg-transparent flex-wrap'>
-            <ReadyTooltip children={
+            <ReadyTooltip title={t('play')}>
               <Button
                 onClick={() => setShowPlayer(true)}
                 className='text-white text-2xl font-bold bg-red-45 hover:bg-red-50 transition-colors duration-400' size="lg">
                 <FaPlay /> {t('title')}
-              </Button>} title={t('play')} />
+              </Button>
+            </ReadyTooltip>
             <div className='flex justify-center items-center gap-2'>
               {
                 currentUserId === process.env.NEXT_PUBLIC_ADMIN_USER_ID &&
@@ -301,7 +307,7 @@ export default function page(props: { params: Promise<{ id: number }> }) {
           imageLoaing ? null
             : <Image src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
 
-              alt={movie.original_title} className='w-full h-full object-cover' height={835} width={1800} />
+              alt={movie.original_title || "Movie"} className='w-full h-full object-cover' height={835} width={1800} />
         }
       </section>
 

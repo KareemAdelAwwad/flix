@@ -62,13 +62,14 @@ const CompletedButton: React.FC<CompletedButtonProps> = ({ titleId, titleType, s
   return (
     style === 'icon' ? (
       <ReadyTooltip
-        children={<Button onClick={handleAddToCompleted} size={'lgIcon'} className={className}>
+        title={isInCompleted ? (locale === 'ar' ? strings.ar.remove : strings.en.remove)
+          : (locale === 'ar' ? strings.ar.add : strings.en.add)}>
+        <Button onClick={handleAddToCompleted} size={'lgIcon'} className={className}>
           {
             isInCompleted ? <GoCheckCircleFill size={24} /> : <GoCheckCircle size={24} />
           }
-        </Button>}
-        title={isInCompleted ? (locale === 'ar' ? strings.ar.remove : strings.en.remove)
-          : (locale === 'ar' ? strings.ar.add : strings.en.add)} />
+        </Button>
+      </ReadyTooltip>
     ) : style === 'text' ? (
       <Button onClick={handleAddToCompleted} size={"default"} className={className}>
         {

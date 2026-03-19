@@ -48,8 +48,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url = 'https://a.top4top.io/m
     const handleFullscreenChange = () => {
       if (document.fullscreenElement) {
         // Lock to landscape when entering fullscreen
-        if (screen.orientation && (screen.orientation as any).lock) {
-          (screen.orientation as any).lock('landscape').catch((err: any) => {
+        if (screen.orientation && (screen.orientation as ScreenOrientation & { lock?: (orientation: string) => Promise<void> }).lock) {
+          (screen.orientation as ScreenOrientation & { lock: (orientation: string) => Promise<void> }).lock('landscape').catch((err: Error) => {
             console.warn('Orientation lock failed:', err);
           });
         }
@@ -149,6 +149,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url = 'https://a.top4top.io/m
     setVolume(parseFloat(e.target.value));
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const toggleVolumeControl = () => {
     setShowVolumeControl(() => (!showVolumeControl));
   };
@@ -170,10 +171,12 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url = 'https://a.top4top.io/m
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const toggleSettings = () => {
     setShowSettings(() => (!showSettings));
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handlePlaybackRateChange = (rate: number) => {
     setPlaybackRate(rate);
     setShowSettings(false);
@@ -245,7 +248,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url = 'https://a.top4top.io/m
   };
 
   const handleVideoClick = () => {
-    isPlaying ? setIsPlaying(false) : setIsPlaying(true);
+    if (isPlaying) {
+      setIsPlaying(false);
+    } else {
+      setIsPlaying(true);
+    }
   };
 
   return (

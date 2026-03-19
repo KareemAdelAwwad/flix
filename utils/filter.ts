@@ -2,6 +2,15 @@
 import { MovieCertification, SeriesCertification } from '@/types/titleCertification';
 import { Title } from '@/types/title';
 
+// Admin email that bypasses safety filters
+const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL;
+
+// Check if the current user is an admin (should bypass filters)
+export function isAdminUser(userEmail: string | null | undefined): boolean {
+  if (!userEmail || !ADMIN_EMAIL) return false;
+  return userEmail.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+}
+
 const BLOCKED_CERTIFICATION =
   [
     "18+",
@@ -124,7 +133,12 @@ const options = {
 };
 
 
-export async function isBlocked(titleId: number, titleName: string, titleType: 'movie' | 'series'): Promise<boolean> {
+export async function isBlocked(titleId: number, titleName: string, titleType: 'movie' | 'series', userEmail?: string | null): Promise<boolean> {
+  // Bypass filtering for admin users
+  if (isAdminUser(userEmail)) {
+    return false;
+  }
+
   // Check if the title name contains any blocked keywords
   const lowerCaseTitleName = titleName.toLowerCase();
   const containsBlockedKeyword = BLOCKED_KEYWORDS.some(keyword => lowerCaseTitleName.includes(keyword.toLowerCase()));
@@ -137,7 +151,9 @@ export async function isBlocked(titleId: number, titleName: string, titleType: '
   try {
     const response = await fetch(keywordsUrl, options);
     const data = await response.json();
-    const containsBlockedKeywordInKeywords = data.keywords.some((keyword: { name: string }) => 
+    // TMDB returns 'keywords' for movies and 'results' for TV shows
+    const keywords = data.keywords || data.results || [];
+    const containsBlockedKeywordInKeywords = keywords.some((keyword: { name: string }) => 
       BLOCKED_KEYWORDS.some(blockedKeyword => keyword.name.toLowerCase().includes(blockedKeyword.toLowerCase()))
     );
     if (containsBlockedKeywordInKeywords) {
@@ -186,13 +202,19 @@ export async function isBlocked(titleId: number, titleName: string, titleType: '
   return false;
 }
 
-export async function filterBlockedTitles(titles: Title[], titleType: 'movie' | 'series'): Promise<Title[]> {
+export async function filterBlockedTitles(titles: Title[], titleType: 'movie' | 'series', userEmail?: string | null): Promise<Title[]> {
+  // Bypass filtering for admin users
+  if (isAdminUser(userEmail)) {
+    return titles;
+  }
+
   const filteredTitles: Title[] = [];
   for (const title of titles) {
     const blocked = await isBlocked(
       title.id,
       titleType === "movie" ? (title.title ?? "") : (title.name ?? ""),
-      titleType
+      titleType,
+      userEmail
     );
     if (!blocked) {
       filteredTitles.push(title);

@@ -168,7 +168,9 @@
     "allMovies": "كل الأفلام",
     "top10Movies": "أفضل 10 أفلام",
     "trendingMovies": "الأفلام الرائجة",
-    "actionMovies": "أفلام الأكشن"
+    "actionMovies": "أفلام الأكشن",
+    "browseMovies": "تصفح الأفلام",
+    "browseShows": "تصفح المسلسلات"
   },
   "TVShows": {
     "movies": "العروض",
@@ -190,7 +192,10 @@
   },
   "Lists": {
     "watchlist": "قائمة المشاهدة خاصتك",
-    "watched": "العناوين التي شاهدتها"
+    "watched": "العناوين التي شاهدتها",
+    "loadMore": "تحميل المزيد",
+    "emptyWatchlist": "قائمة المشاهدة فارغة",
+    "emptyWatched": "لم تشاهد أي شيء بعد"
   },
   "Support": {
     "title": "الدعم",

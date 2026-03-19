@@ -12,7 +12,7 @@ interface EmbedProps {
   status: boolean;
 }
 
-const WatchingServer = ({ string, status, titleType, titleID, seanonNumber, episodeNumber }: EmbedProps) => {
+const WatchingServer = ({ string, status, titleType, titleID }: EmbedProps) => {
   const [showsEmbed, setShowsEmbed] = useState(status);
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
@@ -71,8 +71,8 @@ const WatchingServer = ({ string, status, titleType, titleID, seanonNumber, epis
           <iframe
             ref={iframeRef}
             className='rounded-xl'
-            src={titleType === 'tv' ? `https://vidsrc.to/embed/tv/${titleID}`
-              : `https://vidsrc.to/embed/movie/${titleID}`}
+            src={titleType === 'tv' ? `https://vidsrcme.ru/embed/tv/${titleID}`
+              : `https://vidsrcme.ru/embed/movie/${titleID}`}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             width={800}
             height={450}
@@ -82,11 +82,11 @@ const WatchingServer = ({ string, status, titleType, titleID, seanonNumber, epis
           <p className="text-white">No Content available</p>
         )}
       </div>
-      <ReadyTooltip children={
+      <ReadyTooltip title={string}>
         <Button size='lgIcon' onClick={() => (setShowsEmbed(!showsEmbed))}>
           <FaServer />
-        </Button>}
-        title={string} />
+        </Button>
+      </ReadyTooltip>
     </>
   );
 };

@@ -8,8 +8,7 @@ import Image from 'next/image';
 import FQA from '@/components/FQA';
 
 
-const page = () => {
-  const t = useTranslations('HomePage');
+const Page = () => {
   const sTranslation = useTranslations('Support');
 
   // for the webs3 forms 
@@ -19,7 +18,7 @@ const page = () => {
 
   interface Web3FormsResponse {
     success: boolean;
-    [key: string]: any;
+    [key: string]: unknown;
   }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>): Promise<void> {
@@ -198,4 +197,4 @@ const LabelInputContainer = ({
     </div>
   );
 };
-export default page
+export default Page

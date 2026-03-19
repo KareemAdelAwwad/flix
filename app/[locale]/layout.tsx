@@ -83,7 +83,7 @@ export default async function RootLayout(
     children
   } = props;
 
-  if (!routing.locales.includes(locale as any)) {
+  if (!routing.locales.includes(locale as typeof routing.locales[number])) {
     notFound();
   }
 
@@ -94,7 +94,7 @@ export default async function RootLayout(
         <head>
           <script defer data-domain="flix.kareemadel.com" src="https://analytics.kareemadel.com/js/script.js"></script>
         </head>
-        <body className={locale === 'ar' ? tajawal.className : manrope.className}>
+        <body className={locale === 'ar' ? tajawal.className : manrope.className} suppressHydrationWarning>
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"

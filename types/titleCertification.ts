@@ -12,6 +12,6 @@ export interface MovieCertification {
 export interface SeriesCertification {
   "results": {
     "iso_3166_1": string,
-    "rating": number
+    "rating": string
   }[]
 }

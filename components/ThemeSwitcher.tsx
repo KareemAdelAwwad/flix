@@ -8,7 +8,7 @@ import { useTranslations } from 'next-intl';
 
 export function ThemeSwitcher() {
   const [mounted, setMounted] = useState(false)
-  const { theme, setTheme } = useTheme()
+  const { setTheme } = useTheme()
   const t = useTranslations('ThemeToggle');
 
 

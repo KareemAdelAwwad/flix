@@ -17,9 +17,11 @@ interface SideInfoProps {
 export const SideInfo = ({ series, images, t, locale }: SideInfoProps) => {
   return (
     <div className='dark:bg-black-10 bg-gray-95 rounded-lg p-12 font-semibold text-lg borders flex flex-col gap-8'>
-      <div className='flex justify-center items-center'>
-        <Image loading='lazy' src={`https://image.tmdb.org/t/p/original${images.logos && images.logos[0].file_path}`} alt="Series Logo" width={240} height={160} />
-      </div>
+      {images.logos && images.logos[0] && (
+        <div className='flex justify-center items-center'>
+          <Image loading='lazy' src={`https://image.tmdb.org/t/p/original${images.logos[0].file_path}`} alt={series.name || "Series Logo"} width={240} height={160} />
+        </div>
+      )}
       <Info title={t('first_air_date')}
         content={<p className='dark:text-white text-[16px] font-semibold'>{series.first_air_date}</p>}
         icon={<CiCalendar size={24} />} />
