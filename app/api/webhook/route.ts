@@ -3,23 +3,39 @@ import { collection, query, where, getDocs, addDoc, updateDoc } from 'firebase/f
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
-const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
-
-if (!stripeSecretKey || !webhookSecret) {
-  throw new Error('Missing required environment variables');
-}
-const stripe = new Stripe(stripeSecretKey!);
-
 export async function POST(req: NextRequest) {
+  const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
+  if (!stripeSecretKey || !webhookSecret) {
+    return NextResponse.json(
+      {
+        status: 'error',
+        message: 'Missing required environment variables',
+      },
+      { status: 500 }
+    );
+  }
+
+  const stripe = new Stripe(stripeSecretKey);
   const payload = await req.text();
-  const sig = req.headers.get('Stripe-Signature')!;
+  const sig = req.headers.get('Stripe-Signature');
+
+  if (!sig) {
+    return NextResponse.json(
+      {
+        status: 'error',
+        message: 'Missing Stripe-Signature header',
+      },
+      { status: 400 }
+    );
+  }
 
   try {
     const event = stripe.webhooks.constructEvent(
       payload,
       sig,
-      webhookSecret!
+      webhookSecret
     );
 
     console.log('Received event type:', event.type);
