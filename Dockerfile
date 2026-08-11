@@ -6,12 +6,12 @@ RUN corepack prepare pnpm@9.15.9 --activate
 
 FROM base AS deps
 COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile
+RUN --mount=type=cache,id=flix-pnpm-store,target=/pnpm/store pnpm config set store-dir /pnpm/store && pnpm install --frozen-lockfile
 
 FROM base AS builder
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN pnpm run build
+RUN --mount=type=cache,id=flix-next-cache,target=/app/.next/cache pnpm run build
 
 FROM base AS runner
 ENV NODE_ENV=production
