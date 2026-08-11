@@ -6,7 +6,7 @@ RUN corepack prepare pnpm@9.15.9 --activate
 
 FROM base AS deps
 COPY package.json pnpm-lock.yaml ./
-RUN --mount=type=cache,id=flix-pnpm-store,target=/pnpm/store pnpm config set store-dir /pnpm/store && pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile
 
 FROM base AS builder
 # Set Node memory limit to prevent build OOM crash (exit code 255)
@@ -57,7 +57,7 @@ ENV NEXT_PUBLIC_ADMIN_EMAIL=$NEXT_PUBLIC_ADMIN_EMAIL
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN --mount=type=cache,id=flix-next-cache,target=/app/.next/cache pnpm run build
+RUN pnpm run build
 
 FROM base AS runner
 ENV NODE_ENV=production
