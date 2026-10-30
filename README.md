@@ -1,110 +1,145 @@
-# 🎥 Flix App
+<div align="center">
 
-_A sophisticated streaming platform built with Next.js 14 and TypeScript, powered by TMDB API_
+<img src="public/logo.png" alt="Flix Logo" width="80" height="80" />
 
-[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
-[![Next.js](https://img.shields.io/badge/Next.js-14-black)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
+# Flix
 
-![Flix App Preview](public/meta_bg.png)
+**Production-grade streaming and media discovery platform engineered with Next.js 14, Clerk authentication, Stripe billing, and Firebase Firestore.**
 
-## 📋 Table of Contents
+[![Next.js](https://img.shields.io/badge/Next.js-14.2-black?style=flat-square&logo=next.js)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
+[![Clerk](https://img.shields.io/badge/Clerk-Authentication-6C47FF?style=flat-square&logo=clerk)](https://clerk.com/)
+[![Stripe](https://img.shields.io/badge/Stripe-Subscriptions-008CDD?style=flat-square&logo=stripe)](https://stripe.com/)
+[![Firebase](https://img.shields.io/badge/Firebase-Firestore-FFCA28?style=flat-square&logo=firebase)](https://firebase.google.com/)
+[![Sentry](https://img.shields.io/badge/Sentry-Monitoring-362D59?style=flat-square&logo=sentry)](https://sentry.io/)
 
-- [🌟 Overview](#-overview)
-- [🚀 Features](#-features)
-  - [🔐 Authentication & Security](#-authentication--security)
-  - [🎬 Core Features](#-core-features)
-  - [💳 Premium Features](#-premium-features)
-  - [🎨 Technical Features](#-technical-features)
-- [💻 Tech Stack](#-tech-stack)
-  - [Frontend](#frontend)
-  - [Backend & Services](#backend--services)
-  - [DevOps & Monitoring](#devops--monitoring)
-- [👥 Contributors](#-contributors)
-- [📜 License](#-license)
+> A bilingual (Arabic/English) streaming experience with real-time watchlists, subscription tiers, TMDB catalog synchronization, and edge performance monitoring.
 
-## 🌟 Overview
+[**Explore Live Demo (flix.kareemadel.com)**](https://flix.kareemadel.com)
 
-Flix App is a modern streaming platform inspired by Netflix and [StreamVib](https://www.figma.com/community/file/1294589591426976269). Built with performance and user experience in mind, it leverages:
-
-- **Next.js 14** for optimal performance
-- **TMDB API** for rich content
-- **Clerk** for secure authentication
-- **Firebase** for real-time features
-- **Stripe** for subscription management
-
-## 🚀 Features
-
-### 🔐 Authentication & Security
-
-- Secure authentication via Clerk
-- OAuth support (Google, Discord, Fackbook)
-- Role-based access control
-- Protected routes and API endpoints
-
-### 🎬 Core Features
-
-- Advanced content discovery
-- Real-time search with filters
-- HD video streaming
-- Interactive watchlists
-- Personalized recommendations
-- Multi-language support (اللغة العربية, English)
-- Custome Player (It's only support a static video)
-
-### 💳 Premium Features
-
-- Stripe subscription integration
-- Multiple pricing tiers
-- Exclusive content access
-
-### 🎨 Technical Features
-
-- Server-side rendering
-- Progressive web app support
-- Responsive design
-- Dark/light themes
-- Performance monitoring
-- Error tracking via Sentry
-
-## 💻 Tech Stack
-
-### Frontend
-
-- Next.js 14
-- TypeScript
-- Tailwind CSS
-- GSAP
-
-### Backend & Services
-
-- Firebase
-- Clerk Authentication
-- Stripe Payments
-- TMDB API
-- Custom Node.js Background Music API
-
-### DevOps & Monitoring
-
-- VPS deployment
-- Plausible Analytics
-- Sentry error tracking
-
-## 🤝 Contributors
-
-### Thanks to everyone who contributed to this project!
-
-<table> <tr> <td align="center"> <a href="https://github.com/KareemAdelAwwad"> <img src="https://github.com/KareemAdelAwwad.png" width="100px;" alt="Kareem Adel"/> <br /> <sub><b>Kareem Adel</b></sub> </a> </td> 
-<td align="center"> <a href="https://github.com/ibrahimwael951"> <img src="https://github.com/ibrahimwael951.png" width="100px;" alt="Ibrahim Wael"/> <br /> <sub><b>Ibrahim Wael</b></sub> </a> </td> 
-<td align="center"> <a href="https://github.com/HassanMo1390"> <img src="https://github.com/HassanMo1390.png" width="100px;" alt="Hasan"/> <br /> <sub><b>Hasan</b></sub> </a> </td> 
-</tr> </table>
-
-## ⭐ Support the Project
-
-### If you find this project helpful, show love and giving it a ⭐!
+</div>
 
 ---
 
-## 📜 License
+![Flix App Preview](public/meta_bg.png)
 
-This project is licensed for **personal use only**. Redistribution, modification, or commercial use is not permitted.
+---
+
+## Features
+
+- **Content Discovery Engine:** Direct integration with TMDB API delivering paginated trending, top-rated, and categorized movie/series metadata.
+- **Enterprise Authentication:** Multi-provider OAuth (Google, Discord, Facebook) and session verification powered by Clerk with Arabic & English localizations.
+- **Subscription Management:** Automated Stripe checkout pipelines, customer billing portal, and crash-resilient webhook reconciliation for active tiers.
+- **Real-Time Watchlists:** Low-latency user watchlists, viewing history, and favorites backed by Firebase Firestore.
+- **Bilingual & Responsive:** Full RTL (Right-to-Left) Arabic and LTR English layouts with GSAP micro-animations and Tailwind CSS design tokens.
+- **Production Observability:** Client, server, and edge error monitoring and distributed performance tracing instrumented via Sentry.
+
+---
+
+## Architecture & Integration Flow
+
+```mermaid
+flowchart TD
+    User([User Client]) -->|Next.js 14 App Router| App[Flix Web App]
+
+    subgraph AuthLayer["Identity & Access"]
+        App -->|Session Token| Clerk["Clerk Authentication"]
+        Clerk -->|OAuth Handshake| Providers["Google / Discord / Email"]
+    end
+
+    subgraph MediaCatalog["Catalog Pipeline"]
+        App -->|Server Actions| TMDB["The Movie Database (TMDB API)"]
+        TMDB -->|Metadata / Posters / Trailers| App
+    end
+
+    subgraph Billing["Subscription Engine"]
+        App -->|Checkout Session| Stripe["Stripe Billing"]
+        Stripe -->|invoice.paid webhook| WebhookRoute["/api/webhooks/stripe"]
+        WebhookRoute -->|Sync Tier Status| Firestore
+    end
+
+    subgraph DataStore["State & Preferences"]
+        App -->|Sync Watchlists & History| Firestore[("Firebase Firestore")]
+    end
+
+    subgraph Observability["Monitoring"]
+        App -.->|Telemetry & Errors| Sentry["Sentry Dashboard"]
+    end
+```
+
+---
+
+## Prerequisites
+
+- **Node.js** v18.17.0 or higher
+- **pnpm** (recommended) or npm
+- **TMDB API Key** (from [themoviedb.org](https://www.themoviedb.org/documentation/api))
+- **Clerk Application** (from [clerk.com](https://clerk.com))
+- **Firebase Project** with Firestore enabled (from [firebase.google.com](https://firebase.google.com))
+- **Stripe Account** for subscription webhooks (from [stripe.com](https://stripe.com))
+
+---
+
+## Quick Start
+
+### 1. Clone & Install
+
+```bash
+git clone https://github.com/KareemAdelAwwad/flix.git
+cd flix
+pnpm install
+```
+
+### 2. Configure Environment
+
+Copy `.env.example` to `.env.local` and populate your API credentials:
+
+```bash
+cp .env.example .env.local
+```
+
+### 3. Start Development Server
+
+```bash
+pnpm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+---
+
+## Available Scripts
+
+| Script | Purpose |
+| :--- | :--- |
+| `pnpm run dev` | Runs local development server on port 3000 |
+| `pnpm run build` | Compiles production Next.js build |
+| `pnpm run start` | Boots production server instance |
+| `pnpm run lint` | Runs ESLint analysis across TypeScript & JSX files |
+
+---
+
+## Contributors
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/KareemAdelAwwad">
+        <img src="https://github.com/KareemAdelAwwad.png" width="90px;" alt="Kareem Adel" /><br />
+        <sub><b>Kareem Adel</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/ibrahimwael951">
+        <img src="https://github.com/ibrahimwael951.png" width="90px;" alt="Ibrahim Wael" /><br />
+        <sub><b>Ibrahim Wael</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/HassanMo1390">
+        <img src="https://github.com/HassanMo1390.png" width="90px;" alt="Hasan" /><br />
+        <sub><b>Hasan</b></sub>
+      </a>
+    </td>
+  </tr>
+</table>
