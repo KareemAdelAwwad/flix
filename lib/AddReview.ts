@@ -1,20 +1,27 @@
 import { db } from './firebase';
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  addDoc,
+  updateDoc,
+  doc,
+  Timestamp,
+} from 'firebase/firestore';
 
-// Function to update an existing review
 export const updateReview = async (
   docId: string,
   content: string,
   rating: number
 ): Promise<void> => {
-  const reviewsRef = db.collection('Reviews');
-  await reviewsRef.doc(docId).update({
-    lastEditDate: new Date(),
-    content: content,
-    rating: rating,
+  await updateDoc(doc(db, 'Reviews', docId), {
+    lastEditDate: Timestamp.now(),
+    content,
+    rating,
   });
 };
 
-// Function to add a new review
 export const addReview = async (
   userId: string,
   firstName: string,
@@ -24,30 +31,30 @@ export const addReview = async (
   content: string,
   rating: number
 ): Promise<void> => {
-  if (!userId) throw new Error("User not authenticated");
+  if (!userId) throw new Error('User not authenticated');
 
-  const reviewsRef = db.collection('Reviews');
-  const existingEntry = await reviewsRef
-    .where('userId', '==', userId)
-    .where('titleId', '==', titleId)
-    .where('titleType', '==', titleType)
-    .get();
+  const reviewsRef = collection(db, 'Reviews');
+  const q = query(
+    reviewsRef,
+    where('userId', '==', userId),
+    where('titleId', '==', titleId),
+    where('titleType', '==', titleType)
+  );
+  const existingEntry = await getDocs(q);
 
   if (!existingEntry.empty) {
-    // If the review exists, update it
-    const docId = existingEntry.docs[0].id;
-    await updateReview(docId, content, rating);
+    const existingDocId = existingEntry.docs[0].id;
+    await updateReview(existingDocId, content, rating);
   } else {
-    // If the review does not exist, add a new one
-    await reviewsRef.add({
-      userId: userId,
-      firstName: firstName,
-      avatarUrl: avatarUrl,
-      titleId: titleId,
-      titleType: titleType,
-      content: content,
-      rating: rating,
-      lastEditDate: new Date(),
+    await addDoc(reviewsRef, {
+      userId,
+      firstName,
+      avatarUrl,
+      titleId,
+      titleType,
+      content,
+      rating,
+      lastEditDate: Timestamp.now(),
     });
   }
 };

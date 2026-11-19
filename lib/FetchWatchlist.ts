@@ -1,15 +1,26 @@
 import { db } from './firebase';
-import firebase from 'firebase/compat/app';
+import {
+  collection,
+  query,
+  where,
+  orderBy,
+  limit,
+  startAfter,
+  getDocs,
+  onSnapshot,
+  QueryDocumentSnapshot,
+  DocumentData,
+} from 'firebase/firestore';
 
-interface WatchlistItem {
+export interface WatchlistItem {
   titleId: string;
   titleType: 'movie' | 'tv';
-  createdAt?: Date;
+  createdAt?: Date | null;
 }
 
-interface PaginatedResult {
+export interface PaginatedWatchlistResult {
   items: WatchlistItem[];
-  lastDoc: firebase.firestore.QueryDocumentSnapshot | null;
+  lastDoc: QueryDocumentSnapshot<DocumentData> | null;
   hasMore: boolean;
 }
 
@@ -20,51 +31,59 @@ export const subscribeToWatchlist = (
   onUpdate: (items: WatchlistItem[]) => void,
   onError?: (error: Error) => void
 ) => {
-  const watchlistRef = db.collection('Watchlists')
-    .where('userId', '==', userId)
-    .orderBy('createdAt', 'desc')
-    .limit(PAGE_SIZE);
+  const q = query(
+    collection(db, 'Watchlists'),
+    where('userId', '==', userId),
+    orderBy('createdAt', 'desc'),
+    limit(PAGE_SIZE)
+  );
 
-  // Return the unsubscribe function
-  return watchlistRef.onSnapshot(
+  return onSnapshot(
+    q,
     (snapshot) => {
-      const data = snapshot.docs.map(doc => {
-        const data = doc.data();
+      const data = snapshot.docs.map((entry) => {
+        const d = entry.data();
         return {
-          titleId: data.titleId,
-          titleType: data.titleType,
-          createdAt: data.createdAt ? data.createdAt.toDate() : null,
+          titleId: String(d.titleId),
+          titleType: d.titleType as 'movie' | 'tv',
+          createdAt: d.createdAt?.toDate ? d.createdAt.toDate() : null,
         };
       });
       onUpdate(data);
     },
     (error) => {
       console.error('Firestore subscription error:', error);
-      if (onError) {
-        onError(error as Error);
-      }
+      onError?.(error as Error);
     }
   );
 };
 
-// Paginated fetch for initial load
-export const fetchWatchlist = async (userId: string, lastDoc?: firebase.firestore.QueryDocumentSnapshot | null): Promise<PaginatedResult> => {
-  let query = db.collection('Watchlists')
-    .where('userId', '==', userId)
-    .orderBy('createdAt', 'desc')
-    .limit(PAGE_SIZE);
+export const fetchWatchlist = async (
+  userId: string,
+  lastDoc?: QueryDocumentSnapshot<DocumentData> | null
+): Promise<PaginatedWatchlistResult> => {
+  const q = lastDoc
+    ? query(
+        collection(db, 'Watchlists'),
+        where('userId', '==', userId),
+        orderBy('createdAt', 'desc'),
+        startAfter(lastDoc),
+        limit(PAGE_SIZE)
+      )
+    : query(
+        collection(db, 'Watchlists'),
+        where('userId', '==', userId),
+        orderBy('createdAt', 'desc'),
+        limit(PAGE_SIZE)
+      );
 
-  if (lastDoc) {
-    query = query.startAfter(lastDoc);
-  }
-
-  const snapshot = await query.get();
-  const items = snapshot.docs.map(doc => {
-    const data = doc.data();
+  const snapshot = await getDocs(q);
+  const items = snapshot.docs.map((entry) => {
+    const d = entry.data();
     return {
-      titleId: data.titleId,
-      titleType: data.titleType,
-      createdAt: data.createdAt ? data.createdAt.toDate() : null,
+      titleId: String(d.titleId),
+      titleType: d.titleType as 'movie' | 'tv',
+      createdAt: d.createdAt?.toDate ? d.createdAt.toDate() : null,
     };
   });
 
@@ -75,18 +94,11 @@ export const fetchWatchlist = async (userId: string, lastDoc?: firebase.firestor
   };
 };
 
-// Fetch all for cases where we need the total count
-export const fetchWatchlistAll = async (userId: string): Promise<WatchlistItem[]> => {
-  const watchlistRef = db.collection('Watchlists')
-    .where('userId', '==', userId)
-    .orderBy('createdAt', 'desc');
-  const snapshot = await watchlistRef.get();
-  return snapshot.docs.map(doc => {
-    const data = doc.data();
-    return {
-      titleId: data.titleId,
-      titleType: data.titleType,
-      createdAt: data.createdAt ? data.createdAt.toDate() : null,
-    };
+export const fetchWatchlistIds = async (userId: string): Promise<string[]> => {
+  const q = query(collection(db, 'Watchlists'), where('userId', '==', userId));
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map((entry) => {
+    const d = entry.data();
+    return `${d.titleType}:${d.titleId}`;
   });
 };

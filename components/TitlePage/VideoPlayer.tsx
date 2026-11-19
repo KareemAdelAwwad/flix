@@ -1,4 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
+'use client';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import ReactPlayer from 'react-player';
 import {
   Play, Pause, Settings,
@@ -32,6 +33,26 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url = 'https://a.top4top.io/m
   const playerRef = useRef<ReactPlayer>(null);
   const playerContainerRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  const handlePlayPause = useCallback(() => {
+    setIsPlaying((prev) => !prev);
+  }, []);
+
+  const handleSeek = useCallback((time: number) => {
+    playerRef.current?.seekTo(time);
+  }, []);
+
+  const toggleFullscreen = useCallback(async () => {
+    try {
+      if (!document.fullscreenElement && playerContainerRef.current) {
+        await playerContainerRef.current.requestFullscreen();
+      } else if (document.exitFullscreen) {
+        await document.exitFullscreen();
+      }
+    } catch (error) {
+      console.error('Fullscreen error:', error);
+    }
+  }, []);
 
   useEffect(() => {
     const handleFullScreenChange = () => {
@@ -105,7 +126,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url = 'https://a.top4top.io/m
 
     document.addEventListener('keydown', handleKeyPress);
     return () => document.removeEventListener('keydown', handleKeyPress);
-  }, [isPlaying, isFullScreen, playedSeconds, duration]);
+  }, [handlePlayPause, toggleFullscreen, handleSeek, isFullScreen, playedSeconds, duration]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -141,10 +162,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url = 'https://a.top4top.io/m
     };
   }, [isFullScreen]);
 
-  const handlePlayPause = () => {
-    setIsPlaying(() => (!isPlaying));
-  };
-
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setVolume(parseFloat(e.target.value));
   };
@@ -157,18 +174,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url = 'https://a.top4top.io/m
   const handleProgress = (state: { playedSeconds: number }) => {
     setPlayedSeconds(state.playedSeconds);
     onProgress?.(state);
-  };
-
-  const toggleFullscreen = async () => {
-    try {
-      if (!isFullScreen && playerContainerRef.current) {
-        await playerContainerRef.current.requestFullscreen();
-      } else if (document.exitFullscreen) {
-        await document.exitFullscreen();
-      }
-    } catch (error) {
-      console.error('Fullscreen error:', error);
-    }
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -201,10 +206,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url = 'https://a.top4top.io/m
     } catch (error) {
       console.error('Picture in Picture error:', error);
     }
-  };
-
-  const handleSeek = (time: number) => {
-    playerRef.current?.seekTo(time);
   };
 
   const handleSeekMouseDown = () => {
@@ -285,7 +286,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url = 'https://a.top4top.io/m
                 max={duration || 0}
                 value={seeking ? progress : playedSeconds}
                 step="any"
-                className="absolute w-full h-1 bg-gray-600 rounded-full cursor-pointer
+                className="video-range-input absolute w-full h-1 bg-gray-600 rounded-full cursor-pointer
                         group-hover:h-1.5 transition-all duration-150 accent-red-45"
                 onChange={handleTimelineChange}
                 onMouseDown={handleSeekMouseDown}
@@ -295,7 +296,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url = 'https://a.top4top.io/m
                 className="absolute h-1 group-hover:h-1.5 transition-all duration-75 bg-red-45 pointer-events-none
               rounded-full"
                 style={{
-                  width: `${(playedSeconds / duration) * 100}%`,
+                  width: `${duration > 0 ? (playedSeconds / duration) * 100 : 0}%`,
                   transition: 'width 0.1s linear'
                 }}
               />
@@ -344,7 +345,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url = 'https://a.top4top.io/m
                   max={duration || 0}
                   value={seeking ? progress : playedSeconds}
                   step="any"
-                  className="absolute w-full h-1 bg-gray-600 rounded-full cursor-pointer
+                  className="video-range-input absolute w-full h-1 bg-gray-600 rounded-full cursor-pointer
                         group-hover:h-1.5 transition-all duration-150 accent-red-45"
                   onChange={handleTimelineChange}
                   onMouseDown={handleSeekMouseDown}
@@ -354,7 +355,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url = 'https://a.top4top.io/m
                   className="absolute h-1 group-hover:h-1.5 transition-all duration-75 bg-red-45 pointer-events-none
               rounded-full"
                   style={{
-                    width: `${(playedSeconds / duration) * 100}%`,
+                    width: `${duration > 0 ? (playedSeconds / duration) * 100 : 0}%`,
                     transition: 'width 0.1s linear'
                   }}
                 />
@@ -433,27 +434,3 @@ const formatTime = (seconds: number): string => {
 };
 
 export default VideoPlayer;
-
-<style jsx>{`
-  input[type='range'] {
-    -webkit-appearance: none;
-    background: transparent;
-  }
-
-  input[type='range']::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    height: 12px;
-    width: 12px;
-    border-radius: 50%;
-    background: #ff0000;
-    cursor: pointer;
-    margin-top: -5px;
-  }
-
-  input[type='range']::-webkit-slider-runnable-track {
-    width: 100%;
-    height: 2px;
-    background: rgba(255,255,255,0.3);
-    border-radius: 999px;
-  }
-`}</style>

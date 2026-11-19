@@ -1,66 +1,93 @@
 import { db } from './firebase';
-import firebase from 'firebase/compat/app';
+import {
+  collection,
+  query,
+  where,
+  orderBy,
+  limit,
+  startAfter,
+  getDocs,
+  onSnapshot,
+  QueryDocumentSnapshot,
+  DocumentData,
+} from 'firebase/firestore';
 
-interface CompletedItem {
+export interface CompletedItem {
   titleId: string;
   titleType: 'movie' | 'tv';
-  createdAt: Date;
+  createdAt: Date | null;
 }
 
-interface PaginatedResult {
+export interface PaginatedCompletedResult {
   items: CompletedItem[];
-  lastDoc: firebase.firestore.QueryDocumentSnapshot | null;
+  lastDoc: QueryDocumentSnapshot<DocumentData> | null;
   hasMore: boolean;
 }
 
 const PAGE_SIZE = 12;
 
 export const subscribeToCompleted = (
-  userId: string, 
+  userId: string,
   onUpdate: (items: CompletedItem[]) => void,
   onError?: (error: Error) => void
 ) => {
-  const completedRef = db.collection('Completed')
-    .where('userId', '==', userId)
-    .orderBy('createdAt', 'desc')
-    .limit(PAGE_SIZE);
-  
-  // Return the unsubscribe function
-  return completedRef.onSnapshot(
+  const q = query(
+    collection(db, 'Completed'),
+    where('userId', '==', userId),
+    orderBy('createdAt', 'desc'),
+    limit(PAGE_SIZE)
+  );
+
+  return onSnapshot(
+    q,
     (snapshot) => {
-      const data = snapshot.docs.map(doc => ({
-        titleId: doc.data().titleId,
-        titleType: doc.data().titleType,
-        createdAt: doc.data().createdAt.toDate(),
-      }));
+      const data = snapshot.docs.map((entry) => {
+        const d = entry.data();
+        return {
+          titleId: String(d.titleId),
+          titleType: d.titleType as 'movie' | 'tv',
+          createdAt: d.createdAt?.toDate ? d.createdAt.toDate() : null,
+        };
+      });
       onUpdate(data);
     },
     (error) => {
       console.error('Firestore subscription error:', error);
-      if (onError) {
-        onError(error as Error);
-      }
+      onError?.(error as Error);
     }
   );
 };
 
-// Paginated fetch for initial load
-export const fetchCompleted = async (userId: string, lastDoc?: firebase.firestore.QueryDocumentSnapshot | null): Promise<PaginatedResult> => {
-  let query = db.collection('Completed')
-    .where('userId', '==', userId)
-    .orderBy('createdAt', 'desc')
-    .limit(PAGE_SIZE);
+export const fetchCompleted = async (
+  userId: string,
+  lastDoc?: QueryDocumentSnapshot<DocumentData> | null
+): Promise<PaginatedCompletedResult> => {
+  const baseQuery = query(
+    collection(db, 'Completed'),
+    where('userId', '==', userId),
+    orderBy('createdAt', 'desc'),
+    limit(PAGE_SIZE)
+  );
 
-  if (lastDoc) {
-    query = query.startAfter(lastDoc);
-  }
+  const q = lastDoc
+    ? query(
+        collection(db, 'Completed'),
+        where('userId', '==', userId),
+        orderBy('createdAt', 'desc'),
+        startAfter(lastDoc),
+        limit(PAGE_SIZE)
+      )
+    : baseQuery;
 
-  const snapshot = await query.get();
-  const items = snapshot.docs.map(doc => ({
-    titleId: doc.data().titleId,
-    titleType: doc.data().titleType,
-    createdAt: doc.data().createdAt.toDate(),
-  }));
+  const snapshot = await getDocs(q);
+  const items = snapshot.docs.map((entry) => {
+    const d = entry.data();
+    return {
+      titleId: String(d.titleId),
+      titleType: d.titleType as 'movie' | 'tv',
+      createdAt: d.createdAt?.toDate ? d.createdAt.toDate() : null,
+    };
+  });
 
   return {
     items,
@@ -69,15 +96,11 @@ export const fetchCompleted = async (userId: string, lastDoc?: firebase.firestor
   };
 };
 
-// Fetch all for cases where we need the total count
-export const fetchCompletedAll = async (userId: string): Promise<CompletedItem[]> => {
-  const completedRef = db.collection('Completed')
-    .where('userId', '==', userId)
-    .orderBy('createdAt', 'desc');
-  const snapshot = await completedRef.get();
-  return snapshot.docs.map(doc => ({
-    titleId: doc.data().titleId,
-    titleType: doc.data().titleType,
-    createdAt: doc.data().createdAt.toDate(),
-  }));
+export const fetchCompletedIds = async (userId: string): Promise<string[]> => {
+  const q = query(collection(db, 'Completed'), where('userId', '==', userId));
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map((entry) => {
+    const d = entry.data();
+    return `${d.titleType}:${d.titleId}`;
+  });
 };

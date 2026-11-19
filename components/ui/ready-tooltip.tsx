@@ -1,20 +1,25 @@
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
-import React from "react"
+'use client';
 
-export default function ReadyTooltip({ children, title, className }: { children: React.ReactNode, title: string, className?: string }) {
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import React from 'react';
+
+export default function ReadyTooltip({
+  children,
+  title,
+  className,
+}: {
+  children: React.ReactNode;
+  title: string;
+  className?: string;
+}) {
   return (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger asChild className={className}>{children}</TooltipTrigger>
-        <TooltipContent>
-          <p>{title}</p>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
-  )
+    <Tooltip>
+      <TooltipTrigger asChild className={className}>
+        {children}
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>{title}</p>
+      </TooltipContent>
+    </Tooltip>
+  );
 }

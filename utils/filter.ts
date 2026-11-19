@@ -1,225 +1,243 @@
-// Function that taks the title ID and block it if it's certficate >= 18
 import { MovieCertification, SeriesCertification } from '@/types/titleCertification';
 import { Title } from '@/types/title';
 
-// Admin email that bypasses safety filters
 const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL;
 
-// Check if the current user is an admin (should bypass filters)
 export function isAdminUser(userEmail: string | null | undefined): boolean {
   if (!userEmail || !ADMIN_EMAIL) return false;
   return userEmail.toLowerCase() === ADMIN_EMAIL.toLowerCase();
 }
 
-const BLOCKED_CERTIFICATION =
-  [
-    "18+",
-    "18",
-    "21",
-    "R",
-    "MA15+",
-    "K-18",
-    "18A",
-    "R18",
-    "III",
-    "D",
-    "A",
-    "VM18",
-    "R18+",
-    "청소년관람불가",
-    "N-18",
-    "Btl",
-    "R21",
-    "X",
-    "M/18",
-    "NC-17",
-    "20",
-    "限制級"
-];
+const BLOCKED_CERTIFICATION = new Set([
+  '18+',
+  '18',
+  '21',
+  'R',
+  'MA15+',
+  'K-18',
+  '18A',
+  'R18',
+  'III',
+  'D',
+  'A',
+  'VM18',
+  'R18+',
+  '청소년관람불가',
+  'N-18',
+  'Btl',
+  'R21',
+  'X',
+  'M/18',
+  'NC-17',
+  '20',
+  '限制級',
+]);
 
 const BLOCKED_KEYWORDS = [
-  // Original keywords
-  "Porn",
-  "Porno",
-  "Pornographer",
-  "Sex",
-  "Nude",
-  "Nudity",
-  "Erotic",
-  "Adult",
-  "XXX",
-  
-  // Adult content variations
-  "Hardcore",
-  "Softcore",
-  "NSFW",
-  "18+",
-  "X-Rated",
-  "Adults Only",
-  "Uncensored",
-
-  // Sexual terms
-  "Sexual",
-  "Sexuality",
-  
-  // Adult industry terms
-  "Playboy",
-  "Penthouse",
-  "Hustler",
-  "Adult Film",
-  "Blue Movie",
-  "Stag Film",
-  "Skin Flick",
-  
-  // Explicit body-related terms
-  "Topless",
-  "Bottomless",
-  "Naked",
-  "Undressed",
-  "Unclothed",
-  
-  // Adult entertainment
-  "Strip",
-  "Stripper",
-  "Striptease",
-  "Peep Show",
-  "Red Light District",
-  
-  // Adult romance/BDSM
-  "Kinky",
-  "Fetish",
-  "BDSM",
-  "Bondage",
-  
-  // Adult entertainment venues
-  "Brothel",
-  "Escort",
-  "Strip Club",
-  "Massage Parlor",
-  
-  // Content warnings
-  "Strong Sexual Content",
-  "Sexual Situations",
-  "Brief Nudity",
-  "Partial Nudity",
-  "Full Nudity",
-  "Sexual Violence",
-  "Graphic Sexual Content",
-  
-  // International adult terms
-  "Hentai", // Japanese
-  "Ecchi", // Japanese
-  "Yaoi", // Japanese
-  "Yuri", // Japanese
-  "Erotica",
-  "Erotik", // German
-  "Érotique", // French
-  "Erótico", // Spanish/Portuguese
-  
-  // Explicit slang
-  "Risqué",
-  
-  // Age restrictions
-  "NC-17",
-  "Unrated Adult"
+  'porn',
+  'porno',
+  'pornographer',
+  'sex',
+  'nude',
+  'nudity',
+  'erotic',
+  'adult',
+  'xxx',
+  'hardcore',
+  'softcore',
+  'nsfw',
+  '18+',
+  'x-rated',
+  'adults only',
+  'uncensored',
+  'sexual',
+  'sexuality',
+  'playboy',
+  'penthouse',
+  'hustler',
+  'adult film',
+  'blue movie',
+  'stag film',
+  'skin flick',
+  'topless',
+  'bottomless',
+  'naked',
+  'undressed',
+  'unclothed',
+  'strip',
+  'stripper',
+  'striptease',
+  'peep show',
+  'red light district',
+  'kinky',
+  'fetish',
+  'bdsm',
+  'bondage',
+  'brothel',
+  'escort',
+  'strip club',
+  'massage parlor',
+  'strong sexual content',
+  'sexual situations',
+  'brief nudity',
+  'partial nudity',
+  'full nudity',
+  'sexual violence',
+  'graphic sexual content',
+  'hentai',
+  'ecchi',
+  'yaoi',
+  'yuri',
+  'erotica',
+  'erotik',
+  'érotique',
+  'erótico',
+  'risqué',
+  'nc-17',
+  'unrated adult',
 ];
 
-const options = {
-  method: 'GET',
-  headers: {
-    accept: 'application/json',
-    Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_ACCESS_TOKEN}`,
-  }
-};
+function hasBlockedKeywordText(text: string | undefined | null): boolean {
+  if (!text) return false;
+  const lower = text.toLowerCase();
+  return BLOCKED_KEYWORDS.some((kw) => lower.includes(kw));
+}
 
+export function isBlockedFromDetails(params: {
+  titleName: string;
+  titleType: 'movie' | 'series';
+  adult?: boolean;
+  keywords?: { name: string }[];
+  releaseDates?: MovieCertification['results'];
+  contentRatings?: SeriesCertification['results'];
+  userEmail?: string | null;
+}): boolean {
+  if (isAdminUser(params.userEmail)) return false;
+  if (params.adult) return true;
+  if (hasBlockedKeywordText(params.titleName)) return true;
 
-export async function isBlocked(titleId: number, titleName: string, titleType: 'movie' | 'series', userEmail?: string | null): Promise<boolean> {
-  // Bypass filtering for admin users
-  if (isAdminUser(userEmail)) {
-    return false;
-  }
-
-  // Check if the title name contains any blocked keywords
-  const lowerCaseTitleName = titleName.toLowerCase();
-  const containsBlockedKeyword = BLOCKED_KEYWORDS.some(keyword => lowerCaseTitleName.includes(keyword.toLowerCase()));
-  if (containsBlockedKeyword) {
+  if (params.keywords?.some((kw) => hasBlockedKeywordText(kw.name))) {
     return true;
   }
 
-  // Check title keywords for blocking criteria
-  const keywordsUrl = `https://api.themoviedb.org/3/${titleType === 'movie' ? 'movie' : 'tv'}/${titleId}/keywords`;
-  try {
-    const response = await fetch(keywordsUrl, options);
-    const data = await response.json();
-    // TMDB returns 'keywords' for movies and 'results' for TV shows
-    const keywords = data.keywords || data.results || [];
-    const containsBlockedKeywordInKeywords = keywords.some((keyword: { name: string }) => 
-      BLOCKED_KEYWORDS.some(blockedKeyword => keyword.name.toLowerCase().includes(blockedKeyword.toLowerCase()))
-    );
-    if (containsBlockedKeywordInKeywords) {
-      return true;
+  if (params.titleType === 'movie' && params.releaseDates?.length) {
+    const valid = params.releaseDates.filter((c) => c.release_dates?.length > 0);
+    if (valid.length > 0) {
+      const blockedCount = valid.filter((c) =>
+        BLOCKED_CERTIFICATION.has(c.release_dates[0]?.certification || '')
+      ).length;
+      if ((blockedCount / valid.length) * 100 > 50) return true;
     }
-  } catch (error) {
-    console.error('Error fetching keywords:', error);
   }
 
-  // Fetch the certification data based on title type
-  const SeriesURL = `https://api.themoviedb.org/3/tv/${titleId}/content_ratings`;
-  const MovieURL = `https://api.themoviedb.org/3/movie/${titleId}/release_dates`;
-  const url = titleType === 'movie' ? MovieURL : SeriesURL;
-
-  try {
-    const response = await fetch(url, options);
-    const data: MovieCertification | SeriesCertification = await response.json();
-    if (titleType === 'movie') {
-      const certifications = (data as MovieCertification).results;
-      // loop over all certifications and check if any of them is in the blocked list, after that compare the persantage of blocked certifications with the total number of certifications
-      // if more than 50% of the certifications are blocked, then block the movie
-      const blockedCount = certifications.filter(cert => {
-        return BLOCKED_CERTIFICATION.includes(cert.release_dates[0].certification || '');
-      }).length;
-      const totalCount = certifications.length;
-      const blockedPercentage = (blockedCount / totalCount) * 100;
-      if (blockedPercentage > 50) {
-        return true;
-      }
-    }
-    else {
-      const certifications = (data as SeriesCertification).results;
-      // loop over all certifications and check if any of them is in the blocked list
-      const blockedCount = certifications.filter(cert => {
-        return BLOCKED_CERTIFICATION.includes(cert.rating || '');
-      }).length;
-      const totalCount = certifications.length;
-      const blockedPercentage = (blockedCount / totalCount) * 100;
-      if (blockedPercentage > 50) {
-        return true;
-      }
-    }
-  } catch (error) {
-    console.error('Error fetching certification:', error);
+  if (params.titleType === 'series' && params.contentRatings?.length) {
+    const blockedCount = params.contentRatings.filter((c) =>
+      BLOCKED_CERTIFICATION.has(c.rating || '')
+    ).length;
+    if ((blockedCount / params.contentRatings.length) * 100 > 50) return true;
   }
+
   return false;
 }
 
-export async function filterBlockedTitles(titles: Title[], titleType: 'movie' | 'series', userEmail?: string | null): Promise<Title[]> {
-  // Bypass filtering for admin users
-  if (isAdminUser(userEmail)) {
-    return titles;
+function getTmdbHeaders(): Record<string, string> {
+  const token =
+    process.env.TMDB_API_ACCESS_TOKEN || process.env.NEXT_PUBLIC_TMDB_API_ACCESS_TOKEN;
+  return {
+    accept: 'application/json',
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
+}
+
+export async function isBlocked(
+  titleId: number,
+  titleName: string,
+  titleType: 'movie' | 'series',
+  userEmail?: string | null
+): Promise<boolean> {
+  if (isAdminUser(userEmail)) return false;
+  if (hasBlockedKeywordText(titleName)) return true;
+
+  const headers = getTmdbHeaders();
+  const fetchInit = { headers, next: { revalidate: 86400 } } as RequestInit & {
+    next: { revalidate: number };
+  };
+
+  const keywordsUrl = `https://api.themoviedb.org/3/${titleType === 'movie' ? 'movie' : 'tv'}/${titleId}/keywords`;
+  const certUrl =
+    titleType === 'movie'
+      ? `https://api.themoviedb.org/3/movie/${titleId}/release_dates`
+      : `https://api.themoviedb.org/3/tv/${titleId}/content_ratings`;
+
+  try {
+    const [kwRes, certRes] = await Promise.all([
+      fetch(keywordsUrl, fetchInit),
+      fetch(certUrl, fetchInit),
+    ]);
+
+    const kwData = kwRes.ok ? await kwRes.json() : {};
+    const keywords: { name: string }[] = kwData.keywords || kwData.results || [];
+    if (keywords.some((kw) => hasBlockedKeywordText(kw.name))) {
+      return true;
+    }
+
+    const certData = certRes.ok ? await certRes.json() : {};
+    if (titleType === 'movie') {
+      const results = (certData as MovieCertification).results || [];
+      return isBlockedFromDetails({
+        titleName,
+        titleType,
+        releaseDates: results,
+        userEmail,
+      });
+    } else {
+      const results = (certData as SeriesCertification).results || [];
+      return isBlockedFromDetails({
+        titleName,
+        titleType,
+        contentRatings: results,
+        userEmail,
+      });
+    }
+  } catch (error) {
+    console.error('Error checking blocked status:', error);
+    return false;
+  }
+}
+
+export async function filterBlockedTitles<T extends Title & { adult?: boolean }>(
+  titles: T[],
+  titleType: 'movie' | 'series',
+  userEmail?: string | null
+): Promise<T[]> {
+  if (isAdminUser(userEmail) || !titles?.length) {
+    return titles ?? [];
   }
 
-  const filteredTitles: Title[] = [];
-  for (const title of titles) {
-    const blocked = await isBlocked(
-      title.id,
-      titleType === "movie" ? (title.title ?? "") : (title.name ?? ""),
-      titleType,
-      userEmail
+  // Fast synchronous pre-filter before any network calls
+  const candidates = titles.filter((item) => {
+    if (item.adult) return false;
+    const name = titleType === 'movie' ? item.title ?? '' : item.name ?? '';
+    return !hasBlockedKeywordText(name);
+  });
+
+  // Bounded concurrency (chunks of 6) with 24h Next.js Data Cache
+  const CONCURRENCY = 6;
+  const filtered: T[] = [];
+
+  for (let i = 0; i < candidates.length; i += CONCURRENCY) {
+    const chunk = candidates.slice(i, i + CONCURRENCY);
+    const results = await Promise.all(
+      chunk.map(async (item) => {
+        const name = titleType === 'movie' ? item.title ?? '' : item.name ?? '';
+        const blocked = await isBlocked(item.id, name, titleType, userEmail);
+        return blocked ? null : item;
+      })
     );
-    if (!blocked) {
-      filteredTitles.push(title);
+    for (const item of results) {
+      if (item) filtered.push(item);
     }
   }
-  console.log(`Filtered titles: ${filteredTitles.length} out of ${titles.length}`);
-  return filteredTitles;
+
+  return filtered;
 }

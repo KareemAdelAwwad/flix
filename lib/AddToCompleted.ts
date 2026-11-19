@@ -1,32 +1,44 @@
 import { db } from './firebase';
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  addDoc,
+  writeBatch,
+  Timestamp,
+} from 'firebase/firestore';
 
-export const addToCompleted = async (userId: string, titleId: string, titleType: string) => {
-  if (!userId) throw new Error("User not authenticated");
+export const addToCompleted = async (
+  userId: string,
+  titleId: string,
+  titleType: 'movie' | 'tv'
+): Promise<boolean> => {
+  if (!userId) throw new Error('User not authenticated');
 
-  // Check if the movie already exists in the user's completed
-  const completedRef = db.collection('Completed');
-  const existingEntry = await completedRef
-    .where('userId', '==', userId)
-    .where('titleId', '==', titleId)
-    .where('titleType', '==', titleType)
-    .get();
+  const completedRef = collection(db, 'Completed');
+  const q = query(
+    completedRef,
+    where('userId', '==', userId),
+    where('titleId', '==', titleId),
+    where('titleType', '==', titleType)
+  );
+  const existingEntry = await getDocs(q);
 
   if (!existingEntry.empty) {
-    // If the movie exists, delete it from the completed
-    const batch = db.batch();
-    existingEntry.forEach(doc => {
-      batch.delete(doc.ref);
+    const batch = writeBatch(db);
+    existingEntry.forEach((entryDoc) => {
+      batch.delete(entryDoc.ref);
     });
     await batch.commit();
-    console.log("Movie removed from completed");
-  } else {
-    // If the movie does not exist, add it to the completed
-    await completedRef.add({
-      userId: userId,
-      titleId: titleId,
-      titleType: titleType,
-      createdAt: new Date(),
-    });
-    console.log("Movie added to completed");
+    return false;
   }
+
+  await addDoc(completedRef, {
+    userId,
+    titleId,
+    titleType,
+    createdAt: Timestamp.now(),
+  });
+  return true;
 };

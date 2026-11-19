@@ -1,92 +1,99 @@
-import React, { useState, useEffect } from 'react';
+'use client';
+
+import React, { useMemo } from 'react';
 import { useAuth } from '@clerk/nextjs';
-import { addToCompleted } from '@/lib/AddToCompleted';
-import { db } from '@/lib/firebase';
+import { useUserListsStore } from '@/store';
 import { Button } from '@/components/ui/button';
 import ReadyTooltip from '@/components/ui/ready-tooltip';
-import { GoCheckCircle, GoCheckCircleFill  } from "react-icons/go";
-
+import { GoCheckCircle, GoCheckCircleFill } from 'react-icons/go';
 import { useLocale } from 'next-intl';
 
 interface CompletedButtonProps {
   titleId: string;
-  titleType: "movie" | "tv";
-  style: "icon" | "text" | "badge";
+  titleType: 'movie' | 'tv';
+  style: 'icon' | 'text' | 'badge';
   className?: string;
 }
 
-const CompletedButton: React.FC<CompletedButtonProps> = ({ titleId, titleType, style, className }) => {
-  const { userId } = useAuth();
-  const locale = useLocale();
-  const strings = {
-    en: {
-      add: 'Watched',
-      remove: 'Not Watched Yet'
-    },
-    ar: {
-      add: 'شاهدته',
-      remove: 'لم اشاهده بعد'
-    }
-  };
-  const [isInCompleted, setIsInCompleted] = useState(false);
+const strings = {
+  en: {
+    add: 'Watched',
+    remove: 'Not Watched Yet',
+  },
+  ar: {
+    add: 'شاهدته',
+    remove: 'لم اشاهده بعد',
+  },
+};
 
-  useEffect(() => {
-    const checkCompleted = async () => {
-      if (!userId) return;
+const CompletedButton: React.FC<CompletedButtonProps> = React.memo(
+  ({ titleId, titleType, style, className }) => {
+    const { userId } = useAuth();
+    const locale = useLocale();
+    const key = titleId ? `${titleType}:${titleId}` : '';
 
-      const completedRef = db.collection('Completed');
-      const existingEntry = await completedRef
-        .where('userId', '==', userId)
-        .where('titleId', '==', titleId)
-        .where('titleType', '==', titleType)
-        .get();
+    const isInCompleted = useUserListsStore((state) =>
+      key ? state.completedSet.has(key) : false
+    );
+    const toggleCompleted = useUserListsStore((state) => state.toggleCompleted);
 
-      setIsInCompleted(!existingEntry.empty);
+    const label = useMemo(() => {
+      const lang = locale === 'ar' ? strings.ar : strings.en;
+      return isInCompleted ? lang.remove : lang.add;
+    }, [isInCompleted, locale]);
+
+    const handleAddToCompleted = async (e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (!userId || !titleId) return;
+      try {
+        await toggleCompleted(userId, titleId, titleType);
+      } catch (error) {
+        console.error('Failed to update completed:', error);
+        alert('Failed to update completed');
+      }
     };
 
-    checkCompleted();
-  }, [userId, titleId, titleType]);
-
-  const handleAddToCompleted = async () => {
-    try {
-      if (userId) {
-        await addToCompleted(userId, titleId, titleType);
-        setIsInCompleted(prev => !prev);
-      }
-    } catch (error) {
-      console.error('Failed to update completed:', error);
-      alert('Failed to update completed');
+    if (style === 'icon') {
+      return (
+        <ReadyTooltip title={label}>
+          <Button onClick={handleAddToCompleted} size="lgIcon" className={className} aria-label={label}>
+            {isInCompleted ? <GoCheckCircleFill size={24} /> : <GoCheckCircle size={24} />}
+          </Button>
+        </ReadyTooltip>
+      );
     }
-  };
 
-  return (
-    style === 'icon' ? (
-      <ReadyTooltip
-        title={isInCompleted ? (locale === 'ar' ? strings.ar.remove : strings.en.remove)
-          : (locale === 'ar' ? strings.ar.add : strings.en.add)}>
-        <Button onClick={handleAddToCompleted} size={'lgIcon'} className={className}>
-          {
-            isInCompleted ? <GoCheckCircleFill size={24} /> : <GoCheckCircle size={24} />
-          }
+    if (style === 'text') {
+      return (
+        <Button onClick={handleAddToCompleted} size="default" className={className}>
+          {isInCompleted ? <GoCheckCircleFill size={24} /> : <GoCheckCircle size={24} />}
+          {label}
         </Button>
-      </ReadyTooltip>
-    ) : style === 'text' ? (
-      <Button onClick={handleAddToCompleted} size={"default"} className={className}>
-        {
-          isInCompleted ? <GoCheckCircleFill size={24} /> : <GoCheckCircle size={24} />
-        }
-        {isInCompleted ? (locale === 'ar' ? strings.ar.remove : strings.en.remove)
-          : (locale === 'ar' ? strings.ar.add : strings.en.add)}
-      </Button>
-    ) : style === 'badge' ? (
-      <Button onClick={handleAddToCompleted} size={"lgIcon"}
-        className={`-top-1 left-2 absolute w-8 rounded-none rounded-b z-10 ${className}`} >
-        {
-          isInCompleted ? <GoCheckCircleFill className='dark:text-white text-black-12' size={32} /> : <GoCheckCircle className='dark:text-white text-black-12' size={32} />
-        }
-      </Button>
-    ) : null
-  );
-};
+      );
+    }
+
+    if (style === 'badge') {
+      return (
+        <Button
+          onClick={handleAddToCompleted}
+          size="lgIcon"
+          aria-label={label}
+          className={`-top-1 left-2 absolute w-8 rounded-none rounded-b z-10 ${className ?? ''}`}
+        >
+          {isInCompleted ? (
+            <GoCheckCircleFill className="dark:text-white text-black-12" size={32} />
+          ) : (
+            <GoCheckCircle className="dark:text-white text-black-12" size={32} />
+          )}
+        </Button>
+      );
+    }
+
+    return null;
+  }
+);
+
+CompletedButton.displayName = 'CompletedButton';
 
 export default CompletedButton;

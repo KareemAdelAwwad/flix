@@ -1,262 +1,256 @@
-import { useState, useEffect, useRef } from 'react'
-import { Link } from '@/i18n/routing';
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import { Input } from '@/components/ui/input'
-import { IoClose, IoSearch } from "react-icons/io5";
-import { useLocale } from 'next-intl';
+'use client';
+
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { Link, useRouter } from '@/i18n/routing';
+import { Input } from '@/components/ui/input';
+import { IoClose, IoSearch } from 'react-icons/io5';
+import { useLocale, useTranslations } from 'next-intl';
 import Image from 'next/image';
-import { useTranslations } from 'next-intl';
+import { tmdbImage } from '@/utils/tmdbImage';
 
 interface SearchResults {
   media_type: 'movie' | 'tv' | 'person';
   id: number;
   title?: string;
   name?: string;
-  overview: string;
-  poster_path: string;
-  profile_path?: string;
+  overview?: string;
+  poster_path?: string | null;
+  profile_path?: string | null;
   gender?: number;
   known_for_department?: string;
 }
 
-const Search = ({ isMobile }: { isMobile: boolean }) => {
+interface SearchProps {
+  isMobile: boolean;
+  enableGlobalShortcut?: boolean;
+}
+
+const Search = ({ isMobile, enableGlobalShortcut = !isMobile }: SearchProps) => {
   const locale = useLocale();
+  const router = useRouter();
   const t = useTranslations('Header');
   const [searchValue, setSearchValue] = useState('');
   const [activateSearch, setActivateSearch] = useState(false);
   const [searchResults, setSearchResults] = useState<SearchResults[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
-  const url = `https://api.themoviedb.org/3/search/multi?query=${searchValue}&include_adult=false&language=${locale}&page=1`;
-  const options = {
-    method: 'GET',
-    headers: {
-      accept: 'application/json',
-      Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_ACCESS_TOKEN}`
-    }
-  };
-  // Animation with GSAP
-  useGSAP(() => {
-    if (activateSearch === true) {
-      gsap.to('#search', { duration: 0.5, width: '90%', opacity: 1, display: 'block' });
-    } else {
-      gsap.to('#search', { duration: 0.8, width: '0%', opacity: 0, display: 'none' });
-    }
-  }
-    , [activateSearch]);
 
-  useGSAP(() => {
-    if (searchResults.length > 0) {
-      gsap.to('#search-results-container', { duration: 0.5, opacity: 1, height: 'auto' });
-    } else {
-      gsap.to('#search-results-container', { duration: 0.5, opacity: 0, height: 0 });
-    }
-  }, [searchResults]);
-
-  // Fetching data from TMDB API
-  useEffect(() => {
-    if (searchValue.length > 0) {
-      fetch(url, options)
-        .then(response => response.json())
-        .then(data => {
-          if (data.results.length > 0) {
-            setSearchResults(data.results.slice(0, 5));
-          }
-        })
-        .catch(error => console.error('Error:', error));
-    }
-    if (searchValue.length === 0) {
-      setSearchResults([]);
-    }
-  }, [searchValue])
-
-  // Search Icon Click Handler
-  const clickHandler = () => {
-    setActivateSearch(!activateSearch);
+  const closeSearch = useCallback(() => {
+    setActivateSearch(false);
     setSearchValue('');
     setSearchResults([]);
-  }
-
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setActivateSearch(false);
-        setSearchValue('');
-      } else if (event.ctrlKey && event.key === 'k') {
-        event.preventDefault();
-        setActivateSearch(true);
-        setTimeout(() => {
-          const searchInput = document.getElementById('search') as HTMLInputElement;
-          searchInput?.focus();
-        }, 300); // Adjust the timeout duration if necessary
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
   }, []);
+
+  // Debounced search with AbortController
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Enter' && searchResults.length > 0) {
-        const firstResult = searchResults[0];
-        if (firstResult.media_type === 'movie' || firstResult.media_type === 'tv') {
-          window.location.href = `/${locale}/browse/${firstResult.media_type === 'movie' ? 'movies' : 'tv-shows'}/title/${firstResult.id}`;
-        } else if (firstResult.media_type === 'person') {
-          window.location.href = `/${locale}/browse/person/${firstResult.id}`;
+    const trimmed = searchValue.trim();
+    if (trimmed.length < 2) {
+      setSearchResults([]);
+      return;
+    }
+
+    const controller = new AbortController();
+    const timer = setTimeout(async () => {
+      try {
+        const res = await fetch(
+          `/api/tmdb/search?q=${encodeURIComponent(trimmed)}&locale=${encodeURIComponent(locale)}`,
+          { signal: controller.signal }
+        );
+        if (!res.ok) return;
+        const data = await res.json();
+        setSearchResults(data.results || []);
+      } catch (error) {
+        if ((error as Error).name !== 'AbortError') {
+          console.error('Search error:', error);
         }
       }
+    }, 300);
+
+    return () => {
+      clearTimeout(timer);
+      controller.abort();
+    };
+  }, [searchValue, locale]);
+
+  useEffect(() => {
+    if (!enableGlobalShortcut) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        closeSearch();
+      } else if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault();
+        setActivateSearch(true);
+      }
     };
 
     window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [enableGlobalShortcut, closeSearch]);
 
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [searchResults]);
-
-  // Title Card Component
-  interface TitleCardProps {
-    id: number;
-    titleType: 'movie' | 'tv';
-    title: string;
-    overview: string;
-    poster_path: string;
-  }
-
-  const TitleCard = ({ title, overview, poster_path, id, titleType }: TitleCardProps) => {
-    return (
-      <Link href={`/browse/${titleType === 'movie' ? 'movies' : 'tv-shows'}/title/${id}`}
-        onClick={() => clickHandler()} className='w-full'>
-        <div className='flex items-center gap-2 borders p-4 rounded-lg
-      hover:scale-105 dark:bg-black-15 bg-gray-95 dark:hover:bg-black-10 transition-all cursor-pointer'>
-          <Image src={`https://image.tmdb.org/t/p/w500${poster_path}`}
-            width={80} height={120}
-            alt={title} className='w-20 h-24 rounded-lg' />
-          <div className='flex flex-col justify-between gap-2 h-full w-full overflow-hidden'>
-            <div className='flex justify-between items-center'>
-              <h3 className='text-lg font-semibold truncate w-[70%] dark:text-white text-black-6'>{title}</h3>
-              {
-                !isMobile &&
-                <span className='rounded-full bg-red-50 hover:bg-red-60 p-1 px-2.5 text-sm'>
-                  {titleType === 'movie' ? 'Movie' : 'Series'}
-                </span>
-              }
-            </div>
-            {
-              !isMobile && <p className='text-sm dark:text-gray-75 text-black-30'>{overview.length > 180 ? overview.substring(0, 180) + '...' : overview}</p>
-            }
-          </div>
-        </div>
-      </Link>
-    )
-  }
-
-  // Person Component
-  interface PersonProps {
-    id: number;
-    name: string;
-    profile_path: string;
-    gender: number;
-    known_for_department: string;
-  }
-
-  const PersonCard = ({ name, profile_path, id, known_for_department }: PersonProps) => {
-    return (
-      <Link href={`/browse/person/${id}`} onClick={() => clickHandler()}
-        className='w-full'>
-        <div className='flex items-center gap-2 borders p-4 rounded-lg
-      hover:scale-105 dark:bg-black-15 bg-gray-95 dark:hover:bg-black-10 transition-all cursor-pointer'>
-          <div className='w-20 h-20 rounded-lg overflow-hidden'>
-            <Image src={profile_path}
-              width={60} height={120}
-              alt={name} className='w-full h-full object-cover' />
-          </div>
-          <div className='flex flex-col justify-between h-full w-full'>
-            <div className='flex justify-between items-center w-full'>
-              <h3 className='text-lg font-semibold truncate w-[70%] dark:text-white text-black-6'>{name}</h3>
-              {
-                !isMobile &&
-                <span className='rounded-full bg-red-50 hover:bg-red-60 p-1 px-2.5 text-sm'>
-                  {known_for_department}
-                </span>
-              }
-            </div>
-          </div>
-        </div>
-      </Link>
-    )
-  }
   useEffect(() => {
     if (activateSearch && inputRef.current) {
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         inputRef.current?.focus();
-      }, 300);
+      }, 150);
+      return () => clearTimeout(timer);
     }
   }, [activateSearch]);
 
+  const handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter' && searchResults.length > 0) {
+      const firstResult = searchResults[0];
+      closeSearch();
+      if (firstResult.media_type === 'movie' || firstResult.media_type === 'tv') {
+        router.push(
+          `/browse/${firstResult.media_type === 'movie' ? 'movies' : 'tv-shows'}/title/${firstResult.id}`
+        );
+      } else if (firstResult.media_type === 'person') {
+        router.push(`/browse/person/${firstResult.id}`);
+      }
+    } else if (event.key === 'Escape') {
+      closeSearch();
+    }
+  };
+
+  const toggleSearch = () => {
+    if (activateSearch) {
+      closeSearch();
+    } else {
+      setActivateSearch(true);
+    }
+  };
+
   return (
     <>
-      <span className={`p-3 
-      ${isMobile ? 'rounded-xl' : 'rounded-full'} dark:bg-black-20 bg-white borders 
-      dark:hover:bg-black-30 transition-all duration-300
-        ${isMobile && 'w-full flex flex-row-reverse'}`}
-        onClick={() => isMobile && setActivateSearch(true)}
+      <span
+        className={`p-3 ${
+          isMobile ? 'rounded-xl w-full flex flex-row-reverse' : 'rounded-full'
+        } dark:bg-black-20 bg-white borders dark:hover:bg-black-30 transition-all duration-300`}
+        onClick={() => isMobile && !activateSearch && setActivateSearch(true)}
       >
-        {
-          (activateSearch === true || searchValue !== "") ?
-            <IoClose className={`dark:text-white text-black-8 cursor-pointer `} size={16} onClick={() => clickHandler()} />
-            : <IoSearch className={`dark:text-white text-black-8 cursor-pointer`} size={16} onClick={() => clickHandler()} />
-        }
+        {activateSearch || searchValue !== '' ? (
+          <IoClose
+            className="dark:text-white text-black-8 cursor-pointer relative z-10"
+            size={16}
+            onClick={(e) => {
+              e.stopPropagation();
+              closeSearch();
+            }}
+          />
+        ) : (
+          <IoSearch
+            className="dark:text-white text-black-8 cursor-pointer relative z-10"
+            size={16}
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleSearch();
+            }}
+          />
+        )}
+
         <Input
           ref={inputRef}
-          id='search' type='text' placeholder={t('search')} value={searchValue}
+          type="text"
+          placeholder={t('search')}
+          value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
-          className={`absolute text-black-6 dark:text-white ${locale === 'en' ? 'left-1' : 'right-1'}
-          ${isMobile ? (locale === 'en' ? "top-[1px] left-0" : 'top-[1px] right-0') : 'top-[50%] translate-y-[-50%]'} 
-          ${isMobile ? 'rounded-xl' : 'rounded-full'}
-          opacity-0 ${(activateSearch === true) && "opacity-100"}`} />
+          onKeyDown={handleInputKeyDown}
+          className={`absolute text-black-6 dark:text-white transition-all duration-300 ${
+            locale === 'en' ? 'left-1' : 'right-1'
+          } ${
+            isMobile
+              ? locale === 'en'
+                ? 'top-[1px] left-0'
+                : 'top-[1px] right-0'
+              : 'top-[50%] -translate-y-1/2'
+          } ${isMobile ? 'rounded-xl' : 'rounded-full'} ${
+            activateSearch
+              ? 'w-[90%] opacity-100 pointer-events-auto'
+              : 'w-0 opacity-0 pointer-events-none'
+          }`}
+        />
       </span>
-      <div id='search-results-container'
-        className={`absolute top-16 w-full dark:bg-black-20 bg-gray-50 borders py-4 px-6 rounded-xl opacity-0 ${searchResults.length > 0 && "opacity-100"}`}>
-        <div className='flex flex-col gap-4'>
-          {searchResults.map((result: SearchResults, index) => (
-            <div key={index} className='flex gap-2'>
-              {result.media_type === 'movie' &&
-                <TitleCard
-                  titleType='movie'
-                  id={result.id}
-                  title={result.title ? result.title : "No Title"}
-                  overview={result.overview}
-                  poster_path={result.poster_path}
-                />}
-              {result.media_type === 'tv' &&
-                <TitleCard
-                  titleType='tv'
-                  id={result.id}
-                  title={result.name ? result.name : "No Title"}
-                  overview={result.overview}
-                  poster_path={result.poster_path}
-                />}
-              {result.media_type === 'person' &&
-                <PersonCard
-                  id={result.id}
-                  name={result.name ? result.name : "No Name"}
-                  profile_path={result.profile_path ? ('https://image.tmdb.org/t/p/w500' + result.profile_path) :
-                    (result.gender === 0 ? 'https://mockmind-api.uifaces.co/content/abstract/10.jpg'
-                      : 'https://mockmind-api.uifaces.co/content/abstract/36.jpg'
-                    )}
-                  known_for_department={result.known_for_department ? result.known_for_department : "No Department"}
-                  gender={result.gender ? result.gender : 1}
-                />}
-            </div>
-          ))}
-        </div>
-      </div>
-    </>
-  )
-}
 
-export default Search
+      {searchResults.length > 0 && activateSearch && (
+        <div className="absolute top-16 left-0 right-0 w-full dark:bg-black-20 bg-gray-50 borders py-4 px-6 rounded-xl z-50 transition-opacity duration-200">
+          <div className="flex flex-col gap-4">
+            {searchResults.map((result) => (
+              <div key={`${result.media_type}-${result.id}`} className="flex gap-2">
+                {(result.media_type === 'movie' || result.media_type === 'tv') && (
+                  <Link
+                    href={`/browse/${result.media_type === 'movie' ? 'movies' : 'tv-shows'}/title/${result.id}`}
+                    onClick={closeSearch}
+                    className="w-full"
+                  >
+                    <div className="flex items-center gap-2 borders p-4 rounded-lg hover:scale-[1.02] dark:bg-black-15 bg-gray-95 dark:hover:bg-black-10 transition-all cursor-pointer">
+                      <Image
+                        src={tmdbImage(result.poster_path, 'w185')}
+                        width={80}
+                        height={120}
+                        alt={result.title || result.name || 'Title'}
+                        className="w-20 h-24 rounded-lg object-cover shrink-0"
+                      />
+                      <div className="flex flex-col justify-between gap-2 h-full w-full overflow-hidden">
+                        <div className="flex justify-between items-center">
+                          <h3 className="text-lg font-semibold truncate w-[70%] dark:text-white text-black-6">
+                            {result.title || result.name || 'No Title'}
+                          </h3>
+                          {!isMobile && (
+                            <span className="rounded-full bg-red-50 hover:bg-red-60 p-1 px-2.5 text-sm text-white">
+                              {result.media_type === 'movie' ? 'Movie' : 'Series'}
+                            </span>
+                          )}
+                        </div>
+                        {!isMobile && result.overview && (
+                          <p className="text-sm dark:text-gray-75 text-black-30">
+                            {result.overview.length > 180
+                              ? result.overview.substring(0, 180) + '...'
+                              : result.overview}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </Link>
+                )}
+
+                {result.media_type === 'person' && (
+                  <Link
+                    href={`/browse/person/${result.id}`}
+                    onClick={closeSearch}
+                    className="w-full"
+                  >
+                    <div className="flex items-center gap-2 borders p-4 rounded-lg hover:scale-[1.02] dark:bg-black-15 bg-gray-95 dark:hover:bg-black-10 transition-all cursor-pointer">
+                      <div className="w-20 h-20 rounded-lg overflow-hidden shrink-0">
+                        <Image
+                          src={tmdbImage(result.profile_path, 'w185', '/images/no-avatar.svg')}
+                          width={60}
+                          height={120}
+                          alt={result.name || 'Person'}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="flex flex-col justify-between h-full w-full">
+                        <div className="flex justify-between items-center w-full">
+                          <h3 className="text-lg font-semibold truncate w-[70%] dark:text-white text-black-6">
+                            {result.name || 'No Name'}
+                          </h3>
+                          {!isMobile && (
+                            <span className="rounded-full bg-red-50 hover:bg-red-60 p-1 px-2.5 text-sm text-white">
+                              {result.known_for_department || 'Person'}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
+
+export default Search;

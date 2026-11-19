@@ -1,26 +1,24 @@
 import { Tajawal, Manrope } from 'next/font/google';
-import { ThemeProvider } from "@/app/[locale]/theme-provider";
+import { ThemeProvider } from '@/app/[locale]/theme-provider';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
-import type { Metadata } from "next";
-import "./globals.css";
-import {
-  ClerkProvider,
-} from '@clerk/nextjs'
-import { arSA, enUS } from '@clerk/localizations'
-import { dark } from '@clerk/themes'
+import type { Metadata } from 'next';
+import './globals.css';
+import { ClerkProvider } from '@clerk/nextjs';
+import { arSA, enUS } from '@clerk/localizations';
+import { dark } from '@clerk/themes';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
-// Arabic font
 const tajawal = Tajawal({
   weight: ['400', '500', '700'],
   subsets: ['arabic', 'latin'],
   display: 'swap',
-})
-// English font
+});
+
 const manrope = Manrope({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
@@ -28,73 +26,96 @@ const manrope = Manrope({
   display: 'swap',
 });
 
-
 export const metadata: Metadata = {
   icons: {
-    icon: "/icon.svg",
+    icon: '/icon.svg',
   },
-  title: "Flix App",
-  description: "Flix is a subscription-based streaming service that allows our members to watch TV shows and movies on an internet-connected device",
+  title: 'Flix App',
+  description:
+    'Flix is a subscription-based streaming service that allows our members to watch TV shows and movies on an internet-connected device',
   referrer: 'origin-when-cross-origin',
   keywords: [
-    "Flix", "Netflix", "streaming", "movies", "TV shows", "entertainment", "watch", "stream", "subscription", "streaming service",
-    "فليكس", "نتفليكس", "بث", "أفلام", "مسلسلات", "ترفيه", "مشاهدة", "بث", "اشتراك", "خدمة بث", "خدمة بث مباشر", "موقع أفلام", "موقع مسلسلات", "موقع ترفيه"
+    'Flix',
+    'Netflix',
+    'streaming',
+    'movies',
+    'TV shows',
+    'entertainment',
+    'watch',
+    'stream',
+    'subscription',
+    'streaming service',
+    'فليكس',
+    'نتفليكس',
+    'بث',
+    'أفلام',
+    'مسلسلات',
+    'ترفيه',
+    'مشاهدة',
+    'اشتراك',
+    'خدمة بث',
+    'خدمة بث مباشر',
+    'موقع أفلام',
+    'موقع مسلسلات',
+    'موقع ترفيه',
   ],
   authors: [
     { name: 'Kareem Adel', url: 'https://www.kareem-adel.com' },
-    { name: 'Ibrahim Wael', url: 'https://github.com/ibrahimwael951' }
+    { name: 'Ibrahim Wael', url: 'https://github.com/ibrahimwael951' },
   ],
-  metadataBase: new URL("https://flix.kareemadel.com"),
+  metadataBase: new URL('https://flix.kareemadel.com'),
   alternates: {
     canonical: 'https://flix.kareemadel.com/',
   },
   openGraph: {
-    title: "Flix",
-    description: "Flix is a subscription-based streaming service that allows our members to watch TV shows and movies on an internet-connected device",
-    url: "https://flix.kareemadel.com",
-    siteName: "Flix App",
+    title: 'Flix',
+    description:
+      'Flix is a subscription-based streaming service that allows our members to watch TV shows and movies on an internet-connected device',
+    url: 'https://flix.kareemadel.com',
+    siteName: 'Flix App',
     images: [
       {
-        url: "/meta_bg.png",
+        url: '/meta_bg.jpg',
         width: 1200,
         height: 630,
-        alt: "Flix App - Subscription-based streaming service",
-        type: "image/png"
-      }
+        alt: 'Flix App - Subscription-based streaming service',
+        type: 'image/jpeg',
+      },
     ],
-    locale: "en_US",
-    type: "website",
-  }
+    locale: 'en_US',
+    type: 'website',
+  },
 };
 
 export default async function RootLayout(
   props: Readonly<{
     children: React.ReactNode;
-    params: { locale: string };
+    params: Promise<{ locale: string }>;
   }>
 ) {
-  const params = await props.params;
+  const { locale } = await props.params;
+  const { children } = props;
 
-  const {
-    locale
-  } = params;
-
-  const {
-    children
-  } = props;
-
-  if (!routing.locales.includes(locale as typeof routing.locales[number])) {
+  if (!routing.locales.includes(locale as (typeof routing.locales)[number])) {
     notFound();
   }
 
   const messages = await getMessages();
+
   return (
-    <ClerkProvider dynamic localization={locale === "ar" ? arSA : enUS} appearance={{ baseTheme: dark }}>
-      <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"} suppressHydrationWarning>
+    <ClerkProvider localization={locale === 'ar' ? arSA : enUS} appearance={{ baseTheme: dark }}>
+      <html lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'} suppressHydrationWarning>
         <head>
-          <script defer data-domain="flix.kareemadel.com" src="https://analytics.kareemadel.com/js/script.js"></script>
+          <script
+            defer
+            data-domain="flix.kareemadel.com"
+            src="https://analytics.kareemadel.com/js/script.js"
+          ></script>
         </head>
-        <body className={locale === 'ar' ? tajawal.className : manrope.className} suppressHydrationWarning>
+        <body
+          className={locale === 'ar' ? tajawal.className : manrope.className}
+          suppressHydrationWarning
+        >
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
@@ -102,9 +123,11 @@ export default async function RootLayout(
             disableTransitionOnChange
           >
             <NextIntlClientProvider messages={messages}>
-              <Header />
-              {children}
-              <Footer />
+              <TooltipProvider delayDuration={300}>
+                <Header />
+                {children}
+                <Footer />
+              </TooltipProvider>
             </NextIntlClientProvider>
           </ThemeProvider>
         </body>
